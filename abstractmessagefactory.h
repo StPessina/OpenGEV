@@ -12,6 +12,8 @@ class AbstractMessageFactory
 public:
     AbstractMessageFactory(GVComponent* target);
 
+    virtual bool isValidCode(int messageCode);
+
     virtual AbstractMessage createMessageHandler(int messageCode);
 
 private:

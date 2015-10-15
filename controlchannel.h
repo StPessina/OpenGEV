@@ -7,6 +7,8 @@
 #include <QLoggingCategory>
 
 #include "abstractmessagefactory.h"
+#include "controlchannelprivilege.h"
+#include "privilege.h"
 
 /*!
  * \brief The ControlChannel class create a new control channel
@@ -50,9 +52,9 @@ private:
 
     void readPendingDatagrams();
 
-    void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
+    virtual void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 
-    bool checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort);
+    Privilege checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort);
 };
 
 #endif // CONTROLCHANNEL_H

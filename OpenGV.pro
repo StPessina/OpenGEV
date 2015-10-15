@@ -22,7 +22,12 @@ include(commonComponent.pri)
 include(commonCtrlChannel.pri)
 include(commonCtrlMsg.pri)
 include(commonUdpProtocol.pri)
+
 include(device.pri)
+include(deviceMessage.pri)
+
+include(application.pri)
+include(applicationMessage.pri)
 
 unix {
     target.path = /usr/lib
@@ -30,5 +35,4 @@ unix {
 
     QMAKE_CXXFLAGS+= -std=c++11
 }
-
 

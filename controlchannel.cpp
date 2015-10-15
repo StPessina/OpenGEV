@@ -44,21 +44,30 @@ void ControlChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 ap
     this->applicationPort = applicationPort;
 }
 
-bool ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
+Privilege ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
 {
     switch (ctrlChannelPrivilege) {
         case MONITOR:
+            return FULL;
         case CTRL_ACCESS:
+            if(senderAddr==applicationAddr && senderPort == applicationPort)
+                return FULL;
+            else
+                return READ;
         case CTRL_ACCESS_SWITCH_OVER:
-            return true;
+            if(senderAddr==applicationAddr && senderPort == applicationPort)
+                return FULL;
+            else
+                return READ_SWITCH_OVER;
         case EXCLUSIVE:
             if(senderAddr==applicationAddr && senderPort == applicationPort)
-                return true;
-            break;
+                return FULL;
+            else
+                return DENIED;
         default:
             break;
     }
-    return false;
+    return DENIED;
 }
 
 void ControlChannel::readPendingDatagrams()
@@ -73,15 +82,6 @@ void ControlChannel::readPendingDatagrams()
                                 &sender, &senderPort);
 
         processTheDatagram(datagram, sender, senderPort);
-    }
-}
-
-void ControlChannel::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
-{
-    if(checkChannelPrivilege(sender, senderPort)) {
-        if(datagram.at(0)==0x42) {
-
-        }
     }
 }
 

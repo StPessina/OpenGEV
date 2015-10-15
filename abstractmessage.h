@@ -5,7 +5,7 @@
 #include <QHostAddress>
 
 #include "gvcomponent.h"
-#include "controlchannelprivilege.h"
+#include "privilege.h"
 
 /*!
  * \brief The AbstractMessage class
@@ -29,7 +29,7 @@ public:
      * \brief isAllowed
      * \return true if this command is allowed on the target
      */
-    virtual bool isAllowed(ControlChannelPrivilege ctrlChannelPrivilege);
+    virtual bool isAllowed(Privilege ctrlChannelPrivilege);
 
     /*!
      * \brief execute a command from
