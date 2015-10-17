@@ -1,12 +1,12 @@
 @INCLUDE += commonCtrlMsg
 
 HEADERS += \
-    $$PWD/abstractmessage.h \
-    $$PWD/abstractmessagefactory.h \
     $$PWD/privilege.h \
-    $$PWD/abstractcommand.h
+    $$PWD/abstractcommand.h \
+    $$PWD/abstractmessagehandler.h \
+    $$PWD/abstractmessagehandlerfactory.h
 
 SOURCES += \
-    $$PWD/abstractmessage.cpp \
-    $$PWD/abstractmessagefactory.cpp \
-    $$PWD/abstractcommand.cpp
+    $$PWD/abstractcommand.cpp \
+    $$PWD/abstractmessagehandler.cpp \
+    $$PWD/abstractmessagehandlerfactory.cpp

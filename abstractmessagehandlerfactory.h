@@ -1,0 +1,26 @@
+#ifndef ABSTRACTMESSAGEHANDLERFACTORY_H
+#define ABSTRACTMESSAGEHANDLERFACTORY_H
+
+#include "gvcomponent.h"
+#include "abstractmessagehandler.h"
+
+/*!
+ * \brief The AbstractMessageHandlerFactory class create new message handlers
+ */
+class AbstractMessageHandlerFactory
+{
+public:
+    AbstractMessageHandlerFactory(GVComponent* target);
+
+    virtual bool isValidCode(int messageCode) = 0;
+
+    virtual AbstractMessageHandler* createMessageHandler(int messageCode,
+                                                         QByteArray datagram,
+                                                         QHostAddress senderAddress,
+                                                         quint16 senderPort) = 0;
+
+private:
+    GVComponent* target;
+};
+
+#endif // ABSTRACTMESSAGEHANDLERFACTORY_H

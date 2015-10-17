@@ -3,20 +3,25 @@
 
 #include "controlchannel.h"
 
-#include "applicationmessagefactory.h"
+#include "applicationmessagehandlerfactory.h"
 
 #include "abstractcommand.h"
 
-class ApplicationControlChannel : public ControlChannel
+class ControlChannelMaster : public ControlChannel
 {
 public:
-    ApplicationControlChannel(QHostAddress sourceAddr,
+    ControlChannelMaster(QHostAddress sourceAddr,
                               quint16 sourcePort,
-                              ApplicationMessageFactory* messageHandlerFactory);
+                              AbstractMessageHandlerFactory *messageHandlerFactory);
 
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 
     void sendCommand(AbstractCommand* cmd);
+
+private:
+    static int timeout;
+
+    bool waitForAck;
 };
 
 #endif // APPLICATIONCONTROLCHANNEL_H

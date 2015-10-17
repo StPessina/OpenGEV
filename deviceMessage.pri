@@ -1,7 +1,9 @@
 @INCLUDE += deviceMessage
 
 HEADERS += \
-    $$PWD/devicemessagefactory.h
+    $$PWD/discoverymessagehandler.h \
+    $$PWD/devicemessagehandlerfactory.h
 
 SOURCES += \
-    $$PWD/devicemessagefactory.cpp
+    $$PWD/discoverymessagehandler.cpp \
+    $$PWD/devicemessagehandlerfactory.cpp

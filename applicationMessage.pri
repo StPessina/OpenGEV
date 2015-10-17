@@ -1,7 +1,9 @@
 @INCLUDE += applicationMessage
 
 HEADERS += \
-    $$PWD/applicationmessagefactory.h
+    $$PWD/discoverycommand.h \
+    $$PWD/applicationmessagehandlerfactory.h
 
 SOURCES += \
-    $$PWD/applicationmessagefactory.cpp
+    $$PWD/applicationmessagefactory.cpp \
+    $$PWD/discoverycommand.cpp

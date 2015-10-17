@@ -2,14 +2,14 @@
 #define DEVICECONTROLCHANNEL_H
 
 #include "controlchannel.h"
-#include "devicemessagefactory.h"
+#include "devicemessagehandlerfactory.h"
 
-class DeviceControlChannel : public ControlChannel
+class ControlChannelSlave : public ControlChannel
 {
 public:
-    DeviceControlChannel(QHostAddress sourceAddr,
+    ControlChannelSlave(QHostAddress sourceAddr,
                          quint16 sourcePort,
-                         DeviceMessageFactory *messageHandlerFactory);
+                         AbstractMessageHandlerFactory *messageHandlerFactory);
 
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 };

@@ -2,11 +2,13 @@
 
 ControlChannel::ControlChannel(QHostAddress sourceAddr,
                                quint16 sourcePort,
-                               AbstractMessageFactory* messageHandlerFactory)
+                               AbstractMessageHandlerFactory *messageHandlerFactory)
 {
     this->sourceAddr = sourceAddr;
     this->sourcePort = sourcePort;
     this->messageHandlerFactory = messageHandlerFactory;
+
+    logger.infoStream()<<getLogMessageHeader()<<"New";
 }
 
 void ControlChannel::initSocket()
@@ -16,11 +18,14 @@ void ControlChannel::initSocket()
 
     connect(socket, SIGNAL(readyRead()),
             this, SLOT(readPendingDatagrams()));
+
+    logger.infoStream()<<getLogMessageHeader()<<"Init socket";
 }
 
 void ControlChannel::setMonitorAccess()
 {
     ctrlChannelPrivilege = MONITOR;
+    logger.infoStream()<<getLogMessageHeader()<<"Set monitor level access";
 }
 
 void ControlChannel::setCtrlAccess(QHostAddress applicationAddr, quint16 applicationPort)
@@ -28,6 +33,11 @@ void ControlChannel::setCtrlAccess(QHostAddress applicationAddr, quint16 applica
     ctrlChannelPrivilege = CTRL_ACCESS;
     this->applicationAddr = applicationAddr;
     this->applicationPort = applicationPort;
+    logger.infoStream()<<getLogMessageHeader()<<"Set control access level; "
+                        <<"Control host at "
+                        <<applicationAddr.toString().toStdString()
+                        <<":"<<(int) applicationPort;
+
 }
 
 void ControlChannel::setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint16 applicationPort)
@@ -35,6 +45,10 @@ void ControlChannel::setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint
     ctrlChannelPrivilege = CTRL_ACCESS_SWITCH_OVER;
     this->applicationAddr = applicationAddr;
     this->applicationPort = applicationPort;
+    logger.infoStream()<<getLogMessageHeader()<<"Set control access switch over level; "
+                        <<"Control host at "
+                        <<applicationAddr.toString().toStdString()
+                        <<":"<<(int) applicationPort;
 }
 
 void ControlChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 applicationPort)
@@ -42,6 +56,10 @@ void ControlChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 ap
     ctrlChannelPrivilege = EXCLUSIVE;
     this->applicationAddr = applicationAddr;
     this->applicationPort = applicationPort;
+    logger.infoStream()<<getLogMessageHeader()<<"Set exclusive access level; "
+                        <<"Control host at "
+                        <<applicationAddr.toString().toStdString()
+                        <<":"<<(int) applicationPort;
 }
 
 Privilege ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
@@ -70,6 +88,13 @@ Privilege ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16
     return DENIED;
 }
 
+std::string ControlChannel::getLogMessageHeader()
+{
+    return "Control channel ("
+            + sourceAddr.toString().toStdString()
+            + ":" + std::to_string((int) sourcePort) + ") - ";
+}
+
 void ControlChannel::readPendingDatagrams()
 {
     while (socket->hasPendingDatagrams()) {
@@ -80,6 +105,12 @@ void ControlChannel::readPendingDatagrams()
 
         socket->readDatagram(datagram.data(), datagram.size(),
                                 &sender, &senderPort);
+
+        logger.debugStream()<<getLogMessageHeader()<<"New datagram received from "
+                            <<sender.toString().toStdString()
+                            <<":"<<(int) senderPort<<"; "
+                            <<"datagram: "<<datagram.toHex().data()<<" "
+                            <<"size: "<<datagram.size()<<" Byte";
 
         processTheDatagram(datagram, sender, senderPort);
     }
@@ -94,3 +125,10 @@ quint16 ControlChannel::getSourcePort()
 {
     return sourcePort;
 }
+
+bool ControlChannel::isSocketOpen()
+{
+    return true;
+}
+
+
