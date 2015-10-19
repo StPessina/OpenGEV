@@ -26,8 +26,8 @@ void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress s
         logger.debugStream()<<getLogMessageHeader()
                             <<"Ack sent "
                             <<"("<<msg->toString()<<") "
-                            <<"Datagram: "<<datagram.toHex().data()<<" "
-                            <<"Datagram size: "<<datagram.size();
+                            <<"Ack datagram: "<<ackDatagram->toHex().data()<<" "
+                            <<"Ack datagram size: "<<ackDatagram->size();
     } else {
         logger.debugStream()<<getLogMessageHeader()
                             <<"Ack not required "

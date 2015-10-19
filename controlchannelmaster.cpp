@@ -19,17 +19,21 @@ void ControlChannelMaster::processTheDatagram(QByteArray datagram, QHostAddress 
         int messageAckLSB = datagram.at(3);
         int messageAck = messageAckMSB*256+messageAckLSB;
 
-        msg = messageHandlerFactory->createMessageHandler(messageAck, datagram,
+        lastMsg = messageHandlerFactory->createMessageHandler(messageAck, datagram,
                                                             sender, senderPort);
+
+        msgCache.push_back(lastMsg);
 
         //msg->execute(FULL);
 
         logger.debugStream()<<getLogMessageHeader()
                             <<"Ack message processed "
-                            <<"("<<msg->toString()<<") "
+                            <<"("<<lastMsg->toString()<<") "
                             <<"Datagram: "<<datagram.toHex().data();
-        waitForAck = false;
-        emit stopWaitingAck();
+        if(!socket->hasPendingDatagrams()) {
+            waitForAck = false;
+            emit stopWaitingAck();
+        }
     }
 }
 
@@ -47,6 +51,10 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
                                 <<"Datagram: "<<datagram->toHex().data()<<" "
                                 <<"Datagram size: "<<datagram->size()<<" "
                                <<"(Retry counter: "<<retryCounter<<")";
+
+            waitForAck=true;
+            timeoutExpired=false;
+            msgCache.clear();
 
             result = socket->writeDatagram(*datagram,
                               cmd->getDestinationAddress(),
@@ -80,8 +88,6 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
                                             <<"and start waiting for ack"
                                             <<"(Retry counter: "<<retryCounter<<") "
                                             <<"(Timeout: "<<TIMEOUT_MS<<" ms)";
-                        waitForAck=true;
-                        timeoutExpired=false;
 
                         timeoutTimer->start(TIMEOUT_MS);
 

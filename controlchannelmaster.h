@@ -2,6 +2,7 @@
 #define APPLICATIONCONTROLCHANNEL_H
 
 #include <QEventLoop>
+#include <vector>
 
 #include "controlchannel.h"
 
@@ -31,7 +32,9 @@ public slots:
 
 private:
 
-    AbstractMessageHandler* msg;
+    AbstractMessageHandler* lastMsg;
+
+    std::vector<AbstractMessageHandler*> msgCache;
 
     int retryCounter;
 

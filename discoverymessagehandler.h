@@ -1,10 +1,14 @@
 #ifndef DEVICEDISCOVERYMESSAGEHANDLER_H
 #define DEVICEDISCOVERYMESSAGEHANDLER_H
 
+#include <QtNetwork/QNetworkInterface>
+
 #include "abstractmessagehandler.h"
 #include "gvdevice.h"
 
 #include "deviceackcode.h"
+
+#include "opengv_global.h"
 
 class DiscoveryMessageHandler : public AbstractMessageHandler
 {
