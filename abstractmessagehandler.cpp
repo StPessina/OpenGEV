@@ -89,8 +89,10 @@ char *AbstractMessageHandler::getAckHeader()
 {
     char* header = new char[8];
 
-    header[1]=resultStatus / 256;
-    header[2]=resultStatus % 256;
+    int resultStatusShifted = resultStatus>>4;
+
+    header[1]=resultStatusShifted / 256;
+    header[2]=resultStatusShifted % 256;
 
     header[2]=ackCode / 256;
     header[3]=ackCode % 256;
@@ -103,4 +105,9 @@ char *AbstractMessageHandler::getAckHeader()
     header[7]=reqId % 256;
 
     return header;
+}
+
+bool AbstractMessageHandler::checkHeader()
+{
+    return true;
 }

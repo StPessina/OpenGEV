@@ -2,8 +2,9 @@
 
 HEADERS += \
     $$PWD/discoverycommand.h \
-    $$PWD/applicationmessagehandlerfactory.h
+    $$PWD/applicationmessagehandlerfactory.h \
+    $$PWD/ApplicationCommandCode.h
 
 SOURCES += \
-    $$PWD/applicationmessagefactory.cpp \
-    $$PWD/discoverycommand.cpp
+    $$PWD/discoverycommand.cpp \
+    $$PWD/applicationmessagehandlerfactory.cpp

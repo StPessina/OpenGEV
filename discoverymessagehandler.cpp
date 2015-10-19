@@ -2,7 +2,7 @@
 
 DiscoveryMessageHandler::DiscoveryMessageHandler(GVDevice* target, QByteArray datagram,
                                                  QHostAddress senderAddress, quint16 senderPort)
-    : AbstractMessageHandler(target, 1, datagram, senderAddress, senderPort)
+    : AbstractMessageHandler(target, DISCOVERY_ACK, datagram, senderAddress, senderPort)
 {
 }
 

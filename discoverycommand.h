@@ -5,6 +5,8 @@
 
 #include "abstractcommand.h"
 
+#include "ApplicationCommandCode.h"
+
 class DiscoveryCommand : public AbstractCommand
 {
 public:

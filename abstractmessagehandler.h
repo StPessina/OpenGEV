@@ -96,6 +96,8 @@ protected:
 
     virtual char* getAckHeader() final;
 
+    virtual bool checkHeader() final;
+
     /*!
      * \brief getAck
      * \return message for acknowledgement

@@ -2,7 +2,9 @@
 
 HEADERS += \
     $$PWD/discoverymessagehandler.h \
-    $$PWD/devicemessagehandlerfactory.h
+    $$PWD/devicemessagehandlerfactory.h \
+    $$PWD/deviceackcode.h \
+    $$PWD/deviceackstatus.h
 
 SOURCES += \
     $$PWD/discoverymessagehandler.cpp \

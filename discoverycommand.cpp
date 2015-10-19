@@ -1,12 +1,12 @@
 #include "discoverycommand.h"
 
 DiscoveryCommand::DiscoveryCommand(int req_id)
-    : AbstractCommand(QHostAddress::Broadcast, CONTROL_CHANNEL_DEF_PORT,1,req_id,true, true)
+    : AbstractCommand(QHostAddress::Broadcast, CONTROL_CHANNEL_DEF_PORT,DISCOVERY_CMD,req_id,true, true)
 {
 }
 
 DiscoveryCommand::DiscoveryCommand(QHostAddress destinationAddress, quint16 destinationPort, int req_id)
-    : AbstractCommand(destinationAddress, destinationPort,1,req_id,true, true)
+    : AbstractCommand(destinationAddress, destinationPort,DISCOVERY_CMD,req_id,true, true)
 {
 
 }

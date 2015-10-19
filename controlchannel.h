@@ -8,6 +8,8 @@
 
 #include <QLoggingCategory>
 
+#include <QTimer>
+
 #include "abstractmessagehandlerfactory.h"
 #include "controlchannelprivilege.h"
 #include "privilege.h"
@@ -51,6 +53,10 @@ protected:
 
     Privilege checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort);
 
+    int TIMEOUT_MS = 2000;
+
+    int RETRY_SEND = 3;
+
     QHostAddress sourceAddr;
 
     quint16 sourcePort;
@@ -68,6 +74,8 @@ protected:
     log4cpp::Category &logger = log4cpp::Category::getInstance( std::string("ControlChannelLog"));
 
     std::string getLogMessageHeader();
+
+    QTimer *timeoutTimer;
 };
 
 #endif // CONTROLCHANNEL_H

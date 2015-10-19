@@ -8,6 +8,8 @@ ControlChannel::ControlChannel(QHostAddress sourceAddr,
     this->sourcePort = sourcePort;
     this->messageHandlerFactory = messageHandlerFactory;
 
+    this->timeoutTimer=new QTimer(this);
+
     logger.infoStream()<<getLogMessageHeader()<<"New";
 }
 

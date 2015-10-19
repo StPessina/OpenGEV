@@ -4,6 +4,8 @@
 #include "abstractmessagehandler.h"
 #include "gvdevice.h"
 
+#include "deviceackcode.h"
+
 class DiscoveryMessageHandler : public AbstractMessageHandler
 {
 public:

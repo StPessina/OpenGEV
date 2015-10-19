@@ -19,7 +19,7 @@ public:
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;
 
-private:
+protected:
     GVComponent* target;
 };
 

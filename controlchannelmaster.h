@@ -1,6 +1,8 @@
 #ifndef APPLICATIONCONTROLCHANNEL_H
 #define APPLICATIONCONTROLCHANNEL_H
 
+#include <QEventLoop>
+
 #include "controlchannel.h"
 
 #include "applicationmessagehandlerfactory.h"
@@ -9,6 +11,7 @@
 
 class ControlChannelMaster : public ControlChannel
 {
+    Q_OBJECT
 public:
     ControlChannelMaster(QHostAddress sourceAddr,
                               quint16 sourcePort,
@@ -16,12 +19,25 @@ public:
 
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 
-    void sendCommand(AbstractCommand* cmd);
+    int sendCommand(AbstractCommand* cmd);
+
+    AbstractMessageHandler* getMessageHandler();
+
+signals:
+    void stopWaitingAck();
+
+public slots:
+    void timeoutAck();
 
 private:
-    static int timeout;
+
+    AbstractMessageHandler* msg;
+
+    int retryCounter;
 
     bool waitForAck;
+
+    bool timeoutExpired;
 };
 
 #endif // APPLICATIONCONTROLCHANNEL_H

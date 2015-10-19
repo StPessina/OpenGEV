@@ -13,5 +13,10 @@ bool DeviceMessageHandlerFactory::isValidCode(int messageCode)
 AbstractMessageHandler *DeviceMessageHandlerFactory::createMessageHandler(int messageCode, QByteArray datagram,
                                                                    QHostAddress senderAddress, quint16 senderPort)
 {
-    return new DiscoveryMessageHandler(new GVDevice, datagram, senderAddress, senderPort);
+    switch (messageCode) {
+    case DISCOVERY_CMD:
+        return new DiscoveryMessageHandler((GVDevice*)target, datagram, senderAddress, senderPort);
+    default:
+        return new CmdNotSupportedMH(target, messageCode, datagram, senderAddress, senderPort);
+    }
 }

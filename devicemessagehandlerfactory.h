@@ -5,6 +5,10 @@
 
 #include "gvdevice.h"
 
+#include "ApplicationCommandCode.h"
+
+#include "cmdnotsupportedmh.h"
+
 #include "discoverymessagehandler.h"
 
 class DeviceMessageHandlerFactory : public AbstractMessageHandlerFactory
