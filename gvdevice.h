@@ -8,6 +8,8 @@
 #include "bootstrapregister.h"
 #include "deviceregisters.h"
 
+#include "networkinterfaceregisters.h"
+
 #include "gvcomponent.h"
 
 
@@ -19,7 +21,9 @@ class GVDevice : public GVComponent
 public:
     GVDevice(string manufacture_name, string model_name, string device_name);
 
-    RegisterAccess *getRegister(int registerCode);
+    BootstrapRegister *getRegister(int registerCode);
+
+    BootstrapRegister *getNetworkRegister(int interface, int offsetRegisterCode);
 
     string getManufactureName();
 
@@ -29,7 +33,9 @@ public:
 
 private:
 
-    map<int,BootstrapRegister*> registers;
+    map<int,BootstrapRegister*> commonRegisters;
+
+    map<int,NetworkInterfaceRegisters*> networkRegister;
 
     void initRegisterMap();
 };

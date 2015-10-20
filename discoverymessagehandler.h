@@ -3,6 +3,8 @@
 
 #include <QtNetwork/QNetworkInterface>
 
+#include "deviceregisters.h"
+
 #include "abstractmessagehandler.h"
 #include "gvdevice.h"
 

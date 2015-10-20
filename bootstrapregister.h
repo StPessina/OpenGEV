@@ -41,7 +41,7 @@ private:
 
     std::string valueString;
 
-    int valueNumb;
+    int valueNumb = 0;
 };
 
 #endif // BOOTSTRAPREGISTER_H

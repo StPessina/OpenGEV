@@ -2,8 +2,10 @@
 
 HEADERS += \
     $$PWD/gvdevice.h \
-    $$PWD/deviceregisters.h
+    $$PWD/deviceregisters.h \
+    $$PWD/networkinterfaceregisters.h
 
 SOURCES += \
     $$PWD/gvdevice.cpp \
-    $$PWD/deviceregisters.cpp
+    $$PWD/deviceregisters.cpp \
+    $$PWD/networkinterfaceregisters.cpp
