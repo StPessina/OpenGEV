@@ -15,5 +15,5 @@ AbstractMessageHandler *ApplicationMessageHandlerFactory::createMessageHandler(i
                                                                                QHostAddress senderAddress,
                                                                                quint16 senderPort)
 {
-    return new DiscoveryMessageHandler(new GVDevice(), datagram, senderAddress, senderPort);
+    return new CmdNotSupportedMH(target,messageCode,datagram,senderAddress, senderPort);
 }

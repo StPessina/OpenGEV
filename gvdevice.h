@@ -2,26 +2,36 @@
 #define GVDEVICE_H
 
 #include <string>
+#include <map>
+#include <vector>
+
+#include "bootstrapregister.h"
+#include "deviceregisters.h"
 
 #include "gvcomponent.h"
+
+
+
+using namespace std;
 
 class GVDevice : public GVComponent
 {
 public:
-    GVDevice(std::string manufacture_name, std::string model_name, std::string device_name);
+    GVDevice(string manufacture_name, string model_name, string device_name);
 
-    std::string getManufactureName();
+    RegisterAccess *getRegister(int registerCode);
 
-    std::string getModelName();
+    string getManufactureName();
 
-    std::string getDeviceName();
+    string getModelName();
+
+    string getDeviceName();
 
 private:
-    std::string manufacture_name;
 
-    std::string model_name;
+    map<int,BootstrapRegister*> registers;
 
-    std::string device_name;
+    void initRegisterMap();
 };
 
 #endif // GVDEVICE_H

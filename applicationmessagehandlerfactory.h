@@ -5,7 +5,7 @@
 
 #include "gvapplication.h"
 
-#include "discoverymessagehandler.h"
+#include "cmdnotsupportedmh.h"
 
 class ApplicationMessageHandlerFactory : public AbstractMessageHandlerFactory
 {

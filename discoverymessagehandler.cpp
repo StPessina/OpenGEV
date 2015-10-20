@@ -43,14 +43,6 @@ char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
     answer[9]=RESERVED
     */
 
-    foreach(QNetworkInterface interface, QNetworkInterface::allInterfaces())
-    {
-        // Return only the first non-loopback MAC Address
-        if (!(interface.flags() & QNetworkInterface::IsLoopBack))
-           return interface.hardwareAddress();
-        QString text = interface.hardwareAddress();
-        qDebug() << text;
-    }
 
     return new char[1];
 }

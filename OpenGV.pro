@@ -23,6 +23,7 @@ include(commonComponent.pri)
 include(commonCtrlChannel.pri)
 include(commonCtrlMsg.pri)
 include(commonUdpProtocol.pri)
+include(commonBootstrapRegister.pri)
 
 include(device.pri)
 include(deviceMessage.pri)
