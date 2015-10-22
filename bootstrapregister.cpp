@@ -9,8 +9,10 @@ BootstrapRegister::BootstrapRegister(int address, std::string name, RegisterAcce
 
     if(length==4)
         stringValue=false;
-    else
+    else {
         stringValue=true;
+        valueString="";
+    }
 }
 
 int BootstrapRegister::getAddress()

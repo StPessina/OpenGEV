@@ -2,6 +2,7 @@
 #define NETWORKINTERFACEREGISTERS_H
 
 #include <QtNetwork/QNetworkInterface>
+#include <QNetworkAddressEntry>
 
 #include <map>
 #include <QString>
@@ -41,6 +42,8 @@ private:
     int persistentSubnetMask;
     int persistentDefaultGateway;
     int linkSpeed;
+
+    QNetworkInterface getInterfaceListWithoutLoopBack(int interfaceNumber);
 };
 
 #endif // NETWORKINTERFACEREGISTERS_H

@@ -1,7 +1,7 @@
 #include "devicemessagehandlerfactory.h"
 
 DeviceMessageHandlerFactory::DeviceMessageHandlerFactory(GVDevice *target)
-    : AbstractMessageHandlerFactory(target)
+    : AbstractMessageHandlerFactory(dynamic_cast<GVComponent*>(target))
 {
 }
 
@@ -15,7 +15,7 @@ AbstractMessageHandler *DeviceMessageHandlerFactory::createMessageHandler(int me
 {
     switch (messageCode) {
     case DISCOVERY_CMD:
-        return new DiscoveryMessageHandler((GVDevice*)target, datagram, senderAddress, senderPort);
+        return new DiscoveryMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     default:
         return new CmdNotSupportedMH(target, messageCode, datagram, senderAddress, senderPort);
     }

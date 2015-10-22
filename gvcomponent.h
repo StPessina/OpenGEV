@@ -5,6 +5,7 @@ class GVComponent
 {
 public:
     GVComponent();
+    virtual ~GVComponent() {}
 };
 
 #endif // GVCOMPONENT_H

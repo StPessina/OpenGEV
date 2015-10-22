@@ -2,7 +2,7 @@
 
 GVDevice::GVDevice(string manufacture_name, string model_name, string device_name)
 {
-     initRegisterMap();
+    initRegisterMap();
 
     commonRegisters.at(REG_MANUFACTURE_NAME)->setValueString(manufacture_name);
     commonRegisters.at(REG_MODEL_NAME)->setValueString(model_name);
@@ -11,12 +11,12 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
 
 BootstrapRegister *GVDevice::getRegister(int registerCode)
 {
-    return (BootstrapRegister*) commonRegisters.at(registerCode);
+    return commonRegisters.at(registerCode);
 }
 
 BootstrapRegister *GVDevice::getNetworkRegister(int interface, int offsetRegisterCode)
 {
-    return (BootstrapRegister*) networkRegister.at(interface)->getRegister(offsetRegisterCode);
+    return networkRegister.at(interface)->getRegister(offsetRegisterCode);
 }
 
 string GVDevice::getManufactureName()
@@ -42,31 +42,31 @@ void GVDevice::initRegisterMap()
     commonRegisters[REG_MANUFACTURE_NAME] = new  BootstrapRegister(REG_MANUFACTURE_NAME, "Manufacture name",RA_READ, 32);
     commonRegisters[REG_MODEL_NAME] = new  BootstrapRegister(REG_MODEL_NAME, "Model name",RA_READ, 32);
     commonRegisters[REG_DEVICE_VERSION] = new  BootstrapRegister(REG_DEVICE_VERSION, "Device version",RA_READ, 32);
-    commonRegisters[0x00A8] = new  BootstrapRegister(0x00A8, "Manufacture info",RA_READ, 48);
-    commonRegisters[0x00D8] = new  BootstrapRegister(0x00D8, "Serial number",RA_READ, 16);
-    commonRegisters[0x00E8] = new  BootstrapRegister(0x00E8, "User-definied name",RA_READ_WRITE, 16);
-    commonRegisters[0x0200] = new  BootstrapRegister(0x0200, "First URL",RA_READ, 512);
-    commonRegisters[0x0400] = new  BootstrapRegister(0x0400, "Second URL",RA_READ, 512);
+    commonRegisters[REG_MANUFACTURE_INFO] = new  BootstrapRegister(REG_MANUFACTURE_INFO, "Manufacture info",RA_READ, 48);
+    commonRegisters[REG_SERIAL_NUMBER] = new  BootstrapRegister(REG_SERIAL_NUMBER, "Serial number",RA_READ, 16);
+    commonRegisters[REG_USER_DEFINIED_NAME] = new  BootstrapRegister(REG_USER_DEFINIED_NAME, "User-definied name",RA_READ_WRITE, 16);
+    commonRegisters[REG_FIRST_URL] = new  BootstrapRegister(REG_FIRST_URL, "First URL",RA_READ, 512);
+    commonRegisters[REG_SECOND_URL] = new  BootstrapRegister(REG_SECOND_URL, "Second URL",RA_READ, 512);
 
-    commonRegisters[0x0600] = new  BootstrapRegister(0x0600, "Number Of Network Interface",RA_READ, 4);
+    commonRegisters[REG_NR_NETWORK_INTERFACE] = new  BootstrapRegister(REG_NR_NETWORK_INTERFACE, "Number Of Network Interface",RA_READ, 4);
 
     for (int var = 0; var < QNetworkInterface::allInterfaces().size(); ++var)
         networkRegister[var] = new NetworkInterfaceRegisters(var);
 
-    commonRegisters[0x0900] = new  BootstrapRegister(0x0900, "Number of Message Channels",RA_READ, 4);
-    commonRegisters[0x0904] = new  BootstrapRegister(0x0904, "Number of Stream Channels",RA_READ, 4);
-    commonRegisters[0x090C] = new  BootstrapRegister(0x090C, "Action Device Key", RA_WRITE, 4);
-    commonRegisters[0x0910] = new  BootstrapRegister(0x0910, "Number of Active Links",RA_READ, 4);
-    commonRegisters[0x092C] = new  BootstrapRegister(0x092C, "GVSP Capability",RA_READ, 4);
-    commonRegisters[0x0930] = new  BootstrapRegister(0x0930, "Message Channel Capability",RA_READ, 4);
-    commonRegisters[0x0934] = new  BootstrapRegister(0x0934, "GVCP Capability",RA_READ, 4);
-    commonRegisters[0x0938] = new  BootstrapRegister(0x0938, "Heartbeat Timeout",RA_READ_WRITE, 4);
-    commonRegisters[0x093C] = new  BootstrapRegister(0x093C, "Timestamp Tick Frequency - High",RA_READ, 4);
-    commonRegisters[0x0940] = new  BootstrapRegister(0x0940, "Timestamp Tick Frequency - Low",RA_READ, 4);
-    commonRegisters[0x0944] = new  BootstrapRegister(0x0944, "Timestamp Control",RA_WRITE, 4);
-    commonRegisters[0x0950] = new  BootstrapRegister(0x0950, "Discovery ACK Delay",RA_READ_WRITE, 4);
-    commonRegisters[0x0954] = new  BootstrapRegister(0x0954, "GVCP Configuration",RA_READ_WRITE, 4);
-    commonRegisters[0x0958] = new  BootstrapRegister(0x0958, "Pending timeout",RA_READ, 4);
-    commonRegisters[0x095C] = new  BootstrapRegister(0x095C, "Control Switchover Key",RA_WRITE, 4);
+    commonRegisters[REG_NR_MESSAGE_CHANNELS] = new  BootstrapRegister(REG_NR_MESSAGE_CHANNELS, "Number of Message Channels",RA_READ, 4);
+    commonRegisters[REG_NR_STREAM_CHANNELS] = new  BootstrapRegister(REG_NR_STREAM_CHANNELS, "Number of Stream Channels",RA_READ, 4);
+    commonRegisters[REG_ACTION_DEVICE_KEY] = new  BootstrapRegister(REG_ACTION_DEVICE_KEY, "Action Device Key", RA_WRITE, 4);
+    commonRegisters[REG_NR_ACTIVE_LINKS] = new  BootstrapRegister(REG_NR_ACTIVE_LINKS, "Number of Active Links",RA_READ, 4);
+    commonRegisters[REG_GVSP_CAPABILITY] = new  BootstrapRegister(REG_GVSP_CAPABILITY, "GVSP Capability",RA_READ, 4);
+    commonRegisters[REG_MESSAGE_CHANNEL_CAPABILITY] = new  BootstrapRegister(REG_MESSAGE_CHANNEL_CAPABILITY, "Message Channel Capability",RA_READ, 4);
+    commonRegisters[REG_GVCP_CAPABILITY] = new  BootstrapRegister(REG_GVCP_CAPABILITY, "GVCP Capability",RA_READ, 4);
+    commonRegisters[REG_HEARTBEAT_TIMEOUT] = new  BootstrapRegister(REG_HEARTBEAT_TIMEOUT, "Heartbeat Timeout",RA_READ_WRITE, 4);
+    commonRegisters[REG_TIMEOUT_TICK_FREQUENCY_HIGH] = new  BootstrapRegister(REG_TIMEOUT_TICK_FREQUENCY_HIGH, "Timestamp Tick Frequency - High",RA_READ, 4);
+    commonRegisters[REG_TIMEOUT_TICK_FREQUENCY_LOW] = new  BootstrapRegister(REG_TIMEOUT_TICK_FREQUENCY_LOW, "Timestamp Tick Frequency - Low",RA_READ, 4);
+    commonRegisters[REG_TIMEOUT_CONTROL] = new  BootstrapRegister(REG_TIMEOUT_CONTROL, "Timestamp Control",RA_WRITE, 4);
+    commonRegisters[REG_DISCOVERY_ACK_DELAY] = new  BootstrapRegister(REG_DISCOVERY_ACK_DELAY, "Discovery ACK Delay",RA_READ_WRITE, 4);
+    commonRegisters[REG_GVCP_CONFIGURATION] = new  BootstrapRegister(REG_GVCP_CONFIGURATION, "GVCP Configuration",RA_READ_WRITE, 4);
+    commonRegisters[REG_PENDING_TIMEOUT] = new  BootstrapRegister(REG_PENDING_TIMEOUT, "Pending timeout",RA_READ, 4);
+    commonRegisters[REG_CONTROL_SWITCHOVER_KEY] = new  BootstrapRegister(REG_CONTROL_SWITCHOVER_KEY, "Control Switchover Key",RA_WRITE, 4);
 
 }
