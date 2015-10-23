@@ -1,9 +1,11 @@
 #include "abstractcommand.h"
 
-AbstractCommand::AbstractCommand(QHostAddress destAddress, quint16 destPort,
-        int commandCode, int reqId, bool requireAck, bool broadcast)
+AbstractCommand::AbstractCommand(GVComponent *target, QHostAddress destAddress, quint16 destPort,
+        int commandCode, int ackCommandCode, int reqId, bool requireAck, bool broadcast)
 {
+    this->target = target;
     this->commandCode=commandCode;
+    this->ackCommandCode=ackCommandCode;
     this->reqId = reqId;
     this->requireACK = requireAck;
     this->broadcast = broadcast;
@@ -11,17 +13,22 @@ AbstractCommand::AbstractCommand(QHostAddress destAddress, quint16 destPort,
     this->destPort = destPort;
 }
 
+AbstractCommand::~AbstractCommand()
+{
+
+}
+
 QByteArray* AbstractCommand::getCommandDatagram()
 {
-    int datagramSize = 8 + getLengthWithoutHeader(); //8 byte for header
+    int datagramSize = HEADER_LENGTH + getLengthWithoutHeader(); //8 byte for header
     char* datagramChar = new char[datagramSize];
     char* header = getHeader();
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < HEADER_LENGTH; ++i)
         datagramChar[i]=header[i];
     if(datagramSize>8) {
         char* body = getCommandDatagramWithoutHeader();
-        for (int i = 8; i < datagramSize; ++i)
-            datagramChar[i]=body[i-8];
+        for (int i = HEADER_LENGTH; i < datagramSize; ++i)
+            datagramChar[i]=body[i-HEADER_LENGTH];
     }
     QByteArray* datagram = new QByteArray(datagramChar, datagramSize);
     return datagram;
@@ -42,6 +49,11 @@ int AbstractCommand::getCommandCode()
     return commandCode;
 }
 
+void AbstractCommand::setRequestId(int reqId)
+{
+    this->reqId = reqId;
+}
+
 int AbstractCommand::getRequestId()
 {
     return reqId;
@@ -57,6 +69,17 @@ bool AbstractCommand::isBroadcastMessage()
     return broadcast;
 }
 
+bool AbstractCommand::checkAckHeader(QByteArray answer)
+{
+    if(answer.at(0)!=0x42)
+        return false;
+    if(ackCommandCode!=(answer.at(2)*256+answer.at(3)))
+        return false;
+    if(reqId!=(answer.at(6)*256+answer.at(7)))
+        return false;
+    return true;
+}
+
 std::string AbstractCommand::toString()
 {
     return destAddress.toString().toStdString() + ":" + std::to_string((int) destPort) + "/"
@@ -68,26 +91,26 @@ std::string AbstractCommand::toString()
 
 char* AbstractCommand::getHeader()
 {
-    char* header = new char[8];
+    char* header = new char[HEADER_LENGTH];
     header[0]=0x42;
     header[1]=getHeaderFlag();
 
-    header[2]=commandCode / 256;
-    header[3]=commandCode % 256;
+    header[2]=commandCode >> 8;
+    header[3]=commandCode;
 
     int length = getLengthWithoutHeader();
-    header[4]=length / 256;
-    header[5]=length % 256;
+    header[4]=length >> 8;
+    header[5]=length;
 
-    header[6]=reqId / 256;
-    header[7]=reqId % 256;
+    header[6]=reqId >> 8;
+    header[7]=reqId;
     return header;
 }
 
 short AbstractCommand::getHeaderFlag()
 {
     if(requireACK)
-        return 0x80;
+        return 0x1;
     else
         return 0x0;
 }

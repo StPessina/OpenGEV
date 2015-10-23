@@ -15,7 +15,7 @@ using namespace std;
 class NetworkInterfaceRegisters
 {
 public:
-    NetworkInterfaceRegisters(int interfaceNumber);
+    NetworkInterfaceRegisters(QNetworkInterface netInterface, int interfaceNumber);
 
     BootstrapRegister *getRegister(int offsetRegisterCode);
 

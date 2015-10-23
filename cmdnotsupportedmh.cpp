@@ -10,6 +10,11 @@ CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, int cmdCode, QByteArra
     this->resultStatus = GEV_STATUS_NOT_IMPLEMENTED;
 }
 
+CmdNotSupportedMH::~CmdNotSupportedMH()
+{
+
+}
+
 bool CmdNotSupportedMH::isAllowed(Privilege ctrlChannelPrivilege)
 {
     return true;

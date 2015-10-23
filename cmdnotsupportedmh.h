@@ -10,6 +10,8 @@ class CmdNotSupportedMH : public AbstractMessageHandler
 public:
     CmdNotSupportedMH(GVComponent* target, int msgCode, QByteArray datagram, QHostAddress senderAddress,quint16 senderPort);
 
+    virtual ~CmdNotSupportedMH();
+
     bool isAllowed(Privilege ctrlChannelPrivilege);
 
     int execute(Privilege ctrlChannelPrivilege);

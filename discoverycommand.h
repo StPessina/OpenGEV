@@ -4,19 +4,24 @@
 #include "opengv_global.h"
 
 #include "abstractcommand.h"
+#include "gvapplication.h"
 
 #include "ApplicationCommandCode.h"
+#include "deviceackcode.h"
 
 class DiscoveryCommand : public AbstractCommand
 {
 public:
-    DiscoveryCommand(int req_id);
+    DiscoveryCommand(GVApplication* target);
+    virtual ~DiscoveryCommand();
 
-    DiscoveryCommand(QHostAddress destinationAddress, quint16 destinationPort, int req_id);
+    DiscoveryCommand(GVApplication* target, QHostAddress destinationAddress, quint16 destinationPort);
 
     int getLengthWithoutHeader();
 
     char* getCommandDatagramWithoutHeader();
+
+    int executeAnswer(QByteArray answer);
 };
 
 #endif // DISCOVERYCOMMAND_H

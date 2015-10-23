@@ -11,6 +11,8 @@ public:
                          quint16 sourcePort,
                          AbstractMessageHandlerFactory *messageHandlerFactory);
 
+    virtual ~ControlChannelSlave();
+
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 };
 

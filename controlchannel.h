@@ -27,6 +27,7 @@ public:
     ControlChannel(QHostAddress sourceAddr,
                    quint16 sourcePort,
                    AbstractMessageHandlerFactory* messageHandlerFactory);
+    virtual ~ControlChannel();
 
     void initSocket();
 

@@ -2,7 +2,8 @@
 #define GVDEVICE_H
 
 #include <string>
-#include <map>
+#include <unordered_map>
+
 #include <vector>
 
 #include "bootstrapregister.h"
@@ -13,6 +14,8 @@
 #include "gvcomponent.h"
 
 
+#include "iostream"
+
 
 using namespace std;
 
@@ -20,6 +23,7 @@ class GVDevice : public GVComponent
 {
 public:
     GVDevice(string manufacture_name, string model_name, string device_name);
+    virtual ~GVDevice();
 
     BootstrapRegister *getRegister(int registerCode);
 
@@ -33,11 +37,13 @@ public:
 
 private:
 
-    map<int,BootstrapRegister*> commonRegisters;
+    unordered_map<int,BootstrapRegister*> commonRegisters;
 
-    map<int,NetworkInterfaceRegisters*> networkRegister;
+    unordered_map<int,NetworkInterfaceRegisters*> networkRegister;
 
-    void initRegisterMap();
+    void initCommonRegisterMap();
+
+    void initNetworkRegisters();
 };
 
 #endif // GVDEVICE_H

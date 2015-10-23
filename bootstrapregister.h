@@ -4,11 +4,14 @@
 #include <string>
 
 #include "registeraccess.h"
+#include "bootstrapregistertype.h"
 
 class BootstrapRegister
 {
 public:
-    BootstrapRegister(int address, std::string name, RegisterAccess accessType, int length);
+    BootstrapRegister(int address, std::string name, RegisterAccess accessType, int byteLength);
+
+    virtual ~BootstrapRegister();
 
     int getAddress();
 
@@ -20,13 +23,15 @@ public:
 
     bool isStringValue();
 
-    std::string setValueString(std::string valueString);
+    void setValueString(std::string valueString);
 
     std::string getValueString();
 
     void setValueNumb(int valueNumb);
 
-    int getValueNumb();
+    void setValueNumb(long valueNumb);
+
+    long getValueNumb();
 
 private:
     int address;
@@ -37,11 +42,11 @@ private:
 
     int length;
 
-    bool stringValue;
+    BootstrapRegisterType valueType;
 
-    std::string valueString;
+    std::string valueString = "";
 
-    int valueNumb = 0;
+    long valueNumb = 0;
 };
 
 #endif // BOOTSTRAPREGISTER_H

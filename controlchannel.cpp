@@ -13,6 +13,12 @@ ControlChannel::ControlChannel(QHostAddress sourceAddr,
     logger.infoStream()<<getLogMessageHeader()<<"New";
 }
 
+ControlChannel::~ControlChannel()
+{
+    delete socket;
+    delete timeoutTimer;
+}
+
 void ControlChannel::initSocket()
 {
     socket = new QUdpSocket(this);

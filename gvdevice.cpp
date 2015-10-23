@@ -2,39 +2,45 @@
 
 GVDevice::GVDevice(string manufacture_name, string model_name, string device_name)
 {
-    initRegisterMap();
+    initCommonRegisterMap();
+    initNetworkRegisters();
 
-    commonRegisters.at(REG_MANUFACTURE_NAME)->setValueString(manufacture_name);
-    commonRegisters.at(REG_MODEL_NAME)->setValueString(model_name);
-    commonRegisters.at(REG_DEVICE_VERSION)->setValueString(device_name);
+    commonRegisters[REG_MANUFACTURE_NAME]->setValueString(manufacture_name);
+    commonRegisters[REG_MODEL_NAME]->setValueString(model_name);
+    commonRegisters[REG_DEVICE_VERSION]->setValueString(device_name);
+}
+
+GVDevice::~GVDevice()
+{
+
 }
 
 BootstrapRegister *GVDevice::getRegister(int registerCode)
 {
-    return commonRegisters.at(registerCode);
+    return commonRegisters[registerCode];
 }
 
 BootstrapRegister *GVDevice::getNetworkRegister(int interface, int offsetRegisterCode)
 {
-    return networkRegister.at(interface)->getRegister(offsetRegisterCode);
+    return networkRegister[interface]->getRegister(offsetRegisterCode);
 }
 
 string GVDevice::getManufactureName()
 {
-    return commonRegisters.at(REG_MANUFACTURE_NAME)->getValueString();
+    return commonRegisters[REG_MANUFACTURE_NAME]->getValueString();
 }
 
 string GVDevice::getModelName()
 {
-    return commonRegisters.at(REG_MODEL_NAME)->getValueString();
+    return commonRegisters[REG_MODEL_NAME]->getValueString();
 }
 
 string GVDevice::getDeviceName()
 {
-    return commonRegisters.at(REG_DEVICE_VERSION)->getValueString();
+    return commonRegisters[REG_DEVICE_VERSION]->getValueString();
 }
 
-void GVDevice::initRegisterMap()
+void GVDevice::initCommonRegisterMap()
 {
     commonRegisters[REG_VESION]= new  BootstrapRegister(REG_VESION, "Version",RA_READ, 4);
     commonRegisters[REG_DEVICE_MODE] = new  BootstrapRegister(REG_DEVICE_MODE, "Device Mode",RA_READ, 4);
@@ -49,9 +55,6 @@ void GVDevice::initRegisterMap()
     commonRegisters[REG_SECOND_URL] = new  BootstrapRegister(REG_SECOND_URL, "Second URL",RA_READ, 512);
 
     commonRegisters[REG_NR_NETWORK_INTERFACE] = new  BootstrapRegister(REG_NR_NETWORK_INTERFACE, "Number Of Network Interface",RA_READ, 4);
-
-    for (int var = 0; var < QNetworkInterface::allInterfaces().size(); ++var)
-        networkRegister[var] = new NetworkInterfaceRegisters(var);
 
     commonRegisters[REG_NR_MESSAGE_CHANNELS] = new  BootstrapRegister(REG_NR_MESSAGE_CHANNELS, "Number of Message Channels",RA_READ, 4);
     commonRegisters[REG_NR_STREAM_CHANNELS] = new  BootstrapRegister(REG_NR_STREAM_CHANNELS, "Number of Stream Channels",RA_READ, 4);
@@ -69,4 +72,32 @@ void GVDevice::initRegisterMap()
     commonRegisters[REG_PENDING_TIMEOUT] = new  BootstrapRegister(REG_PENDING_TIMEOUT, "Pending timeout",RA_READ, 4);
     commonRegisters[REG_CONTROL_SWITCHOVER_KEY] = new  BootstrapRegister(REG_CONTROL_SWITCHOVER_KEY, "Control Switchover Key",RA_WRITE, 4);
 
+}
+
+void GVDevice::initNetworkRegisters()
+{
+    QList<QNetworkInterface> validNotConnected;
+    int interfaceNumber = 0;
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
+        if(!(bool)(interface.flags() & QNetworkInterface::IsLoopBack)
+                && interface.hardwareAddress().compare("00:00:00:00:00:00")!=0) {
+                if(interface.addressEntries().size()!=0) { //Check if interface is connected
+                    logger.debugStream()<<"GVDevice adding network connected interface #"<<to_string(interfaceNumber)
+                                       <<"; Name:"<<interface.name().toStdString()
+                                       <<"; MAC:"<<interface.hardwareAddress().toStdString();
+                    networkRegister[interfaceNumber] = new NetworkInterfaceRegisters(interface, interfaceNumber);
+                    interfaceNumber++;
+                } else {
+                    validNotConnected.push_back(interface);
+                }
+        }
+    }
+
+    foreach (QNetworkInterface interface, validNotConnected) {
+        logger.debugStream()<<"GVDevice adding network NOT connected interface #"<<to_string(interfaceNumber)
+                           <<"; Name:"<<interface.name().toStdString()
+                           <<"; MAC:"<<interface.hardwareAddress().toStdString();
+        networkRegister[interfaceNumber] = new NetworkInterfaceRegisters(interface, interfaceNumber);
+        interfaceNumber++;
+    }
 }

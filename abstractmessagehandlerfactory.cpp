@@ -5,3 +5,8 @@ AbstractMessageHandlerFactory::AbstractMessageHandlerFactory(GVComponent *target
     this->target = target;
 }
 
+AbstractMessageHandlerFactory::~AbstractMessageHandlerFactory()
+{
+
+}
+

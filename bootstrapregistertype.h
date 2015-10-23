@@ -1,0 +1,10 @@
+#ifndef BOOTSTRAPREGISTERTYPE_H
+#define BOOTSTRAPREGISTERTYPE_H
+
+enum BootstrapRegisterType {
+    INT,
+    LONG,
+    STRING
+};
+
+#endif // BOOTSTRAPREGISTERTYPE_H

@@ -14,6 +14,11 @@ AbstractMessageHandler::AbstractMessageHandler(GVComponent* target, int ackCode,
     this->reqId = readRequestRequestId(&datagram);
 }
 
+AbstractMessageHandler::~AbstractMessageHandler()
+{
+
+}
+
 GVComponent* AbstractMessageHandler::getTarget()
 {
     return target;
@@ -91,18 +96,18 @@ char *AbstractMessageHandler::getAckHeader()
 
     int resultStatusShifted = resultStatus>>4;
 
-    header[1]=resultStatusShifted / 256;
-    header[2]=resultStatusShifted % 256;
+    header[1]=resultStatusShifted >> 8;
+    header[2]=resultStatusShifted;
 
-    header[2]=ackCode / 256;
-    header[3]=ackCode % 256;
+    header[2]=ackCode >> 8;
+    header[3]=ackCode;
 
     int length = getAckDatagramLengthWithoutHeader();
-    header[4]=length / 256;
-    header[5]=length % 256;
+    header[4]=length >> 8;
+    header[5]=length;
 
-    header[6]=reqId / 256;
-    header[7]=reqId % 256;
+    header[6]=reqId >> 8;
+    header[7]=reqId;
 
     return header;
 }

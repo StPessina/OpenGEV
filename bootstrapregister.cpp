@@ -1,18 +1,28 @@
 #include "bootstrapregister.h"
 
-BootstrapRegister::BootstrapRegister(int address, std::string name, RegisterAccess accessType, int length)
+BootstrapRegister::BootstrapRegister(int address, std::string name, RegisterAccess accessType, int byteLength)
 {
     this->address = address;
     this->name = name;
     this->accessType = accessType;
-    this->length = length;
+    this->length = byteLength;
+    this->valueString="";
 
-    if(length==4)
-        stringValue=false;
-    else {
-        stringValue=true;
-        valueString="";
+    switch (byteLength) {
+    case 4:
+        valueType=INT;
+        break;
+    case 8:
+        valueType=LONG;
+        break;
+    default:
+        valueType=STRING;
     }
+}
+
+BootstrapRegister::~BootstrapRegister()
+{
+
 }
 
 int BootstrapRegister::getAddress()
@@ -37,10 +47,10 @@ int BootstrapRegister::getLength()
 
 bool BootstrapRegister::isStringValue()
 {
-    return stringValue;
+    return valueType==STRING;
 }
 
-std::string BootstrapRegister::setValueString(std::string valueString)
+void BootstrapRegister::setValueString(std::string valueString)
 {
     this->valueString = valueString;
 }
@@ -55,7 +65,12 @@ void BootstrapRegister::setValueNumb(int valueNumb)
     this->valueNumb = valueNumb;
 }
 
-int BootstrapRegister::getValueNumb()
+void BootstrapRegister::setValueNumb(long valueNumb)
+{
+    this->valueNumb = valueNumb;
+}
+
+long BootstrapRegister::getValueNumb()
 {
     return valueNumb;
 }

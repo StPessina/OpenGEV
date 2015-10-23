@@ -1,11 +1,10 @@
 #include "networkinterfaceregisters.h"
 
-NetworkInterfaceRegisters::NetworkInterfaceRegisters(int interfaceNumber)
+NetworkInterfaceRegisters::NetworkInterfaceRegisters(QNetworkInterface netInterface, int interfaceNumber)
 {
+    this->netInterface = netInterface;
     this->interfaceNumber = interfaceNumber;
     initRegisterMap();
-
-    netInterface = QNetworkInterface::interfaceFromIndex(interfaceNumber);
 }
 
 BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode)
@@ -16,17 +15,22 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode
     switch (offsetRegisterCode) {
     case REG_DEVICE_MAC_ADD_HIGH:
     {
-        QString MACAddrH = netInterface.hardwareAddress();
-        int MACHigh = MACAddrH.at(0).digitValue() | (MACAddrH.at(1).digitValue() >> 8);
-        reg->setValueNumb(MACHigh);
+        QString MACAddr = netInterface.hardwareAddress();
+        bool* ok = new bool;
+        int MACHigh1 = MACAddr.section(':',4,4).toInt(ok,16);
+        int MACHigh2 = MACAddr.section(':',5,5).toInt(ok,16);
+        reg->setValueNumb((MACHigh1 | (MACHigh2 << 8)));
         break;
     }
     case REG_DEVICE_MAC_ADD_LOW:
     {
-        QString MACAddrL = netInterface.hardwareAddress();
-        int MACLow = MACAddrL.at(0).digitValue() | (MACAddrL.at(1).digitValue() >> 8)
-                | (MACAddrL.at(2).digitValue() >> 16) | (MACAddrL.at(3).digitValue() >> 24);
-        reg->setValueNumb(MACLow);
+        QString MACAddr = netInterface.hardwareAddress();
+        bool* ok = new bool;
+        int MACLow1 = MACAddr.section(':',0,0).toInt(ok,16);
+        int MACLow2 = MACAddr.section(':',1,1).toInt(ok,16);
+        int MACLow3 = MACAddr.section(':',2,2).toInt(ok,16);
+        int MACLow4 = MACAddr.section(':',3,3).toInt(ok,16);
+        reg->setValueNumb(MACLow1 | (MACLow2 << 8) | (MACLow3 << 16) | (MACLow4 << 24));
         break;
     }
     case REG_NETWORK_INTERFACE_CAPABILITIES:
@@ -37,7 +41,7 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode
         break;
     case REG_CURRENT_IP_ADD:
     {
-        QNetworkAddressEntry host = netInterface.addressEntries().at(interfaceNumber);
+        QNetworkAddressEntry host = netInterface.addressEntries().at(0);
         int ip = host.ip().toIPv4Address();
         reg->setValueNumb(ip);
         break;
@@ -124,15 +128,4 @@ void NetworkInterfaceRegisters::initRegisterMap()
     registers[linkSpeed]
      = new  BootstrapRegister(linkSpeed, "Link Speed (Network interface #" +
                               to_string(interfaceNumber) + ")",RA_READ, 4);
-}
-
-QNetworkInterface NetworkInterfaceRegisters::getInterfaceListWithoutLoopBack(int interfaceNumber)
-{
-    QList<QNetworkInterface> validInterfaces;
-    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
-        if(!(bool)(interface.flags() & QNetworkInterface::IsLoopBack)
-                && interface.hardwareAddress().compare("00:00:00:00:00:00")!=0)
-            validInterfaces.push_back(interface);
-    }
-    return validInterfaces.at(interfaceNumber);
 }

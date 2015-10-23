@@ -5,6 +5,11 @@ ApplicationMessageHandlerFactory::ApplicationMessageHandlerFactory(GVApplication
 {
 }
 
+ApplicationMessageHandlerFactory::~ApplicationMessageHandlerFactory()
+{
+
+}
+
 bool ApplicationMessageHandlerFactory::isValidCode(int messageCode)
 {
     return true;

@@ -1,18 +1,24 @@
 #ifndef ABSTRACTCOMMAND_H
 #define ABSTRACTCOMMAND_H
 
+#define HEADER_LENGTH 8
+
 #include <QByteArray>
 
 #include <string>
 #include <QHostAddress>
+
+#include <gvcomponent.h>
 
 #include <boost/detail/endian.hpp>
 
 class AbstractCommand
 {
 public:
-    AbstractCommand(QHostAddress destAddress, quint16 destPort,
-                    int commandCode, int reqId, bool requireAck, bool broadcast);
+    AbstractCommand(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+                    int commandCode, int ackCommandCode, int reqId, bool requireAck, bool broadcast);
+
+    virtual ~AbstractCommand();
 
     virtual QByteArray* getCommandDatagram() final;
 
@@ -22,6 +28,8 @@ public:
 
     virtual int getCommandCode() final;
 
+    virtual void setRequestId(int reqId) final;
+
     virtual int getRequestId() final;
 
     virtual bool isAckRequired() final;
@@ -30,9 +38,16 @@ public:
 
     virtual bool isBroadcastMessage() final;
 
+    virtual bool checkAckHeader(QByteArray answer) final;
+
+    virtual int executeAnswer(QByteArray answer) = 0;
+
     std::string toString();
 
 protected:
+
+    GVComponent* target;
+
     /*!
      * \brief getHeaderFlagFirstBits for custom bit flag redefine
      * Standard flag
@@ -70,6 +85,7 @@ private:
     QHostAddress destAddress;
     quint16 destPort;
     int commandCode;
+    int ackCommandCode;
     int reqId;
     bool requireACK;
     bool broadcast;

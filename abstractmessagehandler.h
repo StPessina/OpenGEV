@@ -23,6 +23,9 @@ public:
                            QHostAddress senderAddress,
                            quint16 senderPort);
 
+
+    virtual ~AbstractMessageHandler();
+
     /*!
      * \brief getTarget
      * \return target for this command

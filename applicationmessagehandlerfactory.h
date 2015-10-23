@@ -11,6 +11,7 @@ class ApplicationMessageHandlerFactory : public AbstractMessageHandlerFactory
 {
 public:
     ApplicationMessageHandlerFactory(GVApplication* target);
+    virtual ~ApplicationMessageHandlerFactory();
 
     bool isValidCode(int messageCode);
 

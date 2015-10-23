@@ -3,6 +3,7 @@
 
 #include <QEventLoop>
 #include <vector>
+#include <unordered_map>
 
 #include "controlchannel.h"
 
@@ -18,6 +19,8 @@ public:
                               quint16 sourcePort,
                               AbstractMessageHandlerFactory *messageHandlerFactory);
 
+    virtual ~ControlChannelMaster();
+
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
 
     int sendCommand(AbstractCommand* cmd);
@@ -32,9 +35,9 @@ public slots:
 
 private:
 
-    AbstractMessageHandler* lastMsg;
+    std::unordered_map<int, AbstractCommand*> commandCache;
 
-    std::vector<AbstractMessageHandler*> msgCache;
+    int lastReqId = 0;
 
     int retryCounter;
 

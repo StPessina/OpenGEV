@@ -3,8 +3,7 @@
 HEADERS += \
     $$PWD/bootstrapregister.h \
     $$PWD/registeraccess.h \
-    $$PWD/networkintefacedata.h
+    $$PWD/bootstrapregistertype.h
 
 SOURCES += \
-    $$PWD/bootstrapregister.cpp \
-    $$PWD/networkintefacedata.cpp
+    $$PWD/bootstrapregister.cpp

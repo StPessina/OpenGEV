@@ -8,6 +8,11 @@ ControlChannelSlave::ControlChannelSlave(QHostAddress sourceAddr,
 
 }
 
+ControlChannelSlave::~ControlChannelSlave()
+{
+
+}
+
 void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
     Privilege privilege = checkChannelPrivilege(sender, senderPort);
@@ -19,7 +24,7 @@ void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress s
                                                                                           sender, senderPort);
     msg->execute(privilege);
 
-    bool ackRequired = datagram.at(1) & 128;
+    bool ackRequired = datagram.at(1) & 1;
     if(ackRequired) { //if ack is required
         QByteArray* ackDatagram = msg->getAckDatagram();
         socket->writeDatagram(*ackDatagram, sender, senderPort);
