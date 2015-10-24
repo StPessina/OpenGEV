@@ -17,8 +17,8 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode
     {
         QString MACAddr = netInterface.hardwareAddress();
         bool* ok = new bool;
-        int MACHigh1 = MACAddr.section(':',4,4).toInt(ok,16);
-        int MACHigh2 = MACAddr.section(':',5,5).toInt(ok,16);
+        int MACHigh1 = MACAddr.section(':',1,1).toInt(ok,16);
+        int MACHigh2 = MACAddr.section(':',0,0).toInt(ok,16);
         reg->setValueNumb((MACHigh1 | (MACHigh2 << 8)));
         break;
     }
@@ -26,10 +26,10 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode
     {
         QString MACAddr = netInterface.hardwareAddress();
         bool* ok = new bool;
-        int MACLow1 = MACAddr.section(':',0,0).toInt(ok,16);
-        int MACLow2 = MACAddr.section(':',1,1).toInt(ok,16);
-        int MACLow3 = MACAddr.section(':',2,2).toInt(ok,16);
-        int MACLow4 = MACAddr.section(':',3,3).toInt(ok,16);
+        int MACLow1 = MACAddr.section(':',5,5).toInt(ok,16);
+        int MACLow2 = MACAddr.section(':',4,4).toInt(ok,16);
+        int MACLow3 = MACAddr.section(':',3,3).toInt(ok,16);
+        int MACLow4 = MACAddr.section(':',2,2).toInt(ok,16);
         reg->setValueNumb(MACLow1 | (MACLow2 << 8) | (MACLow3 << 16) | (MACLow4 << 24));
         break;
     }

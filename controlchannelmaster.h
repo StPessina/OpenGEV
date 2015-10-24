@@ -7,17 +7,13 @@
 
 #include "controlchannel.h"
 
-#include "applicationmessagehandlerfactory.h"
-
 #include "abstractcommand.h"
 
 class ControlChannelMaster : public ControlChannel
 {
     Q_OBJECT
 public:
-    ControlChannelMaster(QHostAddress sourceAddr,
-                              quint16 sourcePort,
-                              AbstractMessageHandlerFactory *messageHandlerFactory);
+    ControlChannelMaster(QHostAddress sourceAddr, quint16 sourcePort);
 
     virtual ~ControlChannelMaster();
 

@@ -1,37 +1,37 @@
 #ifndef GVAPPLICATION_H
 #define GVAPPLICATION_H
 
+#include <QList>
+
 #include "gvcomponent.h"
 
-#include <string>
-#include <QHostAddress>
+#include "controlchannelmaster.h"
 
-using namespace std;
-struct Device {
-    QString macAddress;
-    QHostAddress ipAddress;
-    QHostAddress subnetMask;
-    QHostAddress defaultGateway;
+#include "partnerdevice.h"
 
-    QString manufactureName;
-    QString modelName;
-    QString deviceVersion;
-
-};
+#include "discoverycommand.h"
 
 class GVApplication : public GVComponent
 {
 public:
-    GVApplication();
+    GVApplication(int primaryChannelport=5000);
     virtual ~GVApplication();
 
-    void addDevice(Device aDevice);
+    void clearDevices();
 
-    QList<Device> getDiscoveredDevice();
+    void addDevice(PartnerDevice aDevice);
+
+    QList<PartnerDevice> getDiscoveredDevice();
+
+
+    int discoverDevice();
 
 private:
 
-    QList<Device> devices;
+    QList<PartnerDevice> devices;
+
+    ControlChannelMaster* masterChannel;
+
 };
 
 #endif // GVAPPLICATION_H

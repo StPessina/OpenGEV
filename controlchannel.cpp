@@ -1,12 +1,10 @@
 #include "controlchannel.h"
 
 ControlChannel::ControlChannel(QHostAddress sourceAddr,
-                               quint16 sourcePort,
-                               AbstractMessageHandlerFactory *messageHandlerFactory)
+                               quint16 sourcePort)
 {
     this->sourceAddr = sourceAddr;
     this->sourcePort = sourcePort;
-    this->messageHandlerFactory = messageHandlerFactory;
 
     this->timeoutTimer=new QTimer(this);
 

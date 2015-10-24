@@ -4,18 +4,23 @@
 #include "opengv_global.h"
 
 #include "abstractcommand.h"
+
 #include "gvapplication.h"
 
 #include "ApplicationCommandCode.h"
 #include "deviceackcode.h"
 
+#include "conversionutils.h"
+
+using namespace std;
+
 class DiscoveryCommand : public AbstractCommand
 {
 public:
-    DiscoveryCommand(GVApplication* target);
+    DiscoveryCommand(GVComponent* target);
     virtual ~DiscoveryCommand();
 
-    DiscoveryCommand(GVApplication* target, QHostAddress destinationAddress, quint16 destinationPort);
+    DiscoveryCommand(GVComponent* target, QHostAddress destinationAddress, quint16 destinationPort);
 
     int getLengthWithoutHeader();
 

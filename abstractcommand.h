@@ -8,9 +8,9 @@
 #include <string>
 #include <QHostAddress>
 
-#include <gvcomponent.h>
-
 #include <boost/detail/endian.hpp>
+
+#include "gvcomponent.h"
 
 class AbstractCommand
 {

@@ -1,9 +1,8 @@
 #include "controlchannelmaster.h"
 
 ControlChannelMaster::ControlChannelMaster(QHostAddress sourceAddr,
-                                                     quint16 sourcePort,
-                                                     AbstractMessageHandlerFactory *messageHandlerFactory)
-    : ControlChannel(sourceAddr, sourcePort, messageHandlerFactory)
+                                                     quint16 sourcePort)
+    : ControlChannel(sourceAddr, sourcePort)
 {
     connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
 }
@@ -28,7 +27,6 @@ void ControlChannelMaster::processTheDatagram(QByteArray datagram, QHostAddress 
         if(commandCache[ackId]!=NULL) {
             AbstractCommand* reqCmd = commandCache[ackId];
             reqCmd->executeAnswer(datagram);
-            commandCache.erase(ackId);
             logger.debugStream()<<getLogMessageHeader()
                             <<"Ack message processed "
                             <<"("<<reqCmd->toString()<<") "
@@ -104,6 +102,8 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
                         QEventLoop loop;
                         connect(this, SIGNAL(stopWaitingAck()), &loop, SLOT(quit()));
                         loop.exec();
+
+                        commandCache.erase(cmd->getRequestId());
 
                         if(timeoutExpired) {
                             result = -2;

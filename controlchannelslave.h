@@ -14,6 +14,9 @@ public:
     virtual ~ControlChannelSlave();
 
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
+
+private:
+    AbstractMessageHandlerFactory* messageHandlerFactory;
 };
 
 #endif // DEVICECONTROLCHANNEL_H

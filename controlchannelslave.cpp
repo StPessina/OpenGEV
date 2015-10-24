@@ -3,9 +3,9 @@
 ControlChannelSlave::ControlChannelSlave(QHostAddress sourceAddr,
                                            quint16 sourcePort,
                                            AbstractMessageHandlerFactory *messageHandlerFactory)
-    : ControlChannel(sourceAddr,sourcePort,messageHandlerFactory)
+    : ControlChannel(sourceAddr,sourcePort)
 {
-
+    this->messageHandlerFactory = messageHandlerFactory;
 }
 
 ControlChannelSlave::~ControlChannelSlave()

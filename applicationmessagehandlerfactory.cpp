@@ -1,7 +1,7 @@
 #include "applicationmessagehandlerfactory.h"
 
 ApplicationMessageHandlerFactory::ApplicationMessageHandlerFactory(GVApplication* target)
-    : AbstractMessageHandlerFactory(target)
+    : AbstractMessageHandlerFactory(dynamic_cast<GVComponent*>(target))
 {
 }
 

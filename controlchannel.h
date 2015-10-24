@@ -10,11 +10,11 @@
 
 #include <QTimer>
 
+#include <log4cpp/Category.hh>
+
 #include "abstractmessagehandlerfactory.h"
 #include "controlchannelprivilege.h"
 #include "privilege.h"
-
-#include <log4cpp/Category.hh>
 
 /*!
  * \brief The ControlChannel class create a new control channel
@@ -25,8 +25,7 @@ class ControlChannel :  public QObject
 public:
     explicit ControlChannel(QObject* parent = 0);
     ControlChannel(QHostAddress sourceAddr,
-                   quint16 sourcePort,
-                   AbstractMessageHandlerFactory* messageHandlerFactory);
+                   quint16 sourcePort);
     virtual ~ControlChannel();
 
     void initSocket();
@@ -69,8 +68,6 @@ protected:
     QHostAddress applicationAddr;
 
     quint16 applicationPort;
-
-    AbstractMessageHandlerFactory* messageHandlerFactory;
 
     log4cpp::Category &logger = log4cpp::Category::getInstance( std::string("ControlChannelLog"));
 
