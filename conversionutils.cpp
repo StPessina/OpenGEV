@@ -4,9 +4,20 @@ ConversionUtils::ConversionUtils()
 {
 }
 
+bool ConversionUtils::setShortToCharArray(char *array, short value, int start)
+{
+    array[start] = (value >> 8) & 0xFF;
+    array[start+1] = value;
+    return true;
+}
+
 bool ConversionUtils::setIntToCharArray(char *array, int value, int start)
 {
-    return false;
+    array[start] = (value >> 24) & 0xFF;
+    array[start+1] = (value >> 16) & 0xFF;
+    array[start+2] = (value >> 8) & 0xFF;
+    array[start+3] = value;
+    return true;
 }
 
 bool ConversionUtils::sanityCheck(int size, int requiredSize, int start)
@@ -20,10 +31,10 @@ int ConversionUtils::getIntFromQByteArray(QByteArray array, int start)
 {
     if(!sanityCheck(array.size(), 4, start)) return 0;
 
-    int valueMSB = array.at(start);
-    int valueB = array.at(start+1);
-    int valueC = array.at(start+2);
-    int valueLSB = array.at(start+3);
+    int valueMSB = array.at(start) & 0xFF;
+    int valueB = array.at(start+1) & 0xFF;
+    int valueC = array.at(start+2) & 0xFF;
+    int valueLSB = array.at(start+3) & 0xFF;
 
     return valueLSB | (valueB << 8) | (valueC << 16) | (valueMSB << 24);
 }

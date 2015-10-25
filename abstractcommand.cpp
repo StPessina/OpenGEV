@@ -114,3 +114,15 @@ short AbstractCommand::getHeaderFlag()
     else
         return 0x0;
 }
+
+bool AbstractCommand::haveAnswer()
+{
+    return answer!=NULL;
+}
+
+QByteArray AbstractCommand::getAnswer()
+{
+    return answer;
+}
+
+

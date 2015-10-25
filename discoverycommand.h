@@ -27,6 +27,7 @@ public:
     char* getCommandDatagramWithoutHeader();
 
     int executeAnswer(QByteArray answer);
+
 };
 
 #endif // DISCOVERYCOMMAND_H

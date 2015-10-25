@@ -10,6 +10,8 @@ public:
 
     static QString getStringFromQByteArray(QByteArray array, int size, int start=0);
 
+    static bool setShortToCharArray(char *array, short value, int start);
+
     static bool setIntToCharArray(char* array, int value, int start);
 
     static int getIntFromQByteArray(QByteArray array, int start=0);

@@ -24,6 +24,11 @@ GVComponent* AbstractMessageHandler::getTarget()
     return target;
 }
 
+bool AbstractMessageHandler::isAckAllowed()
+{
+    return !ackNotAllowed;
+}
+
 int AbstractMessageHandler::readRequestCommandCode(QByteArray *datagram)
 {
     int valueMSB = datagram->at(2);

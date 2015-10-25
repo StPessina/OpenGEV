@@ -1,3 +1,5 @@
+@INCLUDE += commonComponent
+
 HEADERS += \
     $$PWD/gvcomponent.h
 

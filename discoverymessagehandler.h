@@ -8,6 +8,8 @@
 #include "abstractmessagehandler.h"
 #include "gvdevice.h"
 
+#include "conversionutils.h"
+
 #include "deviceackcode.h"
 
 #include "opengv_global.h"

@@ -4,13 +4,14 @@
 #include <QString>
 #include <QHostAddress>
 
+#include <unordered_map>
+
 #include "controlchannelmaster.h"
 
 class PartnerDevice
 {
 public:
     PartnerDevice();
-
 
     QString macAddress;
     QHostAddress ipAddress;
@@ -23,7 +24,7 @@ public:
 
 private:
 
-    ControlChannelMaster* controlChannel;
+    std::unordered_map<int, ControlChannelMaster*> controlChannels;
 
 };
 

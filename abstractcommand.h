@@ -65,6 +65,13 @@ protected:
 
     virtual char* getCommandDatagramWithoutHeader() = 0;
 
+    virtual bool haveAnswer() final;
+
+    virtual QByteArray getAnswer() final;
+
+protected:
+    QByteArray answer;
+
 private:
 
     /*!

@@ -29,36 +29,41 @@ char *DiscoveryCommand::getCommandDatagramWithoutHeader()
 
 int DiscoveryCommand::executeAnswer(QByteArray answer)
 {
+    this->answer = answer;
     if(checkAckHeader(answer))
         return 1;
 
+    QByteArray answerWithoutHeader = answer.mid(8);
+
     PartnerDevice aDevice;
 
-    aDevice.manufactureName = ConversionUtils::getStringFromQByteArray(answer, 32, 80);
-    aDevice.modelName = ConversionUtils::getStringFromQByteArray(answer, 32, 112);
-    aDevice.deviceVersion = ConversionUtils::getStringFromQByteArray(answer, 32, 144);
+    //device info
+    aDevice.manufactureName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 72);
+    aDevice.modelName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 104);
+    aDevice.deviceVersion = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 136);
 
+    //Read device mac address
+    char* hexAnswer = answerWithoutHeader.toHex().data();
+    char* mac = new char[17];
+    int pos = 0;
+    for (int i = 0; i < 6; i++) {
+        mac[pos]=hexAnswer[20+i*2];
+        mac[pos+1]=hexAnswer[20+i*2+1];
+        if(i!=5)
+            mac[pos+2]=':';
+        pos+=3;
+    }
 
-    cout<<answer.at(18)<<':'
-        <<answer.at(19)<<':'
-        <<answer.at(20)<<':'
-        <<answer.at(21)<<':'
-        <<answer.at(22)<<':'
-        <<answer.at(23)<<std::endl;
-    char* hexAnswer = answer.toHex().data();
-    cout<<hexAnswer[36] + hexAnswer[37]<<':'
-                                     <<hexAnswer[38]<<hexAnswer[39]<<':'
-                                     <<hexAnswer[40]<<hexAnswer[41]<<':'
-                                     <<hexAnswer[42]<<hexAnswer[43]<<':'
-                                     <<hexAnswer[44]<<hexAnswer[45]<<':'
-                                     <<hexAnswer[46]<<hexAnswer[47]<<std::endl;
-    aDevice.macAddress = QString("");
+    aDevice.macAddress = QString(mac);
 
-    aDevice.ipAddress = QHostAddress::LocalHost;
+    //Ip address
+    aDevice.ipAddress = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 36));
 
-    aDevice.subnetMask = QHostAddress::LocalHost;
+    aDevice.subnetMask = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 52));
 
-    aDevice.defaultGateway = QHostAddress::LocalHost;
+    aDevice.defaultGateway = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 68));
 
     dynamic_cast<GVApplication*>(target)->addDevice(aDevice);
+
+    return 0;
 }

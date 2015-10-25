@@ -53,6 +53,8 @@ public:
      */
     virtual int execute(Privilege ctrlChannelPrivilege) = 0;
 
+    bool isAckAllowed();
+
     static int readRequestCommandCode(QByteArray* datagram);
 
     static int readRequestRequestLength(QByteArray* datagram);
@@ -96,6 +98,8 @@ protected:
     int requestLength;
 
     int reqId;
+
+    bool ackNotAllowed = false;
 
     virtual char* getAckHeader() final;
 

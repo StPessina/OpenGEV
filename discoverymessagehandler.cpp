@@ -1,4 +1,4 @@
-#include "discoverymessagehandler.h"
+﻿#include "discoverymessagehandler.h"
 
 DiscoveryMessageHandler::DiscoveryMessageHandler(GVDevice* target, QByteArray datagram,
                                                  QHostAddress senderAddress, quint16 senderPort)
@@ -25,17 +25,11 @@ char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
 {
     char* answer = new char[248];
 
-    answer[0]=SPEC_VERSION_MAJOR >> 8;
-    answer[1]=SPEC_VERSION_MAJOR;
-
-    answer[2]=SPEC_VERSION_MINOR >> 8;
-    answer[3]=SPEC_VERSION_MINOR;
+    ConversionUtils::setShortToCharArray(answer, SPEC_VERSION_MAJOR, 0);
+    ConversionUtils::setShortToCharArray(answer, SPEC_VERSION_MINOR, 2);
 
     int deviceMode = (dynamic_cast<GVDevice*>(target))->getRegister(REG_DEVICE_MODE)->getValueNumb();
-    answer[4]=deviceMode >> 24;
-    answer[5]=deviceMode >> 16;
-    answer[6]=deviceMode >> 8;
-    answer[7]=deviceMode;
+    ConversionUtils::setIntToCharArray(answer, deviceMode, 4);
 
     answer[8]=0; //RESERVED
     answer[9]=0; //RESERVED
@@ -43,24 +37,14 @@ char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
     int MACHigh = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_HIGH)->getValueNumb();
     int MACLow = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_LOW)->getValueNumb();
 
-    answer[10] = MACHigh >> 8;
-    answer[11] = MACHigh;
-    answer[12] = MACLow >> 24;
-    answer[13] = MACLow >> 16;
-    answer[14] = MACLow >> 8;
-    answer[15] = MACLow;
+    ConversionUtils::setShortToCharArray(answer, MACHigh, 10);
+    ConversionUtils::setIntToCharArray(answer, MACLow, 12);
 
     //IP options
-    answer[16] = 0;
-    answer[17] = 0;
-    answer[18] = 0;
-    answer[19] = 0;
+    ConversionUtils::setIntToCharArray(answer, 0, 16);
 
     //IP current config
-    answer[20] = 0;
-    answer[21] = 0;
-    answer[22] = 0;
-    answer[23] = 0;
+    ConversionUtils::setIntToCharArray(answer, 0, 20);
 
     //12 byte reserved
     for (int var = 24; var < 36; ++var)
@@ -68,10 +52,7 @@ char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
 
     //Current IP
     int currentIP = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_IP_ADD)->getValueNumb();
-    answer[36]=currentIP >> 24;
-    answer[37]=currentIP >> 16;
-    answer[38]=currentIP >> 8;
-    answer[39]=currentIP;
+    ConversionUtils::setIntToCharArray(answer, currentIP, 36);
 
     //12 byte reserved
     for (int var = 40; var < 52; ++var)
@@ -79,21 +60,15 @@ char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
 
     //Subnet mask
     int subnetMask = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_SUBNET_MASK)->getValueNumb();
-    answer[52]=subnetMask >> 24;
-    answer[53]=subnetMask >> 16;
-    answer[54]=subnetMask >> 8;
-    answer[55]=subnetMask;
+    ConversionUtils::setIntToCharArray(answer, subnetMask, 52);
 
     //12 byte reserved
     for (int var = 56; var < 68; ++var)
         answer[var]=0;
 
-    //Subnet mask
+    //Default gateway
     int defGateway = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_DEFAULT_GATEWAY)->getValueNumb();
-    answer[68]=defGateway >> 24;
-    answer[69]=defGateway >> 16;
-    answer[70]=defGateway >> 8;
-    answer[71]=defGateway;
+    ConversionUtils::setIntToCharArray(answer, defGateway, 68);
 
     //Manufacture name 32 byte
     std::string manName = (dynamic_cast<GVDevice*>(target))->getRegister(REG_MANUFACTURE_NAME)->getValueString();
