@@ -1,15 +1,14 @@
 #ifndef DEVICEMESSAGEHANDLERFACTORY_H
 #define DEVICEMESSAGEHANDLERFACTORY_H
 
-#include "abstractmessagehandlerfactory.h"
+#include "CommonMessages/abstractmessagehandlerfactory.h"
 
-#include "gvdevice.h"
+#include "Device/gvdevice.h"
 
-#include "ApplicationCommandCode.h"
+#include "ApplicationCommand/applicationcommandcode.h"
 
-#include "cmdnotsupportedmh.h"
-
-#include "discoverymessagehandler.h"
+#include "DeviceMessageHandler/cmdnotsupportedmh.h"
+#include "DeviceMessageHandler/discoverymessagehandler.h"
 
 class DeviceMessageHandlerFactory : public AbstractMessageHandlerFactory
 {

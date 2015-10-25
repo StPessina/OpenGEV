@@ -1,8 +1,8 @@
 #ifndef ABSTRACTMESSAGEHANDLERFACTORY_H
 #define ABSTRACTMESSAGEHANDLERFACTORY_H
 
-#include "gvcomponent.h"
-#include "abstractmessagehandler.h"
+#include "CommonComponent/gvcomponent.h"
+#include "CommonMessages/abstractmessagehandler.h"
 
 /*!
  * \brief The AbstractMessageHandlerFactory class create new message handlers

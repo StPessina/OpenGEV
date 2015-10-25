@@ -5,9 +5,9 @@
 #include <vector>
 #include <unordered_map>
 
-#include "controlchannel.h"
+#include "CommonControlChannel/controlchannel.h"
 
-#include "abstractcommand.h"
+#include "CommonMessages/abstractcommand.h"
 
 class ControlChannelMaster : public ControlChannel
 {

@@ -4,8 +4,8 @@
 #include <QString>
 #include <QHostAddress>
 
-#include "gvcomponent.h"
-#include "privilege.h"
+#include "CommonComponent/gvcomponent.h"
+#include "CommonMessages/privilege.h"
 
 /*!
  * \brief The AbstractMessageHandler class

@@ -10,7 +10,7 @@
 
 #include <boost/detail/endian.hpp>
 
-#include "gvcomponent.h"
+#include "CommonComponent/gvcomponent.h"
 
 class AbstractCommand
 {

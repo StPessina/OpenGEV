@@ -12,9 +12,9 @@
 
 #include <log4cpp/Category.hh>
 
-#include "abstractmessagehandlerfactory.h"
-#include "controlchannelprivilege.h"
-#include "privilege.h"
+#include "CommonMessages/abstractmessagehandlerfactory.h"
+#include "CommonControlChannel/controlchannelprivilege.h"
+#include "CommonMessages/privilege.h"
 
 /*!
  * \brief The ControlChannel class create a new control channel

@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "registeraccess.h"
-#include "bootstrapregistertype.h"
+#include "CommonBootstrapRegister/registeraccess.h"
+#include "CommonBootstrapRegister/bootstrapregistertype.h"
 
 class BootstrapRegister
 {

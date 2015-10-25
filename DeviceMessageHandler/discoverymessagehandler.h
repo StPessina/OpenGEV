@@ -3,14 +3,14 @@
 
 #include <QtNetwork/QNetworkInterface>
 
-#include "deviceregisters.h"
+#include "Device/deviceregisters.h"
 
-#include "abstractmessagehandler.h"
-#include "gvdevice.h"
+#include "CommonMessages/abstractmessagehandler.h"
+#include "Device/gvdevice.h"
 
-#include "conversionutils.h"
+#include "CommonMessages/conversionutils.h"
 
-#include "deviceackcode.h"
+#include "DeviceMessageHandler/deviceackcode.h"
 
 #include "opengv_global.h"
 

@@ -3,13 +3,13 @@
 
 #include <QList>
 
-#include "gvcomponent.h"
+#include "CommonComponent/gvcomponent.h"
 
-#include "controlchannelmaster.h"
+#include "CommonControlChannel/controlchannelmaster.h"
 
 #include "partnerdevice.h"
 
-#include "discoverycommand.h"
+#include "ApplicationCommand/discoverycommand.h"
 
 class GVApplication : public GVComponent
 {

@@ -6,13 +6,12 @@
 
 #include <vector>
 
-#include "bootstrapregister.h"
-#include "deviceregisters.h"
+#include "CommonBootstrapRegister/bootstrapregister.h"
+#include "Device/deviceregisters.h"
 
-#include "networkinterfaceregisters.h"
+#include "Device/networkinterfaceregisters.h"
 
-#include "gvcomponent.h"
-
+#include "CommonComponent/gvcomponent.h"
 
 #include "iostream"
 

@@ -1,9 +1,9 @@
 #ifndef CMDNOTSUPPORTEDMH_H
 #define CMDNOTSUPPORTEDMH_H
 
-#include "abstractmessagehandler.h"
+#include "CommonMessages/abstractmessagehandler.h"
 
-#include "deviceackstatus.h"
+#include "DeviceMessageHandler/deviceackstatus.h"
 
 class CmdNotSupportedMH : public AbstractMessageHandler
 {

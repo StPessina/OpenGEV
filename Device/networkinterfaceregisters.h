@@ -6,9 +6,10 @@
 
 #include <map>
 #include <QString>
-#include "deviceregisters.h"
 
-#include "bootstrapregister.h"
+#include "Device/deviceregisters.h"
+
+#include "CommonBootstrapRegister/bootstrapregister.h"
 
 using namespace std;
 

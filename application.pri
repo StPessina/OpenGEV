@@ -1,9 +1,31 @@
 @INCLUDE += application
 
+INCLUDEPATH += Application
+DEPENDPATH += Application
+
 HEADERS += \
-    $$PWD/gvapplication.h \
-    $$PWD/partnerdevice.h
+    $$PWD/Application/gvapplication.h \
+    $$PWD/Application/partnerdevice.h
 
 SOURCES += \
-    $$PWD/gvapplication.cpp \
-    $$PWD/partnerdevice.cpp
+    $$PWD/Application/gvapplication.cpp \
+    $$PWD/Application/partnerdevice.cpp
+
+INCLUDEPATH += ApplicationCommand
+DEPENDPATH += ApplicationCommand
+
+HEADERS += \
+    $$PWD/ApplicationCommand/discoverycommand.h \
+    $$PWD/ApplicationCommand/applicationcommandcode.h
+
+SOURCES += \
+    $$PWD/ApplicationCommand/discoverycommand.cpp
+
+INCLUDEPATH += ApplicationMessageHandler
+DEPENDPATH += ApplicationMessageHandler
+
+HEADERS += \
+    $$PWD/ApplicationMessageHandler/applicationmessagehandlerfactory.h
+
+SOURCES += \
+    $$PWD/ApplicationMessageHandler/applicationmessagehandlerfactory.cpp

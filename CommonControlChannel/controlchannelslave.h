@@ -1,8 +1,7 @@
 #ifndef DEVICECONTROLCHANNEL_H
 #define DEVICECONTROLCHANNEL_H
 
-#include "controlchannel.h"
-#include "devicemessagehandlerfactory.h"
+#include "CommonControlChannel/controlchannel.h"
 
 class ControlChannelSlave : public ControlChannel
 {

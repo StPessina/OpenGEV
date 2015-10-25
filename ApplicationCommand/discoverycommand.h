@@ -3,14 +3,15 @@
 
 #include "opengv_global.h"
 
-#include "abstractcommand.h"
+#include "CommonMessages/abstractcommand.h"
 
-#include "gvapplication.h"
+#include "Application/gvapplication.h"
 
-#include "ApplicationCommandCode.h"
-#include "deviceackcode.h"
+#include "ApplicationCommand/applicationcommandcode.h"
 
-#include "conversionutils.h"
+#include "DeviceMessageHandler/deviceackcode.h"
+
+#include "CommonMessages/conversionutils.h"
 
 using namespace std;
 

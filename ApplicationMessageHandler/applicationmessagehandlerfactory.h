@@ -1,11 +1,11 @@
 #ifndef APPLICATIONMESSAGEHANDLERFACTORY_H
 #define APPLICATIONMESSAGEHANDLERFACTORY_H
 
-#include "abstractmessagehandlerfactory.h"
+#include "CommonMessages/abstractmessagehandlerfactory.h"
 
-#include "gvapplication.h"
+#include "Application/gvapplication.h"
 
-#include "cmdnotsupportedmh.h"
+#include "DeviceMessageHandler/cmdnotsupportedmh.h"
 
 class ApplicationMessageHandlerFactory : public AbstractMessageHandlerFactory
 {

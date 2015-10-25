@@ -6,7 +6,7 @@
 
 #include <unordered_map>
 
-#include "controlchannelmaster.h"
+#include "CommonControlChannel/controlchannelmaster.h"
 
 class PartnerDevice
 {

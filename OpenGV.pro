@@ -19,17 +19,9 @@ SOURCES += opengv.cpp
 HEADERS += opengv.h\
         opengv_global.h
 
-include(commonComponent.pri)
-include(commonCtrlChannel.pri)
-include(commonCtrlMsg.pri)
-include(commonUdpProtocol.pri)
-include(commonBootstrapRegister.pri)
-
+include(common.pri)
 include(device.pri)
-include(deviceMessage.pri)
-
 include(application.pri)
-include(applicationMessage.pri)
 
 unix {
     target.path = /usr/lib
