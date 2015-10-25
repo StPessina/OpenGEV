@@ -1,6 +1,6 @@
 #include "bootstrapregister.h"
 
-BootstrapRegister::BootstrapRegister(int address, std::string name, RegisterAccess accessType, int byteLength)
+BootstrapRegister::BootstrapRegister(int address, string name, RegisterAccess accessType, int byteLength)
 {
     this->address = address;
     this->name = name;
@@ -30,7 +30,7 @@ int BootstrapRegister::getAddress()
     return address;
 }
 
-std::string BootstrapRegister::getName()
+string BootstrapRegister::getName()
 {
     return name;
 }
@@ -50,12 +50,12 @@ bool BootstrapRegister::isStringValue()
     return valueType==STRING;
 }
 
-void BootstrapRegister::setValueString(std::string valueString)
+void BootstrapRegister::setValueString(string valueString)
 {
     this->valueString = valueString;
 }
 
-std::string BootstrapRegister::getValueString()
+string BootstrapRegister::getValueString()
 {
     return valueString;
 }

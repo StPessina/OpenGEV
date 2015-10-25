@@ -6,46 +6,123 @@
 #include "CommonBootstrapRegister/registeraccess.h"
 #include "CommonBootstrapRegister/bootstrapregistertype.h"
 
+using namespace std;
+
+/**
+ * @brief The BootstrapRegister class provide defition for a bootstrap register. Bootstrap register is used to store
+ * information in GV components (like applications or devices)
+ */
 class BootstrapRegister
 {
 public:
-    BootstrapRegister(int address, std::string name, RegisterAccess accessType, int byteLength);
+    /**
+     * @brief BootstrapRegister constructor
+     * @param address id address
+     * @param name
+     * @param accessType allowed access from the GigE network
+     * @param byteLength number of byte for the register
+     */
+    BootstrapRegister(int address, string name, RegisterAccess accessType, int byteLength);
 
+    /**
+     * @brief ~BootstrapRegister constructor
+     */
     virtual ~BootstrapRegister();
 
+    /**
+     * @brief getAddress method
+     * @return the id address of the register
+     */
     int getAddress();
 
-    std::string getName();
+    /**
+     * @brief getName method
+     * @return the name of the register
+     */
+    string getName();
 
+    /**
+     * @brief getAccessType method
+     * @return access type allowed for this register from the network
+     */
     RegisterAccess getAccessType();
 
+    /**
+     * @brief getLength method
+     * @return the length in bytes
+     */
     int getLength();
 
+    /**
+     * @brief isStringValue method
+     * @return true if the stored value is a string
+     */
     bool isStringValue();
 
-    void setValueString(std::string valueString);
+    /**
+     * @brief setValueString method assign new string value for the register, if it's a string
+     * @param valueString new value
+     */
+    void setValueString(string valueString);
 
-    std::string getValueString();
+    /**
+     * @brief getValueString method
+     * @return the string value for the register, if it's a string
+     */
+    string getValueString();
 
+    /**
+     * @brief setValueNumb method
+     * @param valueNumb number value for the register, if it's a number
+     */
     void setValueNumb(int valueNumb);
 
+    /**
+     * @brief setValueNumb method assign new number value for the register, if it's a number
+     * @param valueNumb new value
+     */
     void setValueNumb(long valueNumb);
 
+    /**
+     * @brief getValueNumb method
+     * @return the number value for this register, if it's a number
+     */
     long getValueNumb();
 
 private:
+    /**
+     * @brief address id of the register
+     */
     int address;
 
-    std::string name;
+    /**
+     * @brief name of the register
+     */
+    string name;
 
+    /**
+     * @brief accessType allowed to the register from the network
+     */
     RegisterAccess accessType;
 
+    /**
+     * @brief length in bytes
+     */
     int length;
 
+    /**
+     * @brief valueType type of the value
+     */
     BootstrapRegisterType valueType;
 
-    std::string valueString = "";
+    /**
+     * @brief valueString value string for the register
+     */
+    string valueString = "";
 
+    /**
+     * @brief valueNumb value number for the register
+     */
     long valueNumb = 0;
 };
 

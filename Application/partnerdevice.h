@@ -8,9 +8,15 @@
 
 #include "CommonControlChannel/controlchannelmaster.h"
 
+/**
+ * @brief The PartnerDevice class provide method for a discovered device
+ */
 class PartnerDevice
 {
 public:
+    /**
+     * @brief PartnerDevice constructor
+     */
     PartnerDevice();
 
     QString macAddress;
