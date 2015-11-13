@@ -10,6 +10,9 @@
 #include "DeviceMessageHandler/cmdnotsupportedmh.h"
 #include "DeviceMessageHandler/discoverymessagehandler.h"
 
+/**
+ * @brief The DeviceMessageHandlerFactory class is handler for device message
+ */
 class DeviceMessageHandlerFactory : public AbstractMessageHandlerFactory
 {
 public:

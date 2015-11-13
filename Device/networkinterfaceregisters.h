@@ -13,21 +13,44 @@
 
 using namespace std;
 
+/**
+ * @brief The NetworkInterfaceRegisters class store bootstrap register for a device network interface
+ */
 class NetworkInterfaceRegisters
 {
 public:
+    /**
+     * @brief NetworkInterfaceRegisters
+     * @param netInterface
+     * @param interfaceNumber
+     */
     NetworkInterfaceRegisters(QNetworkInterface netInterface, int interfaceNumber);
 
+    /**
+     * @brief getRegister
+     * @param offsetRegisterCode (use defined value)
+     * @return network register if exist
+     */
     BootstrapRegister *getRegister(int offsetRegisterCode);
 
+    /**
+     * @brief getInterfaceNumber
+     * @return interface number
+     */
     int getInterfaceNumber();
 
 private:
 
     int interfaceNumber;
 
+    /**
+     * @brief map of network register
+     */
     map<int,BootstrapRegister*> registers;
 
+    /**
+     * @brief initRegisterMap
+     */
     void initRegisterMap();
 
     QNetworkInterface netInterface;
@@ -44,6 +67,11 @@ private:
     int persistentDefaultGateway;
     int linkSpeed;
 
+    /**
+     * @brief getInterfaceListWithoutLoopBack
+     * @param interfaceNumber
+     * @return network interface from interface number
+     */
     QNetworkInterface getInterfaceListWithoutLoopBack(int interfaceNumber);
 };
 

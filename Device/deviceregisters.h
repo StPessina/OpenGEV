@@ -43,10 +43,19 @@
 #define REG_PERSISTENT_DEFAULT_GATEWAY 0x006C
 #define REG_LINK_SPEED 0x0070
 
+/**
+ * @brief The DeviceRegisterConverter class utils conversion for device bootstrap register
+ */
 class DeviceRegisterConverter {
 public:
     DeviceRegisterConverter();
 
+    /**
+     * @brief getNetworkInterfaceRegister return register for netword interface
+     * @param interfaceNumber
+     * @param regType relative register type
+     * @return absolute register type
+     */
     static int getNetworkInterfaceRegister(int interfaceNumber, int regType);
 
 };

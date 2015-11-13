@@ -14,6 +14,9 @@
 
 #include "opengv_global.h"
 
+/**
+ * @brief The DiscoveryMessageHandler class answer to discovery command from application
+ */
 class DiscoveryMessageHandler : public AbstractMessageHandler
 {
 public:
