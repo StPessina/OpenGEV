@@ -2,7 +2,7 @@
 
 ControlChannelMaster::ControlChannelMaster(QHostAddress sourceAddr,
                                                      quint16 sourcePort)
-    : ControlChannel(sourceAddr, sourcePort)
+    : UDPChannel(sourceAddr, sourcePort)
 {
     connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
 }

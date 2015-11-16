@@ -1,14 +1,14 @@
 #ifndef DEVICECONTROLCHANNEL_H
 #define DEVICECONTROLCHANNEL_H
 
-#include "CommonControlChannel/controlchannel.h"
+#include "CommonControlChannel/udpchannel.h"
 
 /**
  * @brief The ControlChannelSlave class provide a control channel that wait for new command
  * from a master control channel. It will automatically generate new message handler
  * for manage incoming command
  */
-class ControlChannelSlave : public ControlChannel
+class ControlChannelSlave : public UDPChannel
 {
 public:
     /**

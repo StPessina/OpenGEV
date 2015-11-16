@@ -77,12 +77,15 @@ QByteArray *AbstractMessageHandler::getAckDatagram()
     char* header = getAckHeader();
     for (int i = 0; i < 8; ++i)
         datagramChar[i]=header[i];
+    delete header;
     if(datagramSize>8) {
         char* body = getAckDatagramWithoutHeader();
         for (int i = 8; i < datagramSize; ++i)
             datagramChar[i]=body[i-8];
+        delete body;
     }
     QByteArray* datagram = new QByteArray(datagramChar, datagramSize);
+    delete datagramChar;
     return datagram;
 }
 

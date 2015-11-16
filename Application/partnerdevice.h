@@ -19,6 +19,11 @@ public:
      */
     PartnerDevice();
 
+    /**
+     * @brief ~PartnerDevice object deconstructor
+     */
+    virtual ~PartnerDevice();
+
     QString macAddress;
     QHostAddress ipAddress;
     QHostAddress subnetMask;

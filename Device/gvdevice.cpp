@@ -12,7 +12,10 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
 
 GVDevice::~GVDevice()
 {
-
+    foreach (auto reg, commonRegisters)
+        delete reg.second;
+    foreach (auto netReg, networkRegister)
+        delete netReg.second;
 }
 
 BootstrapRegister *GVDevice::getRegister(int registerCode)

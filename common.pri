@@ -5,10 +5,12 @@ INCLUDEPATH += CommonBootstrapRegister
 HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
-    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h
+    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
+    $$PWD/CommonControlChannel/udpchannel.h
 
 SOURCES += \
-    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
+    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp \
+    $$PWD/CommonControlChannel/udpchannel.cpp
 
 @INCLUDE += CommonComponent
 
@@ -27,13 +29,11 @@ INCLUDEPATH += CommonControlChannel
 DEPENDPATH += CommonControlChannel
 
 HEADERS += \
-    $$PWD/CommonControlChannel/controlchannel.h \
     $$PWD/CommonControlChannel/controlchannelprivilege.h \
     $$PWD/CommonControlChannel/controlchannelmaster.h \
     $$PWD/CommonControlChannel/controlchannelslave.h
 
 SOURCES += \
-    $$PWD/CommonControlChannel/controlchannel.cpp \
     $$PWD/CommonControlChannel/controlchannelmaster.cpp \
     $$PWD/CommonControlChannel/controlchannelslave.cpp
 

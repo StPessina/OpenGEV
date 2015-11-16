@@ -27,6 +27,11 @@ public:
     NetworkInterfaceRegisters(QNetworkInterface netInterface, int interfaceNumber);
 
     /**
+     * @brief ~NetworkInterfaceRegisters deconstructor
+     */
+    virtual ~NetworkInterfaceRegisters();
+
+    /**
      * @brief getRegister
      * @param offsetRegisterCode (use defined value)
      * @return network register if exist

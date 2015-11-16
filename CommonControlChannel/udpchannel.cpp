@@ -1,6 +1,6 @@
-#include "controlchannel.h"
+#include "udpchannel.h"
 
-ControlChannel::ControlChannel(QHostAddress sourceAddr,
+UDPChannel::UDPChannel(QHostAddress sourceAddr,
                                quint16 sourcePort)
 {
     this->sourceAddr = sourceAddr;
@@ -11,13 +11,13 @@ ControlChannel::ControlChannel(QHostAddress sourceAddr,
     logger.infoStream()<<getLogMessageHeader()<<"New";
 }
 
-ControlChannel::~ControlChannel()
+UDPChannel::~UDPChannel()
 {
     delete socket;
     delete timeoutTimer;
 }
 
-void ControlChannel::initSocket()
+void UDPChannel::initSocket()
 {
     socket = new QUdpSocket(this);
     socket->bind(sourceAddr, sourcePort);
@@ -28,13 +28,13 @@ void ControlChannel::initSocket()
     logger.infoStream()<<getLogMessageHeader()<<"Init socket";
 }
 
-void ControlChannel::setMonitorAccess()
+void UDPChannel::setMonitorAccess()
 {
     ctrlChannelPrivilege = MONITOR;
     logger.infoStream()<<getLogMessageHeader()<<"Set monitor level access";
 }
 
-void ControlChannel::setCtrlAccess(QHostAddress applicationAddr, quint16 applicationPort)
+void UDPChannel::setCtrlAccess(QHostAddress applicationAddr, quint16 applicationPort)
 {
     ctrlChannelPrivilege = CTRL_ACCESS;
     this->applicationAddr = applicationAddr;
@@ -46,7 +46,7 @@ void ControlChannel::setCtrlAccess(QHostAddress applicationAddr, quint16 applica
 
 }
 
-void ControlChannel::setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint16 applicationPort)
+void UDPChannel::setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint16 applicationPort)
 {
     ctrlChannelPrivilege = CTRL_ACCESS_SWITCH_OVER;
     this->applicationAddr = applicationAddr;
@@ -57,7 +57,7 @@ void ControlChannel::setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint
                         <<":"<<(int) applicationPort;
 }
 
-void ControlChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 applicationPort)
+void UDPChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 applicationPort)
 {
     ctrlChannelPrivilege = EXCLUSIVE;
     this->applicationAddr = applicationAddr;
@@ -68,7 +68,7 @@ void ControlChannel::setExclusiveAccess(QHostAddress applicationAddr, quint16 ap
                         <<":"<<(int) applicationPort;
 }
 
-Privilege ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
+Privilege UDPChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
 {
     switch (ctrlChannelPrivilege) {
         case MONITOR:
@@ -94,14 +94,14 @@ Privilege ControlChannel::checkChannelPrivilege(QHostAddress senderAddr, quint16
     return DENIED;
 }
 
-std::string ControlChannel::getLogMessageHeader()
+std::string UDPChannel::getLogMessageHeader()
 {
     return "Control channel ("
             + sourceAddr.toString().toStdString()
             + ":" + std::to_string((int) sourcePort) + ") - ";
 }
 
-void ControlChannel::readPendingDatagrams()
+void UDPChannel::readPendingDatagrams()
 {
     while (socket->hasPendingDatagrams()) {
         QByteArray datagram;
@@ -122,17 +122,17 @@ void ControlChannel::readPendingDatagrams()
     }
 }
 
-QHostAddress ControlChannel::getSourceAddress()
+QHostAddress UDPChannel::getSourceAddress()
 {
     return sourceAddr;
 }
 
-quint16 ControlChannel::getSourcePort()
+quint16 UDPChannel::getSourcePort()
 {
     return sourcePort;
 }
 
-bool ControlChannel::isSocketOpen()
+bool UDPChannel::isSocketOpen()
 {
     return true;
 }

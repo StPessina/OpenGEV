@@ -5,14 +5,14 @@
 #include <vector>
 #include <unordered_map>
 
-#include "CommonControlChannel/controlchannel.h"
+#include "CommonControlChannel/udpchannel.h"
 
 #include "CommonMessages/abstractcommand.h"
 
 /**
  * @brief The ControlChannelMaster class provide control channel for the master of the GigE communication
  */
-class ControlChannelMaster : public ControlChannel
+class ControlChannelMaster : public UDPChannel
 {
     Q_OBJECT
 public:

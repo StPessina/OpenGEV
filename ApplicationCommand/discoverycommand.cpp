@@ -23,8 +23,7 @@ int DiscoveryCommand::getLengthWithoutHeader()
 
 char *DiscoveryCommand::getCommandDatagramWithoutHeader()
 {
-    char* datagram = new char[0];
-    return datagram;
+    return NULL;
 }
 
 int DiscoveryCommand::executeAnswer(QByteArray answer)
@@ -55,6 +54,8 @@ int DiscoveryCommand::executeAnswer(QByteArray answer)
     }
 
     aDevice.macAddress = QString(mac);
+
+    delete mac;
 
     //Ip address
     aDevice.ipAddress = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 36));

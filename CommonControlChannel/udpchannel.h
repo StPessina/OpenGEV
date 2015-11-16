@@ -17,9 +17,9 @@
 #include "CommonMessages/privilege.h"
 
 /*!
- * \brief The ControlChannel class create a new udp socket for manage in/out datagram from the network
+ * \brief The upd channel class create a new udp socket for manage in/out datagram from the network
  */
-class ControlChannel :  public QObject
+class UDPChannel :  public QObject
 {
     Q_OBJECT
 public:
@@ -27,20 +27,20 @@ public:
      * @brief ControlChannel explict constructor for QObject
      * @param parent
      */
-    explicit ControlChannel(QObject* parent = 0);
+    explicit UDPChannel(QObject* parent = 0);
 
     /**
      * @brief ControlChannel constructor
      * @param sourceAddr addresses that can send message on this channel
      * @param sourcePort port where this channel will be listen
      */
-    ControlChannel(QHostAddress sourceAddr,
+    UDPChannel(QHostAddress sourceAddr,
                    quint16 sourcePort);
 
     /**
      * @brief ~ControlChannel deconstructor
      */
-    virtual ~ControlChannel();
+    virtual ~UDPChannel();
 
     /**
      * @brief initSocket method create a new socket and register readPendingDatagrams method

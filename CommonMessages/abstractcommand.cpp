@@ -25,12 +25,15 @@ QByteArray* AbstractCommand::getCommandDatagram()
     char* header = getHeader();
     for (int i = 0; i < HEADER_LENGTH; ++i)
         datagramChar[i]=header[i];
-    if(datagramSize>8) {
+    delete header;
+    if(datagramSize>HEADER_LENGTH) {
         char* body = getCommandDatagramWithoutHeader();
         for (int i = HEADER_LENGTH; i < datagramSize; ++i)
             datagramChar[i]=body[i-HEADER_LENGTH];
+        delete body;
     }
     QByteArray* datagram = new QByteArray(datagramChar, datagramSize);
+    delete datagramChar;
     return datagram;
 }
 

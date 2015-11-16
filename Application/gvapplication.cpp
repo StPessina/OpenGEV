@@ -30,5 +30,7 @@ QList<PartnerDevice> GVApplication::getDiscoveredDevice()
 int GVApplication::discoverDevice()
 {
     DiscoveryCommand* dis = new DiscoveryCommand(this);
-    return masterChannel->sendCommand(dis);
+    int result = masterChannel->sendCommand(dis);
+    delete dis;
+    return result;
 }

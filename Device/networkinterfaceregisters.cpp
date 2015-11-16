@@ -7,6 +7,12 @@ NetworkInterfaceRegisters::NetworkInterfaceRegisters(QNetworkInterface netInterf
     initRegisterMap();
 }
 
+NetworkInterfaceRegisters::~NetworkInterfaceRegisters()
+{
+    foreach(auto reg, registers)
+        delete reg.second;
+}
+
 BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode)
 {
     BootstrapRegister* reg = (BootstrapRegister*) registers.at(
