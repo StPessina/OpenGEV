@@ -70,6 +70,31 @@ void BootstrapRegister::setValueNumb(long valueNumb)
     this->valueNumb = valueNumb;
 }
 
+void BootstrapRegister::setBit(int bitPosition)
+{
+    int mask = getMask(bitPosition, false);
+    valueNumb |= mask;
+}
+
+void BootstrapRegister::resetBit(int bitPosition)
+{
+    int mask = getMask(bitPosition, true);
+    valueNumb &= mask;
+}
+
+int BootstrapRegister::getMask(int bitPosition, bool reset)
+{
+    if(bitPosition<0 || bitPosition>31)
+        if(reset)
+            return 0xFFFF;
+        else
+            return 0x0000;
+    if(reset)
+        return 0xFFFF - pow(2,bitPosition);
+    else
+        return pow(2,bitPosition);
+}
+
 long BootstrapRegister::getValueNumb()
 {
     return valueNumb;

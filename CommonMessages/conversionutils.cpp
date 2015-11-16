@@ -23,7 +23,7 @@ bool ConversionUtils::setIntToCharArray(char *array, int value, int start)
 bool ConversionUtils::sanityCheck(int size, int requiredSize, int start)
 {
     if(requiredSize<=0 || start<0) return false;
-    if(size<=(start+requiredSize)) return false;
+    if(size<(start+requiredSize)) return false;
     return true;
 }
 

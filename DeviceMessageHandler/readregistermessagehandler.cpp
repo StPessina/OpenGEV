@@ -24,7 +24,22 @@ int ReadRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
             resultStatus = GEV_STATUS_BAD_ALIGNMENT;
         else  {
             numberOfRegisters = datagramWithoutHeader.size()/4;
-            resultStatus = GEV_STATUS_SUCCESS;
+            if(numberOfRegisters>0) {
+                int accessibleRegisters=0;
+                for (int i = 0; i < numberOfRegisters*4; i+=4) {
+                    int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
+                    int access = dynamic_cast<GVDevice*>(target)->getRegister(regNumber)->getAccessType();
+                    if(access==RegisterAccess::RA_WRITE)
+                        break;
+                    accessibleRegisters++;
+                }
+                if(accessibleRegisters==numberOfRegisters)
+                    resultStatus = GEV_STATUS_SUCCESS;
+                else
+                    resultStatus = GEV_STATUS_ACCESS_DENIED; //CR-160cd
+                numberOfRegisters = accessibleRegisters;
+            } else
+                resultStatus = GEV_STATUS_INVALID_PARAMETER;
         }
     }
 
@@ -35,19 +50,23 @@ quint16 ReadRegisterMessageHandler::getAckDatagramLengthWithoutHeader()
 {
     if(resultStatus==GEV_STATUS_SUCCESS)
         return numberOfRegisters*4;
+    if(resultStatus==GEV_STATUS_ACCESS_DENIED
+            && numberOfRegisters>0)
+        return numberOfRegisters*4;
     return 0;
 }
 
 char *ReadRegisterMessageHandler::getAckDatagramWithoutHeader()
 {
-    if(resultStatus!=GEV_STATUS_SUCCESS)
+    if(resultStatus!=GEV_STATUS_SUCCESS ||
+            (numberOfRegisters==0 && resultStatus==GEV_STATUS_ACCESS_DENIED))
         return NULL;
 
     QByteArray datagramWithoutHeader = datagram.mid(8);
 
     char* answer = new char[numberOfRegisters*4];
 
-    for (int i = 0; i < numberOfRegisters*4; i+=4) {
+    for (int i = 0; i < numberOfRegisters*4; i+=4) { //CR-159cd
         int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
         int value = dynamic_cast<GVDevice*>(target)->getRegister(regNumber)->getValueNumb();
         ConversionUtils::setIntToCharArray(answer, value, i);
