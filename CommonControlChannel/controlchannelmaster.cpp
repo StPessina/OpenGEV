@@ -103,8 +103,6 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
                         connect(this, SIGNAL(stopWaitingAck()), &loop, SLOT(quit()));
                         loop.exec();
 
-                        commandCache.erase(cmd->getRequestId());
-
                         if(timeoutExpired) {
                             result = -2;
                             logger.debugStream()<<getLogMessageHeader()
@@ -126,6 +124,8 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
 
             retryCounter++;
         }
+
+        commandCache.erase(cmd->getRequestId());
 
         if(retryCounter>RETRY_SEND) {
             logger.warnStream()<<getLogMessageHeader()

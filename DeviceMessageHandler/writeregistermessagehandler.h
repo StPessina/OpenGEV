@@ -14,6 +14,10 @@
 
 #include "opengv_global.h"
 
+/**
+ * @brief The WriteRegisterMessageHandler class implements ack for write message channel
+ * required R-174c
+ */
 class WriteRegisterMessageHandler : public AbstractMessageHandler
 {
 public:

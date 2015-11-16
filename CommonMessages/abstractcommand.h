@@ -105,7 +105,13 @@ public:
      * @param answer received
      * @return status code
      */
-    virtual short getStatusCode(QByteArray answer) final;
+    virtual short getStatusCodeFromAnswer(QByteArray answer) final;
+
+    /**
+     * @brief getStatusCode
+     * @return status code
+     */
+    virtual short getStatusCode() final;
 
     /**
      * @brief executeAnswer method

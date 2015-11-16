@@ -18,6 +18,13 @@ int WriteRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
         resultStatus = GEV_STATUS_INVALID_HEADER;
     else {
 
+        //TODO R-171cd and R-170cd and R-172-cd
+        /*
+
+       if(ctrlChannelPrivilege!=CONTROL_ACCESS)
+            can't write
+        */
+
         QByteArray datagramWithoutHeader = datagram.mid(8);
 
         if(datagramWithoutHeader.size() % 8 != 0)
@@ -26,24 +33,38 @@ int WriteRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
             numberOfRegisters = datagramWithoutHeader.size()/8;
             if(numberOfRegisters>0) {
                 int accessibleRegisters=0;
-                for (int i = 0; i < numberOfRegisters*8; i+=8) {
+                for (int i = 0; i < numberOfRegisters*8; i+=8) { //CR-168cd
                     int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
                     int value = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i+4);
                     BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
-                    if(reg==NULL)
+                    if(reg==NULL) { //CR-175cd
+                        resultStatus = GEV_STATUS_INVALID_ADDRESS;
                         break;
+                    }
                     int access = reg->getAccessType();
-                    if(access==RegisterAccess::RA_READ)
-                        break;
 
-                    reg->setValueNumb(value);
+                    if(access==RegisterAccess::RA_READ) { //CR-175cd
+                        resultStatus = GEV_STATUS_ACCESS_DENIED;
+                        break;
+                    }
+
+                    switch (regNumber) {
+                    case REG_CONTROL_CHANNEL_PRIVILEGE:
+                        if(value==0)
+                            dynamic_cast<GVDevice*>(target)->closeControlChannelPrivilege();
+                        else
+                            dynamic_cast<GVDevice*>(target)->changeControlChannelPrivilege(sender,port);
+                        break;
+                    default:
+                        reg->setValueNumb(value);
+                        break;
+                    }
 
                     accessibleRegisters++;
                 }
                 if(accessibleRegisters==numberOfRegisters)
                     resultStatus = GEV_STATUS_SUCCESS;
-                else
-                    resultStatus = GEV_STATUS_ACCESS_DENIED; //CR-160cd
+
                 numberOfRegisters = accessibleRegisters;
             } else
                 resultStatus = GEV_STATUS_INVALID_PARAMETER;
@@ -60,6 +81,8 @@ quint16 WriteRegisterMessageHandler::getAckDatagramLengthWithoutHeader()
 
 char *WriteRegisterMessageHandler::getAckDatagramWithoutHeader()
 {
+    //R-174c
+
     char* answer = new char[4];
 
     ConversionUtils::setIntToCharArray(answer,

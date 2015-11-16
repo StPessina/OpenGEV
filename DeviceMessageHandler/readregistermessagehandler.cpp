@@ -29,17 +29,23 @@ int ReadRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
                 for (int i = 0; i < numberOfRegisters*4; i+=4) {
                     int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
                     BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
-                    if(reg==NULL)
+                    if(reg==NULL) { //CR-160cd
+                        resultStatus = GEV_STATUS_INVALID_ADDRESS;
                         break;
+                    }
+
                     int access = reg->getAccessType();
-                    if(access==RegisterAccess::RA_WRITE)
+                    if(access==RegisterAccess::RA_WRITE) { //CR-160cd
+                        resultStatus = GEV_STATUS_ACCESS_DENIED;
                         break;
+                    }
+
                     accessibleRegisters++;
                 }
                 if(accessibleRegisters==numberOfRegisters)
                     resultStatus = GEV_STATUS_SUCCESS;
-                else
-                    resultStatus = GEV_STATUS_ACCESS_DENIED; //CR-160cd
+
+
                 numberOfRegisters = accessibleRegisters;
             } else
                 resultStatus = GEV_STATUS_INVALID_PARAMETER;

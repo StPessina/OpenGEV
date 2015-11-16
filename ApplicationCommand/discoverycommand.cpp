@@ -30,7 +30,7 @@ int DiscoveryCommand::executeAnswer(QByteArray answer)
 {
     this->answer = answer;
     if(!checkAckHeader(answer))
-        return getStatusCode(answer);
+        return getStatusCodeFromAnswer(answer);
 
     QByteArray answerWithoutHeader = answer.mid(8);
 

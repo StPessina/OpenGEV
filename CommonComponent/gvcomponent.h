@@ -24,7 +24,7 @@ protected:
     /**
      * @brief logger
      */
-    log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
+    //log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 
 };
 

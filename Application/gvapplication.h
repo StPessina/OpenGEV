@@ -7,11 +7,9 @@
 
 #include "CommonControlChannel/controlchannelmaster.h"
 
-#include "partnerdevice.h"
+#include "Application/partnerdevice.h"
 
 #include "ApplicationCommand/discoverycommand.h"
-#include "ApplicationCommand/readregistercommand.h"
-#include "ApplicationCommand/writeregistercommand.h"
 
 #include "Device/deviceregisters.h"
 
@@ -27,6 +25,7 @@ public:
      * @param primaryChannelport local port for send broadcast message or common message on GigE vision network
      */
     GVApplication(int primaryChannelport=5000);
+
     /**
      * @brief ~GVApplication object deconstructor
      */
@@ -54,20 +53,6 @@ public:
      * @return 0 if command success
      */
     int discoverDevice();
-
-    /**
-     * @brief getStreamingChannelNumber
-     * @param device
-     * @return
-     */
-    int getStreamingChannelNumber(PartnerDevice device);
-
-    /**
-     * @brief setControlAccessKey
-     * @param device
-     * @param key
-     */
-    void setControlAccessKey(PartnerDevice device, int key);
 
 private:
 

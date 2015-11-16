@@ -52,9 +52,9 @@ char *WriteRegisterCommand::getCommandDatagramWithoutHeader()
 int WriteRegisterCommand::executeAnswer(QByteArray answer)
 {
     this->answer = answer;
-    if(checkAckHeader(answer))
+    if(!checkAckHeader(answer))
         return 1;
 
-    return getStatusCode(answer);
+    return getStatusCodeFromAnswer(answer);
 }
 

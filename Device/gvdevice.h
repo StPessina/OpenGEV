@@ -70,6 +70,18 @@ public:
      */
     string getDeviceName();
 
+    /**
+     * @brief changeControlChannelPrivilege
+     * @param primary_address
+     * @param primary_port
+     */
+    void changeControlChannelPrivilege(QHostAddress primary_address, quint16 primary_port);
+
+    /**
+     * @brief closeControlChannelPrivilege
+     */
+    void closeControlChannelPrivilege();
+
 private:
 
     /**
@@ -81,6 +93,8 @@ private:
      * @brief networkRegister map
      */
     unordered_map<int,NetworkInterfaceRegisters*> networkRegister;
+
+    log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 
     /**
      * @brief initCommonRegisterMap

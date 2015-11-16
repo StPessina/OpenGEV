@@ -45,6 +45,21 @@ string GVDevice::getDeviceName()
     return commonRegisters[REG_DEVICE_VERSION]->getValueString();
 }
 
+void GVDevice::changeControlChannelPrivilege(QHostAddress primary_address, quint16 primary_port)
+{
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(1);
+    int addr = primary_address.toIPv4Address();
+    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValueNumb(addr);
+    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValueNumb((ushort) primary_port);
+}
+
+void GVDevice::closeControlChannelPrivilege()
+{
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(0);
+    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValueNumb(0);
+    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValueNumb(0);
+}
+
 void GVDevice::initCommonRegisterMap()
 {
     commonRegisters[REG_VESION]= new  BootstrapRegister(REG_VESION, "Version",RA_READ, 4);
@@ -76,6 +91,10 @@ void GVDevice::initCommonRegisterMap()
     commonRegisters[REG_GVCP_CONFIGURATION] = new  BootstrapRegister(REG_GVCP_CONFIGURATION, "GVCP Configuration",RA_READ_WRITE, 4);
     commonRegisters[REG_PENDING_TIMEOUT] = new  BootstrapRegister(REG_PENDING_TIMEOUT, "Pending timeout",RA_READ, 4);
     commonRegisters[REG_CONTROL_SWITCHOVER_KEY] = new  BootstrapRegister(REG_CONTROL_SWITCHOVER_KEY, "Control Switchover Key",RA_WRITE, 4);
+
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE] = new  BootstrapRegister(REG_CONTROL_CHANNEL_PRIVILEGE, "Control Channel Privilege (0-1)",RA_READ_WRITE, 4);
+    commonRegisters[REG_PRIMARY_APPLICATION_PORT] = new  BootstrapRegister(REG_PRIMARY_APPLICATION_PORT, "Primary application port",RA_READ, 4);
+    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS] = new  BootstrapRegister(REG_PRIMARY_APPLICATION_IP_ADDRESS, "Primary application address",RA_READ, 4);
 
 }
 

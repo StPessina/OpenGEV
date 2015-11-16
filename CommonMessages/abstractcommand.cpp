@@ -83,11 +83,16 @@ bool AbstractCommand::checkAckHeader(QByteArray answer)
     return true;
 }
 
-short AbstractCommand::getStatusCode(QByteArray answer)
+short AbstractCommand::getStatusCodeFromAnswer(QByteArray answer)
 {
     short statusCode = ConversionUtils::getShortFromQByteArray(answer,0);
 
     return statusCode;
+}
+
+short AbstractCommand::getStatusCode()
+{
+    return getStatusCodeFromAnswer(answer);
 }
 
 std::string AbstractCommand::toString()
