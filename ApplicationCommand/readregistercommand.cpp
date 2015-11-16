@@ -31,6 +31,8 @@ quint16 ReadRegisterCommand::getLengthWithoutHeader()
 
 char *ReadRegisterCommand::getCommandDatagramWithoutHeader()
 {
+    //R-163c
+
     char* body = new char[registersData.size()*4];
 
     int pointer = 0;

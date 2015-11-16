@@ -8,6 +8,8 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
     commonRegisters[REG_MANUFACTURE_NAME]->setValueString(manufacture_name);
     commonRegisters[REG_MODEL_NAME]->setValueString(model_name);
     commonRegisters[REG_DEVICE_VERSION]->setValueString(device_name);
+
+    commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //Allow multiple read (R-158cd) (R-167cd)
 }
 
 GVDevice::~GVDevice()

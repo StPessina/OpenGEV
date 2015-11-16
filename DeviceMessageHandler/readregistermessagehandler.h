@@ -13,7 +13,10 @@
 
 #include "opengv_global.h"
 
-
+/**
+ * @brief The ReadRegisterMessageHandler class implements read register handler
+ * required (R-157cd)
+ */
 class ReadRegisterMessageHandler : public AbstractMessageHandler
 {
 public:
@@ -28,6 +31,10 @@ public:
 
     quint16 getAckDatagramLengthWithoutHeader();
 
+    /**
+     * @brief getAckDatagramWithoutHeader
+     * @return datagram (R-164c)
+     */
     char* getAckDatagramWithoutHeader();
 
 private:

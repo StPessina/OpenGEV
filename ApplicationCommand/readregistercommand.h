@@ -44,7 +44,7 @@ public:
                         quint16 destinationPort);
 
     /**
-     * @brief ~DiscoveryCommand deconstructor
+     * @brief ~ReadRegisterCommand deconstructor
      */
     virtual ~ReadRegisterCommand();
 
