@@ -1,7 +1,7 @@
 #include "writeregistermessagehandler.h"
 
 WriteRegisterMessageHandler::WriteRegisterMessageHandler(GVDevice *target, QByteArray datagram,
-                                                       QHostAddress senderAddress, quint16 senderPort)
+                                                         QHostAddress senderAddress, quint16 senderPort)
     : AbstractMessageHandler(target, WRITEREG_ACK, datagram, senderAddress, senderPort)
 {
     numberOfRegisters = 0;
@@ -12,62 +12,61 @@ bool WriteRegisterMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
     return true;
 }
 
-int WriteRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
+int WriteRegisterMessageHandler::execute()
 {
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;
     else {
 
-        //TODO R-171cd and R-170cd and R-172-cd
-        /*
+        //R-171cd and R-170cd and R-172-cd
+        if(dynamic_cast<GVDevice*>(target)->checkChannelPrivilege(sender,port)!=FULL)
+            resultStatus = GEV_STATUS_ACCESS_DENIED;
+        else {
+            QByteArray datagramWithoutHeader = datagram.mid(8);
 
-       if(ctrlChannelPrivilege!=CONTROL_ACCESS)
-            can't write
-        */
+            if(datagramWithoutHeader.size() % 8 != 0)
+                resultStatus = GEV_STATUS_BAD_ALIGNMENT;
+            else  {
+                numberOfRegisters = datagramWithoutHeader.size()/8;
+                if(numberOfRegisters<=0)
+                    resultStatus = GEV_STATUS_INVALID_PARAMETER;
+                else {
+                    int accessibleRegisters=0;
+                    for (int i = 0; i < numberOfRegisters*8; i+=8) { //CR-168cd
+                        int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
+                        int value = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i+4);
+                        BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
+                        if(reg==NULL) { //CR-175cd
+                            resultStatus = GEV_STATUS_INVALID_ADDRESS;
+                            break;
+                        }
+                        int access = reg->getAccessType();
 
-        QByteArray datagramWithoutHeader = datagram.mid(8);
+                        if(access==RegisterAccess::RA_READ) { //CR-175cd
+                            resultStatus = GEV_STATUS_ACCESS_DENIED;
+                            break;
+                        }
 
-        if(datagramWithoutHeader.size() % 8 != 0)
-            resultStatus = GEV_STATUS_BAD_ALIGNMENT;
-        else  {
-            numberOfRegisters = datagramWithoutHeader.size()/8;
-            if(numberOfRegisters>0) {
-                int accessibleRegisters=0;
-                for (int i = 0; i < numberOfRegisters*8; i+=8) { //CR-168cd
-                    int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
-                    int value = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i+4);
-                    BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
-                    if(reg==NULL) { //CR-175cd
-                        resultStatus = GEV_STATUS_INVALID_ADDRESS;
-                        break;
+                        switch (regNumber) {
+                        case REG_CONTROL_CHANNEL_PRIVILEGE:
+                            if(value==0)
+                                dynamic_cast<GVDevice*>(target)->closeControlChannelPrivilege();
+                            else
+                                dynamic_cast<GVDevice*>(target)->changeControlChannelPrivilege(value, sender,port);
+                            break;
+                        default:
+                            reg->setValueNumb(value);
+                            break;
+                        }
+
+                        accessibleRegisters++;
                     }
-                    int access = reg->getAccessType();
+                    if(accessibleRegisters==numberOfRegisters)
+                        resultStatus = GEV_STATUS_SUCCESS;
 
-                    if(access==RegisterAccess::RA_READ) { //CR-175cd
-                        resultStatus = GEV_STATUS_ACCESS_DENIED;
-                        break;
-                    }
-
-                    switch (regNumber) {
-                    case REG_CONTROL_CHANNEL_PRIVILEGE:
-                        if(value==0)
-                            dynamic_cast<GVDevice*>(target)->closeControlChannelPrivilege();
-                        else
-                            dynamic_cast<GVDevice*>(target)->changeControlChannelPrivilege(sender,port);
-                        break;
-                    default:
-                        reg->setValueNumb(value);
-                        break;
-                    }
-
-                    accessibleRegisters++;
+                    numberOfRegisters = accessibleRegisters;
                 }
-                if(accessibleRegisters==numberOfRegisters)
-                    resultStatus = GEV_STATUS_SUCCESS;
-
-                numberOfRegisters = accessibleRegisters;
-            } else
-                resultStatus = GEV_STATUS_INVALID_PARAMETER;
+            }
         }
     }
 

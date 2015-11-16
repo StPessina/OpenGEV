@@ -11,7 +11,10 @@
 
 #include "Device/networkinterfaceregisters.h"
 
+#include "CommonMessages/privilege.h"
+
 #include "CommonComponent/gvcomponent.h"
+#include "CommonControlChannel/controlchannelprivilege.h"
 
 #include "iostream"
 
@@ -71,11 +74,19 @@ public:
     string getDeviceName();
 
     /**
+     * @brief checkChannelPrivilege method return the right of the sender
+     * @param senderAddr
+     * @param senderPort
+     * @return right for the sender
+     */
+    Privilege checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort);
+
+    /**
      * @brief changeControlChannelPrivilege
      * @param primary_address
      * @param primary_port
      */
-    void changeControlChannelPrivilege(QHostAddress primary_address, quint16 primary_port);
+    void changeControlChannelPrivilege(int value, QHostAddress primary_address, quint16 primary_port);
 
     /**
      * @brief closeControlChannelPrivilege
@@ -93,6 +104,7 @@ private:
      * @brief networkRegister map
      */
     unordered_map<int,NetworkInterfaceRegisters*> networkRegister;
+
 
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 

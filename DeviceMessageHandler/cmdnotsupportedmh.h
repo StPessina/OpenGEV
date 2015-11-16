@@ -29,7 +29,7 @@ public:
 
     bool isAllowed(Privilege ctrlChannelPrivilege);
 
-    int execute(Privilege ctrlChannelPrivilege);
+    int execute();
 
 protected:
     char* getAckDatagramWithoutHeader();

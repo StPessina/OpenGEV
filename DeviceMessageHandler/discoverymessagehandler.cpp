@@ -11,7 +11,7 @@ bool DiscoveryMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
     return true;
 }
 
-int DiscoveryMessageHandler::execute(Privilege ctrlChannelPrivilege)
+int DiscoveryMessageHandler::execute()
 {
 
     if(!checkHeader()) {

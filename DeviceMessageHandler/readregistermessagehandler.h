@@ -28,7 +28,7 @@ public:
 
     bool isAllowed(Privilege ctrlChannelPrivilege);
 
-    int execute(Privilege ctrlChannelPrivilege);
+    int execute();
 
     quint16 getAckDatagramLengthWithoutHeader();
 

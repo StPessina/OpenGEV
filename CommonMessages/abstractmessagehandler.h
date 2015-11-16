@@ -63,12 +63,9 @@ public:
 
     /**
      * @brief execute a command on the target
-     * @param datagram data received
-     * @param sender of datagram
-     * @param port
      * @return error code
      */
-    virtual int execute(Privilege ctrlChannelPrivilege) = 0;
+    virtual int execute() = 0;
 
     /**
      * @brief isAckAllowed check if the command is allowed on the target

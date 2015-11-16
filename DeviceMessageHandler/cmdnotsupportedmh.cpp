@@ -20,7 +20,7 @@ bool CmdNotSupportedMH::isAllowed(Privilege ctrlChannelPrivilege)
     return true;
 }
 
-int CmdNotSupportedMH::execute(Privilege ctrlChannelPrivilege)
+int CmdNotSupportedMH::execute()
 {
     return -1;
 }

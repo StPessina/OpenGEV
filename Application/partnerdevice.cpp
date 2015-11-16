@@ -18,9 +18,14 @@ bool PartnerDevice::openControlChannel(quint16 port)
     controlChannel->initSocket();
 
     //send open channel message
+    controlChannelKey = rand()*32000;
+
+    int CCP = controlChannelKey; //create control
+    CCP |= 0x80000000; //Exclusive access
+
     WriteRegisterCommand* writeReg = new WriteRegisterCommand(this,
                                                               REG_CONTROL_CHANNEL_PRIVILEGE,
-                                                              1,
+                                                              CCP,
                                                               ipAddress,
                                                               CONTROL_CHANNEL_DEF_PORT);
     controlChannel->sendCommand(writeReg);
@@ -40,17 +45,23 @@ bool PartnerDevice::openControlChannel(quint16 port)
 void PartnerDevice::closeControlChannel()
 {
     if(isChannelOpen()) { //Send message for channel unlock
+
         WriteRegisterCommand* writeReg = new WriteRegisterCommand(this,
                                                                   REG_CONTROL_CHANNEL_PRIVILEGE,
                                                                   0,
                                                                   ipAddress,
                                                                   CONTROL_CHANNEL_DEF_PORT);
         controlChannel->sendCommand(writeReg);
-        delete writeReg;
-        delete controlChannel;
-    }
 
-    channelOpen=false;
+        if(writeReg->getStatusCode()==GEV_STATUS_SUCCESS) {
+            controlChannelKey = 0;
+            channelOpen=false;
+            delete controlChannel;
+        }
+
+        delete writeReg;
+
+    }
 }
 
 bool PartnerDevice::isChannelOpen()
@@ -58,24 +69,9 @@ bool PartnerDevice::isChannelOpen()
     return channelOpen;
 }
 
-int PartnerDevice::getStreamingChannelNumber()
+bool PartnerDevice::setActionControlAccessKey(int key)
 {
-    if(!channelOpen)
-        return -1;
-
-    ReadRegisterCommand* readReg = new ReadRegisterCommand(this,
-                                                           REG_NR_STREAM_CHANNELS,
-                                                           ipAddress,
-                                                           CONTROL_CHANNEL_DEF_PORT);
-    controlChannel->sendCommand(readReg);
-    int value = readReg->getRegisterValue();
-    delete readReg;
-    return value;
-}
-
-bool PartnerDevice::setControlAccessKey(int key)
-{
-    if(!channelOpen)
+    if(!isChannelOpen())
         return false;
 
     WriteRegisterCommand* writeReg = new WriteRegisterCommand(this,
@@ -87,4 +83,19 @@ bool PartnerDevice::setControlAccessKey(int key)
     delete writeReg;
 
     return result == GEV_STATUS_SUCCESS;
+}
+
+int PartnerDevice::getStreamingChannelNumber()
+{
+    if(!isChannelOpen())
+        return -1;
+
+    ReadRegisterCommand* readReg = new ReadRegisterCommand(this,
+                                                           REG_NR_STREAM_CHANNELS,
+                                                           ipAddress,
+                                                           CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendCommand(readReg);
+    int value = readReg->getRegisterValue();
+    delete readReg;
+    return value;
 }

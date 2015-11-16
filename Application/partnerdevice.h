@@ -1,6 +1,8 @@
 #ifndef PARTNERDEVICE_H
 #define PARTNERDEVICE_H
 
+#include <math.h>
+
 #include <QString>
 #include <QHostAddress>
 
@@ -70,13 +72,15 @@ public:
      * @param device
      * @param key
      */
-    bool setControlAccessKey(int key);
+    bool setActionControlAccessKey(int key);
 
 private:
 
     ControlChannelMaster* controlChannel;
 
     bool channelOpen;
+
+    short controlChannelKey;
 
 };
 

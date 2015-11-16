@@ -12,7 +12,7 @@ bool ReadRegisterMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
     return true;
 }
 
-int ReadRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
+int ReadRegisterMessageHandler::execute()
 {
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;

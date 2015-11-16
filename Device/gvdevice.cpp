@@ -45,9 +45,55 @@ string GVDevice::getDeviceName()
     return commonRegisters[REG_DEVICE_VERSION]->getValueString();
 }
 
-void GVDevice::changeControlChannelPrivilege(QHostAddress primary_address, quint16 primary_port)
+Privilege GVDevice::checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort)
 {
-    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(1);
+    ControlChannelPrivilege ctrlChannelPrivilege;
+
+    bool ctrlAccessSwitchOver = commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->getBit(29);
+    bool CtrlAccess = commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->getBit(30);
+    bool ExclusiveAccess = commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->getBit(31);
+    if(ExclusiveAccess)
+        ctrlChannelPrivilege = EXCLUSIVE;
+    else {
+        if(CtrlAccess && !ctrlAccessSwitchOver)
+            ctrlChannelPrivilege = CTRL_ACCESS;
+        if(CtrlAccess && ctrlAccessSwitchOver)
+            ctrlChannelPrivilege = CTRL_ACCESS_SWITCH_OVER;
+        if(!CtrlAccess && !ctrlAccessSwitchOver)
+            ctrlChannelPrivilege = MONITOR;
+    }
+
+
+    quint32 applicationAddr = commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->getValueNumb();
+    quint16 applicationPort = commonRegisters[REG_PRIMARY_APPLICATION_PORT]->getValueNumb();
+
+    switch (ctrlChannelPrivilege) {
+        case MONITOR:
+            return FULL;
+        case CTRL_ACCESS:
+            if(senderAddr.toIPv4Address()==applicationAddr && senderPort == applicationPort)
+                return FULL;
+            else
+                return READ;
+        case CTRL_ACCESS_SWITCH_OVER:
+            if(senderAddr.toIPv4Address()==applicationAddr && senderPort == applicationPort)
+                return FULL;
+            else
+                return READ_SWITCH_OVER;
+        case EXCLUSIVE:
+            if(senderAddr.toIPv4Address()==applicationAddr && senderPort == applicationPort)
+                return FULL;
+            else
+                return DENIED;
+        default:
+            break;
+    }
+    return DENIED;
+}
+
+void GVDevice::changeControlChannelPrivilege(int value, QHostAddress primary_address, quint16 primary_port)
+{
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(value);
     int addr = primary_address.toIPv4Address();
     commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValueNumb(addr);
     commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValueNumb((ushort) primary_port);

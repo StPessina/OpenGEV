@@ -97,6 +97,13 @@ public:
     void resetBit(int bitPosition);
 
     /**
+     * @brief resetBit reset bit value in a number value for the register, if it's a number
+     * @param bitPosition from 0 to 31
+     * @return bitValue
+     */
+    bool getBit(int bitPosition);
+
+    /**
      * @brief getMask
      * @param bitPosition to reset or set
      * @param direct true for reset and false for set

@@ -14,7 +14,6 @@
 
 #include "CommonMessages/abstractmessagehandlerfactory.h"
 #include "CommonControlChannel/controlchannelprivilege.h"
-#include "CommonMessages/privilege.h"
 
 /*!
  * \brief The upd channel class create a new udp socket for manage in/out datagram from the network
@@ -47,33 +46,6 @@ public:
      * for receive updates if new datagram is received
      */
     void initSocket();
-
-    /**
-     * @brief setMonitorAccess method setup the control channel level to monitor
-     */
-    void setMonitorAccess();
-
-    /**
-     * @brief setCtrlAccess method setup the control channel level to control access
-     * @param applicationAddr
-     * @param applicationPort
-     */
-    void setCtrlAccess(QHostAddress applicationAddr, quint16 applicationPort);
-
-    /**
-     * @brief setCtrlAccessSwitchOver method setup the control channel level to control
-     * access with switch over (control can be changing with correct key)
-     * @param applicationAddr
-     * @param applicationPort
-     */
-    void setCtrlAccessSwitchOver(QHostAddress applicationAddr, quint16 applicationPort);
-
-    /**
-     * @brief setExclusiveAccess method setup the control channel level to exclusive
-     * @param applicationAddr
-     * @param applicationPort
-     */
-    void setExclusiveAccess(QHostAddress applicationAddr, quint16 applicationPort);
 
     /**
      * @brief getSourceAddress method
@@ -110,14 +82,6 @@ protected:
     virtual void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort) = 0;
 
     /**
-     * @brief checkChannelPrivilege method return the right of the sender
-     * @param senderAddr
-     * @param senderPort
-     * @return right for the sender
-     */
-    Privilege checkChannelPrivilege(QHostAddress senderAddr, quint16 senderPort);
-
-    /**
      * @brief TIMEOUT_MS for a sent command
      */
     int TIMEOUT_MS = 2000;
@@ -141,21 +105,6 @@ protected:
      * @brief socket
      */
     QUdpSocket* socket;
-
-    /**
-     * @brief ctrlChannelPrivilege
-     */
-    ControlChannelPrivilege ctrlChannelPrivilege = MONITOR;
-
-    /**
-     * @brif applicationAddr address of the application that store rights on the channel
-     */
-    QHostAddress applicationAddr;
-
-    /**
-     * @brief applicationPort address of the application that store rights on the channel
-     */
-    quint16 applicationPort;
 
     /**
      * @brief logger

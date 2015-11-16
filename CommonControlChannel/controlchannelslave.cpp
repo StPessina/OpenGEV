@@ -15,13 +15,11 @@ ControlChannelSlave::~ControlChannelSlave()
 
 void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
-    Privilege privilege = checkChannelPrivilege(sender, senderPort);
-
     quint16 messageCode = ConversionUtils::getShortFromQByteArray(datagram,2);
 
     AbstractMessageHandler* msg = messageHandlerFactory->createMessageHandler(messageCode, datagram,
                                                                               sender, senderPort);
-    msg->execute(privilege);
+    msg->execute();
 
     bool ackRequired = datagram.at(1) & 1;
     if(ackRequired) { //if ack is required
