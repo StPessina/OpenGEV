@@ -20,9 +20,9 @@ void ControlChannelMaster::processTheDatagram(QByteArray datagram, QHostAddress 
                             <<sender.toString().toStdString()<<":"<<std::to_string(senderPort)<<"; "
                             <<"Datagram: "<<datagram.toHex().data()<<" "
                             <<"Datagram size: "<<datagram.size();
-        int ackIdMSB = datagram.at(6);
-        int ackIdLSB = datagram.at(7);
-        int ackId = ackIdMSB*256+ackIdLSB;
+        quint16 ackIdMSB = datagram.at(6);
+        quint16 ackIdLSB = datagram.at(7);
+        quint16 ackId = ackIdMSB*256+ackIdLSB;
 
         if(commandCache[ackId]!=NULL) {
             AbstractCommand* reqCmd = commandCache[ackId];

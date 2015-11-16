@@ -16,9 +16,8 @@ ControlChannelSlave::~ControlChannelSlave()
 void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
     Privilege privilege = checkChannelPrivilege(sender, senderPort);
-    int messageCodeMSB = datagram.at(2);
-    int messageCodeLSB = datagram.at(3);
-    int messageCode = messageCodeMSB*256+messageCodeLSB;
+
+    quint16 messageCode = ConversionUtils::getShortFromQByteArray(datagram,2);
 
     AbstractMessageHandler* msg = messageHandlerFactory->createMessageHandler(messageCode, datagram,
                                                                               sender, senderPort);

@@ -61,7 +61,7 @@ private:
      * @brief lastReqId will incremented at new command send request
      * store last used request id
      */
-    int lastReqId = 0;
+    quint16 lastReqId = 0;
 
     /**
      * @brief retryCounter

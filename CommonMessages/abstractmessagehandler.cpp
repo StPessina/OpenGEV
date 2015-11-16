@@ -1,6 +1,6 @@
 #include "abstractmessagehandler.h"
 
-AbstractMessageHandler::AbstractMessageHandler(GVComponent* target, int ackCode, QByteArray datagram,
+AbstractMessageHandler::AbstractMessageHandler(GVComponent* target, quint16 ackCode, QByteArray datagram,
                                                QHostAddress senderAddress, quint16 senderPort)
 {
     this->target=target;
@@ -29,43 +29,43 @@ bool AbstractMessageHandler::isAckAllowed()
     return !ackNotAllowed;
 }
 
-int AbstractMessageHandler::readRequestCommandCode(QByteArray *datagram)
+quint16 AbstractMessageHandler::readRequestCommandCode(QByteArray *datagram)
 {
-    int valueMSB = datagram->at(2);
-    int valueLSB = datagram->at(3);
+    uint valueMSB = datagram->at(2);
+    uint valueLSB = datagram->at(3);
     return valueMSB*256+valueLSB;
 }
 
-int AbstractMessageHandler::readRequestRequestLength(QByteArray *datagram)
+quint16 AbstractMessageHandler::readRequestRequestLength(QByteArray *datagram)
 {
-    int valueMSB = datagram->at(4);
-    int valueLSB = datagram->at(5);
+    uint valueMSB = datagram->at(4);
+    uint valueLSB = datagram->at(5);
     return valueMSB*256+valueLSB;
 }
 
-int AbstractMessageHandler::readRequestRequestId(QByteArray *datagram)
+quint16 AbstractMessageHandler::readRequestRequestId(QByteArray *datagram)
 {
-    int valueMSB = datagram->at(6);
-    int valueLSB = datagram->at(7);
+    uint valueMSB = datagram->at(6);
+    uint valueLSB = datagram->at(7);
     return valueMSB*256+valueLSB;
 }
 
-int AbstractMessageHandler::getRequestCommandCode()
+quint16 AbstractMessageHandler::getRequestCommandCode()
 {
     return requestCommandCode;
 }
 
-int AbstractMessageHandler::getRequestLength()
+quint16 AbstractMessageHandler::getRequestLength()
 {
     return requestLength;
 }
 
-int AbstractMessageHandler::getRequestId()
+quint16 AbstractMessageHandler::getRequestId()
 {
     return reqId;
 }
 
-int AbstractMessageHandler::getResultStatus()
+quint16 AbstractMessageHandler::getResultStatus()
 {
     return resultStatus;
 }

@@ -30,7 +30,7 @@ public:
      * @param messageCode
      * @return true if a message handler exists with the requested messageCode
      */
-    bool isValidCode(int messageCode);
+    bool isValidCode(quint16 messageCode);
 
     /**
      * @brief createMessageHandler method create a message handler for a message
@@ -40,7 +40,7 @@ public:
      * @param senderPort
      * @return a message handler if exist, or generic message non supported handler
      */
-    AbstractMessageHandler *createMessageHandler(int messageCode,
+    AbstractMessageHandler *createMessageHandler(quint16 messageCode,
                                                  QByteArray datagram,
                                                  QHostAddress senderAddress,
                                                  quint16 senderPort);

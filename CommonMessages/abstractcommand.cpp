@@ -1,7 +1,7 @@
 #include "abstractcommand.h"
 
 AbstractCommand::AbstractCommand(GVComponent *target, QHostAddress destAddress, quint16 destPort,
-        int commandCode, int ackCommandCode, int reqId, bool requireAck, bool broadcast)
+        quint16 commandCode, quint16 ackCommandCode, quint16 reqId, bool requireAck, bool broadcast)
 {
     this->target = target;
     this->commandCode=commandCode;
@@ -47,17 +47,17 @@ quint16 AbstractCommand::getDestionationPort()
     return destPort;
 }
 
-int AbstractCommand::getCommandCode()
+quint16 AbstractCommand::getCommandCode()
 {
     return commandCode;
 }
 
-void AbstractCommand::setRequestId(int reqId)
+void AbstractCommand::setRequestId(quint16 reqId)
 {
     this->reqId = reqId;
 }
 
-int AbstractCommand::getRequestId()
+quint16 AbstractCommand::getRequestId()
 {
     return reqId;
 }

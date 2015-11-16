@@ -13,16 +13,28 @@ bool DiscoveryMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
 
 int DiscoveryMessageHandler::execute(Privilege ctrlChannelPrivilege)
 {
+
+    if(!checkHeader()) {
+        resultStatus = GEV_STATUS_INVALID_ADDRESS;
+        return 1;
+    }
+
+    resultStatus = GEV_STATUS_SUCCESS;
     return 0;
 }
 
-int DiscoveryMessageHandler::getAckDatagramLengthWithoutHeader()
+quint16 DiscoveryMessageHandler::getAckDatagramLengthWithoutHeader()
 {
-    return 248;
+    if(resultStatus==GEV_STATUS_SUCCESS)
+        return 248;
+    return 0;
 }
 
 char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
 {
+    if(resultStatus!=GEV_STATUS_SUCCESS)
+        return NULL;
+
     char* answer = new char[248];
 
     ConversionUtils::setShortToCharArray(answer, SPEC_VERSION_MAJOR, 0);

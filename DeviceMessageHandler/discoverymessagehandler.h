@@ -11,6 +11,7 @@
 #include "CommonMessages/conversionutils.h"
 
 #include "DeviceMessageHandler/deviceackcode.h"
+#include "DeviceMessageHandler/deviceackstatus.h"
 
 #include "opengv_global.h"
 
@@ -29,7 +30,7 @@ public:
 
     int execute(Privilege ctrlChannelPrivilege);
 
-    int getAckDatagramLengthWithoutHeader();
+    quint16 getAckDatagramLengthWithoutHeader();
 
     char* getAckDatagramWithoutHeader();
 };

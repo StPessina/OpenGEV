@@ -34,3 +34,14 @@ int GVApplication::discoverDevice()
     delete dis;
     return result;
 }
+
+int GVApplication::getStreamingChannelNumber(PartnerDevice device)
+{
+    ReadRegisterCommand* readReg = new ReadRegisterCommand(this,
+                                                           REG_NR_STREAM_CHANNELS,
+                                                           device.ipAddress,
+                                                           CONTROL_CHANNEL_DEF_PORT);
+    masterChannel->sendCommand(readReg);
+    int value = readReg->getRegisterValue();
+    return value;
+}

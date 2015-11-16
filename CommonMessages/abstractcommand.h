@@ -30,7 +30,7 @@ public:
      * @param broadcast if this message is a broadcast message
      */
     AbstractCommand(GVComponent* target, QHostAddress destAddress, quint16 destPort,
-                    int commandCode, int ackCommandCode, int reqId, bool requireAck, bool broadcast);
+                    quint16 commandCode, quint16 ackCommandCode, quint16 reqId, bool requireAck, bool broadcast);
 
     /**
      * @brief ~AbstractCommand decostructor
@@ -59,19 +59,19 @@ public:
      * @brief getCommandCode method
      * @return command code
      */
-    virtual int getCommandCode() final;
+    virtual quint16 getCommandCode() final;
 
     /**
      * @brief setRequestId method
      * @param reqId new request id value
      */
-    virtual void setRequestId(int reqId) final;
+    virtual void setRequestId(quint16 reqId) final;
 
     /**
      * @brief getRequestId method
      * @return the request id
      */
-    virtual int getRequestId() final;
+    virtual quint16 getRequestId() final;
 
     /**
      * @brief isAckRequired method
@@ -83,7 +83,7 @@ public:
      * @brief getLengthWithoutHeader
      * @return length of the command request
      */
-    virtual int getLengthWithoutHeader() = 0;
+    virtual quint16 getLengthWithoutHeader() = 0;
 
     /**
      * @brief isBroadcastMessage method
@@ -187,17 +187,17 @@ private:
     /**
      * @brief commandCode the command code
      */
-    int commandCode;
+    quint16 commandCode;
 
     /**
      * @brief ackCommandCode the aspected ack code
      */
-    int ackCommandCode;
+    quint16 ackCommandCode;
 
     /**
      * @brief reqId the request id
      */
-    int reqId;
+    quint16 reqId;
 
     /**
      * @brief requireACK

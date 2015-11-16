@@ -9,6 +9,7 @@
 
 #include "DeviceMessageHandler/cmdnotsupportedmh.h"
 #include "DeviceMessageHandler/discoverymessagehandler.h"
+#include "DeviceMessageHandler/readregistermessagehandler.h"
 
 /**
  * @brief The DeviceMessageHandlerFactory class is handler for device message
@@ -18,9 +19,9 @@ class DeviceMessageHandlerFactory : public AbstractMessageHandlerFactory
 public:
     DeviceMessageHandlerFactory(GVDevice* target);
 
-    bool isValidCode(int messageCode);
+    bool isValidCode(quint16 messageCode);
 
-    AbstractMessageHandler* createMessageHandler(int messageCode,
+    AbstractMessageHandler* createMessageHandler(quint16 messageCode,
                                                  QByteArray datagram,
                                                  QHostAddress senderAddress,
                                                  quint16 senderPort);

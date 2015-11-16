@@ -10,6 +10,10 @@
 #include "partnerdevice.h"
 
 #include "ApplicationCommand/discoverycommand.h"
+#include "ApplicationCommand/readregistercommand.h"
+
+#include "Device/deviceregisters.h"
+
 /**
  * @brief The GVApplication class provide methods for application in GigE vision network.
  * It manage discovery for GigE device and send command to it
@@ -49,6 +53,13 @@ public:
      * @return 0 if command success
      */
     int discoverDevice();
+
+    /**
+     * @brief getStreamingChannelNumber
+     * @param device
+     * @return
+     */
+    int getStreamingChannelNumber(PartnerDevice device);
 
 private:
 

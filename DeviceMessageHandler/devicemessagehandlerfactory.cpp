@@ -5,17 +5,26 @@ DeviceMessageHandlerFactory::DeviceMessageHandlerFactory(GVDevice *target)
 {
 }
 
-bool DeviceMessageHandlerFactory::isValidCode(int messageCode)
+bool DeviceMessageHandlerFactory::isValidCode(quint16 messageCode)
 {
-    return true;
+    switch (messageCode) {
+    case DISCOVERY_CMD:
+    case READREG_CMD:
+        return true;
+    default:
+        break;
+    }
+    return false;
 }
 
-AbstractMessageHandler *DeviceMessageHandlerFactory::createMessageHandler(int messageCode, QByteArray datagram,
+AbstractMessageHandler *DeviceMessageHandlerFactory::createMessageHandler(quint16 messageCode, QByteArray datagram,
                                                                    QHostAddress senderAddress, quint16 senderPort)
 {
     switch (messageCode) {
     case DISCOVERY_CMD:
         return new DiscoveryMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
+    case READREG_CMD:
+        return new ReadRegisterMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     default:
         return new CmdNotSupportedMH(target, messageCode, datagram, senderAddress, senderPort);
     }

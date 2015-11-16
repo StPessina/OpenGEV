@@ -16,10 +16,12 @@ DEPENDPATH += ApplicationCommand
 
 HEADERS += \
     $$PWD/ApplicationCommand/discoverycommand.h \
-    $$PWD/ApplicationCommand/applicationcommandcode.h
+    $$PWD/ApplicationCommand/applicationcommandcode.h \
+    $$PWD/ApplicationCommand/readregistercommand.h
 
 SOURCES += \
-    $$PWD/ApplicationCommand/discoverycommand.cpp
+    $$PWD/ApplicationCommand/discoverycommand.cpp \
+    $$PWD/ApplicationCommand/readregistercommand.cpp
 
 INCLUDEPATH += ApplicationMessageHandler
 DEPENDPATH += ApplicationMessageHandler

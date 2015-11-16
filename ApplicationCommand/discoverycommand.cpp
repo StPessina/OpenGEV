@@ -16,7 +16,7 @@ DiscoveryCommand::DiscoveryCommand(GVComponent* target, QHostAddress destination
 
 }
 
-int DiscoveryCommand::getLengthWithoutHeader()
+quint16 DiscoveryCommand::getLengthWithoutHeader()
 {
     return 0;
 }

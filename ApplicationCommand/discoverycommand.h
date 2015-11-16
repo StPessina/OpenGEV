@@ -44,7 +44,7 @@ public:
      * @brief getLengthWithoutHeader method
      * @return the length of discorery command
      */
-    int getLengthWithoutHeader();
+    quint16 getLengthWithoutHeader();
 
     /**
      * @brief getCommandDatagramWithoutHeader method

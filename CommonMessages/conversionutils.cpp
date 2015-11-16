@@ -36,7 +36,17 @@ int ConversionUtils::getIntFromQByteArray(QByteArray array, int start)
     int valueC = array.at(start+2) & 0xFF;
     int valueLSB = array.at(start+3) & 0xFF;
 
-    return valueLSB | (valueB << 8) | (valueC << 16) | (valueMSB << 24);
+    return valueLSB | (valueC << 8) | (valueB << 16) | (valueMSB << 24);
+}
+
+short ConversionUtils::getShortFromQByteArray(QByteArray array, int start)
+{
+    if(!sanityCheck(array.size(),2,start)) return 0;
+
+    short valueMSB = array.at(start) & 0xFF;
+    short valueLSB = array.at(start+1) & 0xFF;
+
+    return valueLSB | (valueMSB << 8);
 }
 
 QString ConversionUtils::getStringFromQByteArray(QByteArray array, int size, int start)

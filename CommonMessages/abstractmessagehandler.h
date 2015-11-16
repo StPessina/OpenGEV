@@ -23,7 +23,7 @@ public:
      * @param senderPort destination port of the datagram
      */
     AbstractMessageHandler(GVComponent* target,
-                           int ackCode,
+                           quint16 ackCode,
                            QByteArray datagram,
                            QHostAddress senderAddress,
                            quint16 senderPort);
@@ -81,45 +81,45 @@ public:
      * @param datagram
      * @return command code
      */
-    static int readRequestCommandCode(QByteArray* datagram);
+    static quint16 readRequestCommandCode(QByteArray* datagram);
 
     /**
      * @brief readRequestRequestLength extract length from a datagram
      * @param datagram
      * @return length
      */
-    static int readRequestRequestLength(QByteArray* datagram);
+    static quint16 readRequestRequestLength(QByteArray* datagram);
 
     /**
      * @brief readRequestRequestId extract request id from a datagram
      * @param datagram
      * @return request id
      */
-    static int readRequestRequestId(QByteArray* datagram);
+    static quint16 readRequestRequestId(QByteArray* datagram);
 
     /**
      * @brief getRequestCommandCode
      * @return request command code
      */
-    int getRequestCommandCode();
+    quint16 getRequestCommandCode();
 
     /**
      * @brief getRequestLength
      * @return request length
      */
-    int getRequestLength();
+    quint16 getRequestLength();
 
     /**
      * @brief getRequestId
      * @return request id
      */
-    int getRequestId();
+    quint16 getRequestId();
 
     /**
      * @brief getResultStatus
      * @return result of execution
      */
-    int getResultStatus();
+    quint16 getResultStatus();
 
     /**
      * @brief getAck
@@ -145,15 +145,15 @@ protected:
 
     quint16 port;
 
-    int ackCode;
+    quint16 ackCode;
 
-    int resultStatus;
+    quint16 resultStatus;
 
-    int requestCommandCode;
+    quint16 requestCommandCode;
 
-    int requestLength;
+    quint16 requestLength;
 
-    int reqId;
+    quint16 reqId;
 
     bool ackNotAllowed = false;
 
@@ -179,7 +179,7 @@ protected:
      * \brief getAck message without length
      * \return message for acknowledgement
      */
-    virtual int getAckDatagramLengthWithoutHeader() = 0;
+    virtual quint16 getAckDatagramLengthWithoutHeader() = 0;
 
 };
 

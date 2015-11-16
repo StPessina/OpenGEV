@@ -3,6 +3,8 @@
 
 #include "CommonControlChannel/udpchannel.h"
 
+#include "CommonMessages/conversionutils.h"
+
 /**
  * @brief The ControlChannelSlave class provide a control channel that wait for new command
  * from a master control channel. It will automatically generate new message handler

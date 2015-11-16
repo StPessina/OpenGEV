@@ -49,6 +49,15 @@ public:
      */
     static int getIntFromQByteArray(QByteArray array, int start=0);
 
+    /**
+     * @brief getIntFromQByteArray read integer value from a QByteArray
+     * @param array
+     * @param start
+     * @return the unsigned short value if no out of bound
+     */
+    static short getShortFromQByteArray(QByteArray array, int start=0);
+
+
 private:
     /**
      * @brief sanityCheck check if a it's possible read/write value on a array

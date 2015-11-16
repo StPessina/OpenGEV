@@ -1,6 +1,6 @@
 #include "cmdnotsupportedmh.h"
 
-CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, int cmdCode, QByteArray datagram, QHostAddress senderAddress,quint16 senderPort)
+CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, quint16 cmdCode, QByteArray datagram, QHostAddress senderAddress,quint16 senderPort)
     : AbstractMessageHandler(target,
       cmdCode,
       datagram,
@@ -27,10 +27,10 @@ int CmdNotSupportedMH::execute(Privilege ctrlChannelPrivilege)
 
 char *CmdNotSupportedMH::getAckDatagramWithoutHeader()
 {
-    return new char[1];
+    return NULL;
 }
 
-int CmdNotSupportedMH::getAckDatagramLengthWithoutHeader()
+quint16 CmdNotSupportedMH::getAckDatagramLengthWithoutHeader()
 {
     return 0;
 }

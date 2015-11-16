@@ -10,12 +10,12 @@ ApplicationMessageHandlerFactory::~ApplicationMessageHandlerFactory()
 
 }
 
-bool ApplicationMessageHandlerFactory::isValidCode(int messageCode)
+bool ApplicationMessageHandlerFactory::isValidCode(quint16 messageCode)
 {
     return true;
 }
 
-AbstractMessageHandler *ApplicationMessageHandlerFactory::createMessageHandler(int messageCode,
+AbstractMessageHandler *ApplicationMessageHandlerFactory::createMessageHandler(quint16 messageCode,
                                                                                QByteArray datagram,
                                                                                QHostAddress senderAddress,
                                                                                quint16 senderPort)

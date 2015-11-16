@@ -26,7 +26,7 @@ public:
      * @param messageCode
      * @return true if the code is valid and an handler exist
      */
-    virtual bool isValidCode(int messageCode) = 0;
+    virtual bool isValidCode(quint16 messageCode) = 0;
 
     /**
      * @brief createMessageHandler
@@ -36,7 +36,7 @@ public:
      * @param senderPort
      * @return message handler for the requested message code
      */
-    virtual AbstractMessageHandler* createMessageHandler(int messageCode,
+    virtual AbstractMessageHandler* createMessageHandler(quint16 messageCode,
                                                          QByteArray datagram,
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;
