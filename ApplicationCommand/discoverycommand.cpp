@@ -29,8 +29,8 @@ char *DiscoveryCommand::getCommandDatagramWithoutHeader()
 int DiscoveryCommand::executeAnswer(QByteArray answer)
 {
     this->answer = answer;
-    if(checkAckHeader(answer))
-        return 1;
+    if(!checkAckHeader(answer))
+        return getStatusCode(answer);
 
     QByteArray answerWithoutHeader = answer.mid(8);
 

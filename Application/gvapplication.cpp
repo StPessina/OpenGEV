@@ -43,5 +43,19 @@ int GVApplication::getStreamingChannelNumber(PartnerDevice device)
                                                            CONTROL_CHANNEL_DEF_PORT);
     masterChannel->sendCommand(readReg);
     int value = readReg->getRegisterValue();
+    delete readReg;
     return value;
 }
+
+void GVApplication::setControlAccessKey(PartnerDevice device, int key)
+{
+    WriteRegisterCommand* writeReg = new WriteRegisterCommand(this,
+                                                              REG_ACTION_DEVICE_KEY,
+                                                              key,
+                                                              device.ipAddress,
+                                                              CONTROL_CHANNEL_DEF_PORT);
+    masterChannel->sendCommand(writeReg);
+    delete writeReg;
+}
+
+

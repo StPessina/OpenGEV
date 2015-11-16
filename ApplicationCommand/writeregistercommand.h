@@ -9,6 +9,7 @@
 #include "ApplicationCommand/applicationcommandcode.h"
 
 #include "DeviceMessageHandler/deviceackcode.h"
+#include "DeviceMessageHandler/deviceackstatus.h"
 
 #include "CommonMessages/conversionutils.h"
 
@@ -70,6 +71,9 @@ public:
      * @return 0 if the command is successfully executed
      */
     int executeAnswer(QByteArray answer);
+
+private:
+    std::unordered_map<int, int> registersData;
 };
 
 #endif // WRITEREGISTERCOMMAND_H

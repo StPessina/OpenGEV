@@ -12,6 +12,8 @@
 
 #include "CommonComponent/gvcomponent.h"
 
+#include "CommonMessages/conversionutils.h"
+
 /**
  * @brief The AbstractCommand class provide generic rapresentation for a command
  */
@@ -97,6 +99,13 @@ public:
      * @return true if the header of the message is a valid answer
      */
     virtual bool checkAckHeader(QByteArray answer) final;
+
+    /**
+     * @brief getStatusCode
+     * @param answer received
+     * @return status code
+     */
+    virtual short getStatusCode(QByteArray answer) final;
 
     /**
      * @brief executeAnswer method

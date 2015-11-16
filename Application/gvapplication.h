@@ -11,6 +11,7 @@
 
 #include "ApplicationCommand/discoverycommand.h"
 #include "ApplicationCommand/readregistercommand.h"
+#include "ApplicationCommand/writeregistercommand.h"
 
 #include "Device/deviceregisters.h"
 
@@ -60,6 +61,13 @@ public:
      * @return
      */
     int getStreamingChannelNumber(PartnerDevice device);
+
+    /**
+     * @brief setControlAccessKey
+     * @param device
+     * @param key
+     */
+    void setControlAccessKey(PartnerDevice device, int key);
 
 private:
 

@@ -84,11 +84,12 @@ void BootstrapRegister::resetBit(int bitPosition)
 
 int BootstrapRegister::getMask(int bitPosition, bool reset)
 {
-    if(bitPosition<0 || bitPosition>31)
+    if(bitPosition<0 || bitPosition>31) {
         if(reset)
             return 0xFFFF;
         else
             return 0x0000;
+    }
     if(reset)
         return 0xFFFF - pow(2,bitPosition);
     else

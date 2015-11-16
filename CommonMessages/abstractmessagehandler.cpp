@@ -102,10 +102,8 @@ char *AbstractMessageHandler::getAckHeader()
 {
     char* header = new char[8];
 
-    int resultStatusShifted = resultStatus>>4;
-
-    header[1]=resultStatusShifted >> 8;
-    header[2]=resultStatusShifted;
+    header[0]=resultStatus >> 8;
+    header[1]=resultStatus;
 
     header[2]=ackCode >> 8;
     header[3]=ackCode;

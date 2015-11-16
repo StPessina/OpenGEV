@@ -74,13 +74,20 @@ bool AbstractCommand::isBroadcastMessage()
 
 bool AbstractCommand::checkAckHeader(QByteArray answer)
 {
-    if(answer.at(0)!=0x42)
+    if(answer.size()<8)
         return false;
-    if(ackCommandCode!=(answer.at(2)*256+answer.at(3)))
+    if(ackCommandCode!=ConversionUtils::getShortFromQByteArray(answer,2))
         return false;
-    if(reqId!=(answer.at(6)*256+answer.at(7)))
+    if(reqId!=ConversionUtils::getShortFromQByteArray(answer,6))
         return false;
     return true;
+}
+
+short AbstractCommand::getStatusCode(QByteArray answer)
+{
+    short statusCode = ConversionUtils::getShortFromQByteArray(answer,0);
+
+    return statusCode;
 }
 
 std::string AbstractCommand::toString()
