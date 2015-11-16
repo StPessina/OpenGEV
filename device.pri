@@ -24,10 +24,12 @@ HEADERS += \
     $$PWD/DeviceMessageHandler/deviceackcode.h \
     $$PWD/DeviceMessageHandler/cmdnotsupportedmh.h \
     $$PWD/DeviceMessageHandler/deviceackstatus.h \
-    $$PWD/DeviceMessageHandler/readregistermessagehandler.h
+    $$PWD/DeviceMessageHandler/readregistermessagehandler.h \
+    $$PWD/DeviceMessageHandler/writeregistermessagehandler.h
 
 SOURCES += \
     $$PWD/DeviceMessageHandler/discoverymessagehandler.cpp \
     $$PWD/DeviceMessageHandler/cmdnotsupportedmh.cpp \
     $$PWD/DeviceMessageHandler/devicemessagehandlerfactory.cpp \
-    $$PWD/DeviceMessageHandler/readregistermessagehandler.cpp
+    $$PWD/DeviceMessageHandler/readregistermessagehandler.cpp \
+    $$PWD/DeviceMessageHandler/writeregistermessagehandler.cpp

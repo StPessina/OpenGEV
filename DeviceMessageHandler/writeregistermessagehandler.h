@@ -1,5 +1,5 @@
-#ifndef READREGISTERMESSAGEHANDLER_H
-#define READREGISTERMESSAGEHANDLER_H
+#ifndef WRITEREGISTERMESSAGEHANDLER_H
+#define WRITEREGISTERMESSAGEHANDLER_H
 
 #include "Device/deviceregisters.h"
 #include "CommonBootstrapRegister/bootstrapregister.h"
@@ -14,14 +14,10 @@
 
 #include "opengv_global.h"
 
-/**
- * @brief The ReadRegisterMessageHandler class implements read register handler
- * required (R-157cd)
- */
-class ReadRegisterMessageHandler : public AbstractMessageHandler
+class WriteRegisterMessageHandler : public AbstractMessageHandler
 {
 public:
-    ReadRegisterMessageHandler(GVDevice* target,
+    WriteRegisterMessageHandler(GVDevice* target,
                                QByteArray datagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);
@@ -42,4 +38,4 @@ private:
     int numberOfRegisters;
 };
 
-#endif // READREGISTERMESSAGEHANDLER_H
+#endif // WRITEREGISTERMESSAGEHANDLER_H

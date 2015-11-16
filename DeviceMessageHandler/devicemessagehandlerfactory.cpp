@@ -10,6 +10,7 @@ bool DeviceMessageHandlerFactory::isValidCode(quint16 messageCode)
     switch (messageCode) {
     case DISCOVERY_CMD:
     case READREG_CMD:
+    case WRITEREG_CMD:
         return true;
     default:
         break;
@@ -25,6 +26,8 @@ AbstractMessageHandler *DeviceMessageHandlerFactory::createMessageHandler(quint1
         return new DiscoveryMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     case READREG_CMD:
         return new ReadRegisterMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
+    case WRITEREG_CMD:
+        return new WriteRegisterMessageHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     default:
         return new CmdNotSupportedMH(target, messageCode, datagram, senderAddress, senderPort);
     }

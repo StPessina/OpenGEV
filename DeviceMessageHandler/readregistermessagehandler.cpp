@@ -4,7 +4,7 @@ ReadRegisterMessageHandler::ReadRegisterMessageHandler(GVDevice *target, QByteAr
                                                        QHostAddress senderAddress, quint16 senderPort)
     : AbstractMessageHandler(target, READREG_ACK, datagram, senderAddress, senderPort)
 {
-
+    numberOfRegisters = 0;
 }
 
 bool ReadRegisterMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
@@ -28,7 +28,10 @@ int ReadRegisterMessageHandler::execute(Privilege ctrlChannelPrivilege)
                 int accessibleRegisters=0;
                 for (int i = 0; i < numberOfRegisters*4; i+=4) {
                     int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
-                    int access = dynamic_cast<GVDevice*>(target)->getRegister(regNumber)->getAccessType();
+                    BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
+                    if(reg==NULL)
+                        break;
+                    int access = reg->getAccessType();
                     if(access==RegisterAccess::RA_WRITE)
                         break;
                     accessibleRegisters++;
@@ -68,7 +71,10 @@ char *ReadRegisterMessageHandler::getAckDatagramWithoutHeader()
 
     for (int i = 0; i < numberOfRegisters*4; i+=4) { //CR-159cd
         int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
-        int value = dynamic_cast<GVDevice*>(target)->getRegister(regNumber)->getValueNumb();
+        BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
+        int value = 0;
+        if(reg!=NULL)
+            value = reg->getValueNumb();
         ConversionUtils::setIntToCharArray(answer, value, i);
     }
 
