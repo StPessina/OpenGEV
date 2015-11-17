@@ -11,7 +11,7 @@ int DeviceRegisterConverter::getNetworkInterfaceRegister(int interfaceNumber, in
     switch (interfaceNumber) {
     case 0:
         switch (regType) {
-        case REG_DEVICE_MAC_ADD_HIGH: return 0x0008;
+        case REG_DEVICE_MAC_ADD_HIGH: return 0x0008; //R-431cd
         case REG_DEVICE_MAC_ADD_LOW: return 0x000C;
         case REG_NETWORK_INTERFACE_CAPABILITIES: return 0x0010;
         case REG_NETWORK_INTERFACE_CONF: return 0x0014;

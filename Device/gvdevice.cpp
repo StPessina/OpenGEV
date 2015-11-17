@@ -5,11 +5,21 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
     initCommonRegisterMap();
     initNetworkRegisters();
 
-    commonRegisters[REG_MANUFACTURE_NAME]->setValueString(manufacture_name);
-    commonRegisters[REG_MODEL_NAME]->setValueString(model_name);
-    commonRegisters[REG_DEVICE_VERSION]->setValueString(device_name);
+    commonRegisters[REG_MANUFACTURE_NAME]->setValueString(manufacture_name); //R-437cd
+    commonRegisters[REG_MODEL_NAME]->setValueString(model_name); //R-438cd
+    commonRegisters[REG_DEVICE_VERSION]->setValueString(device_name); //R-439cd
 
+    commonRegisters[REG_DEVICE_MODE]->setBit(0); //Big endianess (R-430cd)
+    commonRegisters[REG_DEVICE_MODE]->setBit(31); //Code UTF-8 (R-430cd)
     commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //Allow multiple read (R-158cd) (R-167cd)
+
+    commonRegisters[REG_NR_MESSAGE_CHANNELS]->setValueNumb(0); //R-451cd
+    commonRegisters[REG_NR_STREAM_CHANNELS]->setValueNumb(0); //R-452cd
+    commonRegisters[REG_NR_ACTION_SIGNAL_CHANNELS]->setValueNumb(0); //R-452cd
+
+    commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //concatenation enabled R-458cd
+
+    commonRegisters[REG_GVSP_CAPABILITY]->setBit(1); //concatenation enabled O-473cd
 }
 
 GVDevice::~GVDevice()
@@ -130,7 +140,7 @@ void GVDevice::closeControlChannelPrivilege()
 
 void GVDevice::initCommonRegisterMap()
 {
-    commonRegisters[REG_VESION]= new  BootstrapRegister(REG_VESION, "Version",RA_READ, 4);
+    commonRegisters[REG_VERSION]= new  BootstrapRegister(REG_VERSION, "Version",RA_READ, 4);
     commonRegisters[REG_DEVICE_MODE] = new  BootstrapRegister(REG_DEVICE_MODE, "Device Mode",RA_READ, 4);
 
     commonRegisters[REG_MANUFACTURE_NAME] = new  BootstrapRegister(REG_MANUFACTURE_NAME, "Manufacture name",RA_READ, 32);
@@ -146,6 +156,7 @@ void GVDevice::initCommonRegisterMap()
 
     commonRegisters[REG_NR_MESSAGE_CHANNELS] = new  BootstrapRegister(REG_NR_MESSAGE_CHANNELS, "Number of Message Channels",RA_READ, 4);
     commonRegisters[REG_NR_STREAM_CHANNELS] = new  BootstrapRegister(REG_NR_STREAM_CHANNELS, "Number of Stream Channels",RA_READ, 4);
+    commonRegisters[REG_NR_ACTION_SIGNAL_CHANNELS] = new  BootstrapRegister(REG_NR_ACTION_SIGNAL_CHANNELS, "Number of action signal Channels",RA_READ, 4);
     commonRegisters[REG_ACTION_DEVICE_KEY] = new  BootstrapRegister(REG_ACTION_DEVICE_KEY, "Action Device Key", RA_WRITE, 4);
     commonRegisters[REG_NR_ACTIVE_LINKS] = new  BootstrapRegister(REG_NR_ACTIVE_LINKS, "Number of Active Links",RA_READ, 4);
     commonRegisters[REG_GVSP_CAPABILITY] = new  BootstrapRegister(REG_GVSP_CAPABILITY, "GVSP Capability",RA_READ, 4);
@@ -185,6 +196,8 @@ void GVDevice::initNetworkRegisters()
         }
     }
 
+    commonRegisters[REG_NR_ACTIVE_LINKS]->setValueNumb(interfaceNumber+1); //Number of active links R-455cd
+
     foreach (QNetworkInterface interface, validNotConnected) {
         logger.debugStream()<<"GVDevice adding network NOT connected interface #"<<to_string(interfaceNumber)
                            <<"; Name:"<<interface.name().toStdString()
@@ -192,4 +205,6 @@ void GVDevice::initNetworkRegisters()
         networkRegister[interfaceNumber] = new NetworkInterfaceRegisters(interface, interfaceNumber);
         interfaceNumber++;
     }
+
+    commonRegisters[REG_NR_NETWORK_INTERFACE]->setValueNumb(interfaceNumber+1); //Number of network interface R-446cd
 }

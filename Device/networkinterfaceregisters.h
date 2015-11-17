@@ -65,6 +65,8 @@ private:
      */
     void initRegisterMap();
 
+    void updateNetworkStatus();
+
     QNetworkInterface netInterface;
 
     int deviceMACAddressHigh;

@@ -10,7 +10,7 @@
 #include "Device/deviceregisters.h"
 
 #include "Device/networkinterfaceregisters.h"
-#include "Device/devicestreamchannel.h"
+#include "Device/streamchanneltransmitter.h"
 
 #include "CommonMessages/privilege.h"
 
@@ -117,7 +117,7 @@ private:
     /**
      * @brief stream channel map
      */
-    unordered_map<int,DeviceStreamChannel*> streamChannels;
+    unordered_map<int,StreamChannelTransmitter*> streamChannels;
 
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 

@@ -1,32 +1,96 @@
-#include "devicestreamchannel.h"
+#include "streamchanneltransmitter.h"
 
-DeviceStreamChannel::DeviceStreamChannel(int id)
+StreamChannelTransmitter::StreamChannelTransmitter(int id)
 {
     this->id = id;
     initRegisterMap();
+
+    int sourcePort = rand()*10000+40000; //select random port between rangeport 40000-50000
+
+    registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_SOURCE_PORT)]
+            ->setValueNumb(sourcePort);
 }
 
-DeviceStreamChannel::~DeviceStreamChannel()
+StreamChannelTransmitter::StreamChannelTransmitter(int id, int sourcePort)
 {
-    /*
+    this->id = id;
+    initRegisterMap();
+
+    registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_SOURCE_PORT)]
+            ->setValueNumb(sourcePort);
+}
+
+StreamChannelTransmitter::~StreamChannelTransmitter()
+{
+    if(isChannelOpen())
+        closeStreamChannel();
+
     foreach(auto reg, registers)
         delete reg.second;
-    */
 }
 
-BootstrapRegister *DeviceStreamChannel::getRegister(int regType)
+BootstrapRegister *StreamChannelTransmitter::getRegister(int regType)
 {
     int regCode = DeviceRegisterConverter::getStreamChannelRegister(id, regType);
 
     return registers[regCode];
 }
 
-BootstrapRegister *DeviceStreamChannel::getRegisterByAbsoluteRegCode(int regCode)
+BootstrapRegister *StreamChannelTransmitter::getRegisterByAbsoluteRegCode(int regCode)
 {
     return registers[regCode];
 }
 
-void DeviceStreamChannel::initRegisterMap()
+void StreamChannelTransmitter::openStreamChannel(QHostAddress destAddress, quint16 destPort)
+{
+    closeStreamChannel(); //Check port different from 0 (R-087ca)
+
+    BootstrapRegister* gvspSCPD =
+            registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_SOURCE_PORT)];
+
+    streamChannelTransmitter = new UDPChannelTransmitter(destAddress, gvspSCPD->getValueNumb());
+    streamChannelTransmitter->initSocket();
+
+    BootstrapRegister* gvspSCP = registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_PORT)];
+
+    gvspSCP->setValueNumb(
+                (gvspSCP->getValueNumb() & (destPort & 0x00FF)) //set new destination port value
+                );
+    this->destPort = destPort;
+
+    BootstrapRegister* gvspSCDA =
+            registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_PACKET_DESTINATION_ADDRESS)];
+    gvspSCDA->setValueNumb((int) destAddress.toIPv4Address());
+    this->destAddress = destAddress;
+}
+
+void StreamChannelTransmitter::closeStreamChannel()
+{
+    if(isChannelOpen()) {
+        destPort = 0;
+        BootstrapRegister* gvspSCP = registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_PORT)];
+        gvspSCP->setValueNumb(gvspSCP->getValueNumb() & 0xFF00); //Reset port
+
+
+        destAddress.clear();
+        BootstrapRegister* gvspSCDA =
+                registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_PACKET_DESTINATION_ADDRESS)];
+        gvspSCDA->setValueNumb(0);
+
+        delete streamChannelTransmitter;
+    }
+}
+
+bool StreamChannelTransmitter::isChannelOpen()
+{
+    BootstrapRegister* gvspSCP = registers[DeviceRegisterConverter::getStreamChannelRegister(id,REG_STREAM_CHANNEL_PORT)];
+
+    if((gvspSCP->getValueNumb() & 0xFF) != 0)
+        return true;
+    return false;
+}
+
+void StreamChannelTransmitter::initRegisterMap()
 {
     int channelPort=DeviceRegisterConverter::getStreamChannelRegister(id, REG_STREAM_CHANNEL_PORT);
     int packetSize=DeviceRegisterConverter::getStreamChannelRegister(id, REG_STREAM_CHANNEL_PACKET_SIZE);
