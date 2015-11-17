@@ -5,12 +5,10 @@ INCLUDEPATH += CommonBootstrapRegister
 HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
-    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
-    $$PWD/CommonControlChannel/udpchannel.h
+    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h
 
 SOURCES += \
-    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp \
-    $$PWD/CommonControlChannel/udpchannel.cpp
+    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
 
 @INCLUDE += CommonComponent
 
@@ -23,19 +21,21 @@ HEADERS += \
 SOURCES += \
     $$PWD/CommonComponent/gvcomponent.cpp
 
-@INCLUDE += CommonCtrlChannel
+@INCLUDE += CommonUdpChannel
 
-INCLUDEPATH += CommonControlChannel
-DEPENDPATH += CommonControlChannel
+INCLUDEPATH += CommonUdpChannel
+DEPENDPATH += CommonUpdChannel
 
 HEADERS += \
-    $$PWD/CommonControlChannel/controlchannelprivilege.h \
-    $$PWD/CommonControlChannel/controlchannelmaster.h \
-    $$PWD/CommonControlChannel/controlchannelslave.h
+    $$PWD/CommonUdpChannel/controlchannelprivilege.h \
+    $$PWD/CommonUdpChannel/udpchannel.h \
+    $$PWD/CommonUdpChannel/udpchanneltransmitter.h \
+    $$PWD/CommonUdpChannel/udpchannelreceiver.h
 
 SOURCES += \
-    $$PWD/CommonControlChannel/controlchannelmaster.cpp \
-    $$PWD/CommonControlChannel/controlchannelslave.cpp
+    $$PWD/CommonUdpChannel/udpchannel.cpp \
+    $$PWD/CommonUdpChannel/udpchanneltransmitter.cpp \
+    $$PWD/CommonUdpChannel/udpchannelreceiver.cpp
 
 @INCLUDE += CommonMessages
 

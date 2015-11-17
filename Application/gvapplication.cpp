@@ -2,7 +2,7 @@
 
 GVApplication::GVApplication(int primaryChannelport)
 {
-    masterChannel = new ControlChannelMaster(QHostAddress::Any, primaryChannelport);
+    masterChannel = new UDPChannelTransmitter(QHostAddress::Any, primaryChannelport);
     masterChannel->initSocket();
 
 }

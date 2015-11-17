@@ -10,7 +10,7 @@
 
 #include "CommonComponent/gvcomponent.h"
 
-#include "CommonControlChannel/controlchannelmaster.h"
+#include "CommonUdpChannel/udpchanneltransmitter.h"
 
 #include "Device/deviceregisters.h"
 
@@ -76,7 +76,7 @@ public:
 
 private:
 
-    ControlChannelMaster* controlChannel;
+    UDPChannelTransmitter* controlChannel;
 
     bool channelOpen;
 

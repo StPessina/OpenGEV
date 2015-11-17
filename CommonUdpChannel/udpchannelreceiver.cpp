@@ -1,6 +1,6 @@
-#include "controlchannelslave.h"
+#include "udpchannelreceiver.h"
 
-ControlChannelSlave::ControlChannelSlave(QHostAddress sourceAddr,
+UdpChannelReceiver::UdpChannelReceiver(QHostAddress sourceAddr,
                                          quint16 sourcePort,
                                          AbstractMessageHandlerFactory *messageHandlerFactory)
     : UDPChannel(sourceAddr,sourcePort)
@@ -8,12 +8,12 @@ ControlChannelSlave::ControlChannelSlave(QHostAddress sourceAddr,
     this->messageHandlerFactory = messageHandlerFactory;
 }
 
-ControlChannelSlave::~ControlChannelSlave()
+UdpChannelReceiver::~UdpChannelReceiver()
 {
 
 }
 
-void ControlChannelSlave::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
+void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
     quint16 messageCode = ConversionUtils::getShortFromQByteArray(datagram,2);
 

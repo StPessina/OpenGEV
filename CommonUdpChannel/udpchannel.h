@@ -13,7 +13,7 @@
 #include <log4cpp/Category.hh>
 
 #include "CommonMessages/abstractmessagehandlerfactory.h"
-#include "CommonControlChannel/controlchannelprivilege.h"
+#include "CommonUdpChannel/controlchannelprivilege.h"
 
 /*!
  * \brief The upd channel class create a new udp socket for manage in/out datagram from the network

@@ -1,18 +1,18 @@
-#include "controlchannelmaster.h"
+#include "udpchanneltransmitter.h"
 
-ControlChannelMaster::ControlChannelMaster(QHostAddress sourceAddr,
+UDPChannelTransmitter::UDPChannelTransmitter(QHostAddress sourceAddr,
                                                      quint16 sourcePort)
     : UDPChannel(sourceAddr, sourcePort)
 {
     connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
 }
 
-ControlChannelMaster::~ControlChannelMaster()
+UDPChannelTransmitter::~UDPChannelTransmitter()
 {
 
 }
 
-void ControlChannelMaster::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
+void UDPChannelTransmitter::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
     if(waitForAck) {
         logger.debugStream()<<getLogMessageHeader()
@@ -43,7 +43,7 @@ void ControlChannelMaster::processTheDatagram(QByteArray datagram, QHostAddress 
     }
 }
 
-int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
+int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
 {
     int result = -3;
     if(isSocketOpen()) {
@@ -145,7 +145,7 @@ int ControlChannelMaster::sendCommand(AbstractCommand *cmd)
     return result;
 }
 
-void ControlChannelMaster::timeoutAck()
+void UDPChannelTransmitter::timeoutAck()
 {
     timeoutExpired=true;
     emit stopWaitingAck();

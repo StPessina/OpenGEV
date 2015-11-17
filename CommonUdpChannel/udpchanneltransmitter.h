@@ -5,14 +5,14 @@
 #include <vector>
 #include <unordered_map>
 
-#include "CommonControlChannel/udpchannel.h"
+#include "CommonUdpChannel/udpchannel.h"
 
 #include "CommonMessages/abstractcommand.h"
 
 /**
  * @brief The ControlChannelMaster class provide control channel for the master of the GigE communication
  */
-class ControlChannelMaster : public UDPChannel
+class UDPChannelTransmitter : public UDPChannel
 {
     Q_OBJECT
 public:
@@ -21,12 +21,12 @@ public:
      * @param sourceAddr
      * @param sourcePort
      */
-    ControlChannelMaster(QHostAddress sourceAddr, quint16 sourcePort);
+    UDPChannelTransmitter(QHostAddress sourceAddr, quint16 sourcePort);
 
     /**
      * @brief ~ControlChannelMaster deconstructor
      */
-    virtual ~ControlChannelMaster();
+    virtual ~UDPChannelTransmitter();
 
     /* HIHERIT DOCS */
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);

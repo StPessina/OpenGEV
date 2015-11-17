@@ -14,7 +14,7 @@
 #include "CommonMessages/privilege.h"
 
 #include "CommonComponent/gvcomponent.h"
-#include "CommonControlChannel/controlchannelprivilege.h"
+#include "CommonUdpChannel/controlchannelprivilege.h"
 
 #include "iostream"
 

@@ -5,7 +5,7 @@
 
 #include "CommonComponent/gvcomponent.h"
 
-#include "CommonControlChannel/controlchannelmaster.h"
+#include "CommonUdpChannel/udpchanneltransmitter.h"
 
 #include "Application/partnerdevice.h"
 
@@ -64,7 +64,7 @@ private:
     /**
      * @brief masterChannel is broadcast control channel
      */
-    ControlChannelMaster* masterChannel;
+    UDPChannelTransmitter* masterChannel;
 
 };
 

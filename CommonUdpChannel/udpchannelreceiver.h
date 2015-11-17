@@ -1,7 +1,7 @@
 #ifndef DEVICECONTROLCHANNEL_H
 #define DEVICECONTROLCHANNEL_H
 
-#include "CommonControlChannel/udpchannel.h"
+#include "CommonUdpChannel/udpchannel.h"
 
 #include "CommonMessages/conversionutils.h"
 
@@ -10,7 +10,7 @@
  * from a master control channel. It will automatically generate new message handler
  * for manage incoming command
  */
-class ControlChannelSlave : public UDPChannel
+class UdpChannelReceiver : public UDPChannel
 {
 public:
     /**
@@ -19,14 +19,14 @@ public:
      * @param sourcePort
      * @param messageHandlerFactory factory used to generate a new message handler
      */
-    ControlChannelSlave(QHostAddress sourceAddr,
+    UdpChannelReceiver(QHostAddress sourceAddr,
                          quint16 sourcePort,
                          AbstractMessageHandlerFactory *messageHandlerFactory);
 
     /**
      * @brief ~ControlChannelSlave deconstructor
      */
-    virtual ~ControlChannelSlave();
+    virtual ~UdpChannelReceiver();
 
     /* HIHERIT DOCS */
     void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
