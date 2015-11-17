@@ -10,6 +10,7 @@
 #include "Device/deviceregisters.h"
 
 #include "Device/networkinterfaceregisters.h"
+#include "Device/devicestreamchannel.h"
 
 #include "CommonMessages/privilege.h"
 
@@ -54,6 +55,14 @@ public:
      * @return network register if exist
      */
     BootstrapRegister *getNetworkRegister(int interface, int offsetRegisterCode);
+
+    /**
+     * @brief getStreamChannelRegister
+     * @param id
+     * @param offsetRegisterCode (use defined code)
+     * @return stream channel register if exist
+     */
+    BootstrapRegister *getStreamChannelRegister(int id, int offsetRegisterCode);
 
     /**
      * @brief getManufactureName
@@ -105,6 +114,10 @@ private:
      */
     unordered_map<int,NetworkInterfaceRegisters*> networkRegister;
 
+    /**
+     * @brief stream channel map
+     */
+    unordered_map<int,DeviceStreamChannel*> streamChannels;
 
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 

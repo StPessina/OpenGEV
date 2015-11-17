@@ -18,16 +18,38 @@ GVDevice::~GVDevice()
         delete reg.second;
     foreach (auto netReg, networkRegister)
         delete netReg.second;
+    foreach (auto streamReg, streamChannels)
+        delete streamReg.second;
 }
 
 BootstrapRegister *GVDevice::getRegister(int registerCode)
 {
+    //Network interface registers
+    if((registerCode>=0x0008 && registerCode<=0x0044) ||
+            (registerCode>=0x064C && registerCode<=0x0900)) {
+        int interfaceNumber = DeviceRegisterConverter::getInterfaceNumberFromNetworkRegister(registerCode);
+        return networkRegister[interfaceNumber]->getRegisterByAbsoluteRegCode(registerCode);
+    }
+
+    //Stream registers
+    if(registerCode>=0x0D00) {
+        int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
+        if(channelNumber<streamChannels.size())
+            return NULL;
+        return streamChannels[channelNumber]->getRegisterByAbsoluteRegCode(registerCode);
+    }
+
     return commonRegisters[registerCode];
 }
 
 BootstrapRegister *GVDevice::getNetworkRegister(int interface, int offsetRegisterCode)
 {
     return networkRegister[interface]->getRegister(offsetRegisterCode);
+}
+
+BootstrapRegister *GVDevice::getStreamChannelRegister(int id, int offsetRegisterCode)
+{
+    return streamChannels[id]->getRegister(offsetRegisterCode);
 }
 
 string GVDevice::getManufactureName()

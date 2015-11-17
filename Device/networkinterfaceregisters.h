@@ -39,6 +39,13 @@ public:
     BootstrapRegister *getRegister(int offsetRegisterCode);
 
     /**
+     * @brief getRegisterByAbsoluteRegCode
+     * @param regCode
+     * @return network register if exist
+     */
+    BootstrapRegister *getRegisterByAbsoluteRegCode(int regCode);
+
+    /**
      * @brief getInterfaceNumber
      * @return interface number
      */

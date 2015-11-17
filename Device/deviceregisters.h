@@ -47,6 +47,17 @@
 #define REG_PERSISTENT_DEFAULT_GATEWAY 0x006C
 #define REG_LINK_SPEED 0x0070
 
+#define REG_STREAM_CHANNEL_PORT 0x0000
+#define REG_STREAM_CHANNEL_PACKET_SIZE 0x0004
+#define REG_STREAM_CHANNEL_PACKET_DELAY 0x0008
+#define REG_STREAM_CHANNEL_PACKET_DESTINATION_ADDRESS 0x0018
+#define REG_STREAM_CHANNEL_SOURCE_PORT 0x001C
+#define REG_STREAM_CHANNEL_CAPABILITY 0x0020
+#define REG_STREAM_CHANNEL_CONFIGURATION 0x0024
+#define REG_STREAM_CHANNEL_ZONE 0x0028
+#define REG_STREAM_CHANNEL_ZONE_DIRECTION 0x002C
+
+
 /**
  * @brief The DeviceRegisterConverter class utils conversion for device bootstrap register
  */
@@ -61,6 +72,16 @@ public:
      * @return absolute register type
      */
     static int getNetworkInterfaceRegister(int interfaceNumber, int regType);
+
+    static int getInterfaceNumberFromNetworkRegister(int regCode);
+
+    static int getRegTypeFromNetworkRegister(int regCode);
+
+    static int getStreamChannelRegister(int streamChannelId, int regType);
+
+    static int getChannelNumberFromStreamChannel(int regCode);
+
+    static int getRegTypeFromStreamChannel(int regCode);
 
 };
 

@@ -6,12 +6,14 @@ DEPENDPATH += Device
 HEADERS += \
     $$PWD/Device/gvdevice.h \
     $$PWD/Device/deviceregisters.h \
-    $$PWD/Device/networkinterfaceregisters.h
+    $$PWD/Device/networkinterfaceregisters.h \
+    $$PWD/Device/devicestreamchannel.h
 
 SOURCES += \
     $$PWD/Device/gvdevice.cpp \
     $$PWD/Device/deviceregisters.cpp \
-    $$PWD/Device/networkinterfaceregisters.cpp
+    $$PWD/Device/networkinterfaceregisters.cpp \
+    $$PWD/Device/devicestreamchannel.cpp
 
 @INCLUDE += DeviceMessageHandler
 

@@ -82,6 +82,12 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode
     return reg;
 }
 
+BootstrapRegister *NetworkInterfaceRegisters::getRegisterByAbsoluteRegCode(int regCode)
+{
+    int regType = DeviceRegisterConverter::getInterfaceNumberFromNetworkRegister(regCode);
+    return getRegister(regType);
+}
+
 int NetworkInterfaceRegisters::getInterfaceNumber()
 {
     return interfaceNumber;

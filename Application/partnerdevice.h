@@ -63,7 +63,7 @@ public:
     /**
      * @brief getStreamingChannelNumber
      * @param device
-     * @return
+     * @return stream channel number or -1 if the channel is not open
      */
     int getStreamingChannelNumber();
 
@@ -71,6 +71,7 @@ public:
      * @brief setControlAccessKey
      * @param device
      * @param key
+     * @return false if the channel is not open
      */
     bool setActionControlAccessKey(int key);
 
