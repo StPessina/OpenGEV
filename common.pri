@@ -69,3 +69,14 @@ SOURCES += \
     $$PWD/CommonCommand/abstractcommand.cpp \
     $$PWD/CommonCommand/abstractcommandhandler.cpp \
     $$PWD/CommonCommand/abstractcommandhandlerfactory.cpp
+
+@INCLUDE += CommonStream
+
+INCLUDEPATH += CommonStream
+DEPENDPATH += CommonStream
+
+HEADERS += \
+    $$PWD/CommonStream/abstractstreamdata.h
+
+SOURCES += \
+    $$PWD/CommonStream/abstractstreamdata.cpp
