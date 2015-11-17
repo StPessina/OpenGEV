@@ -1,18 +1,13 @@
-#include "writeregistermessagehandler.h"
+#include "writeregistercommandhandler.h"
 
-WriteRegisterMessageHandler::WriteRegisterMessageHandler(GVDevice *target, QByteArray datagram,
+WriteRegisterCommandHandler::WriteRegisterCommandHandler(GVDevice *target, QByteArray datagram,
                                                          QHostAddress senderAddress, quint16 senderPort)
-    : AbstractMessageHandler(target, WRITEREG_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, WRITEREG_ACK, datagram, senderAddress, senderPort)
 {
     numberOfRegisters = 0;
 }
 
-bool WriteRegisterMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
-{
-    return true;
-}
-
-int WriteRegisterMessageHandler::execute()
+int WriteRegisterCommandHandler::execute()
 {
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;
@@ -73,12 +68,12 @@ int WriteRegisterMessageHandler::execute()
     return resultStatus;
 }
 
-quint16 WriteRegisterMessageHandler::getAckDatagramLengthWithoutHeader()
+quint16 WriteRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
 {
     return 4;
 }
 
-char *WriteRegisterMessageHandler::getAckDatagramWithoutHeader()
+char *WriteRegisterCommandHandler::getAckDatagramWithoutHeader()
 {
     //R-174c
 

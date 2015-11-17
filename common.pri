@@ -28,6 +28,7 @@ DEPENDPATH += CommonUpdChannel
 
 HEADERS += \
     $$PWD/CommonUdpChannel/controlchannelprivilege.h \
+    $$PWD/CommonUdpChannel/privilege.h \
     $$PWD/CommonUdpChannel/udpchannel.h \
     $$PWD/CommonUdpChannel/udpchanneltransmitter.h \
     $$PWD/CommonUdpChannel/udpchannelreceiver.h
@@ -37,20 +38,34 @@ SOURCES += \
     $$PWD/CommonUdpChannel/udpchanneltransmitter.cpp \
     $$PWD/CommonUdpChannel/udpchannelreceiver.cpp
 
-@INCLUDE += CommonMessages
+@INCLUDE += CommonPacket
 
-INCLUDEPATH += CommonMessages
-DEPENDPATH += CommonMessages
+INCLUDEPATH += CommonPacket
+DEPENDPATH += CommonPacket
 
 HEADERS += \
-    $$PWD/CommonMessages/privilege.h \
-    $$PWD/CommonMessages/abstractcommand.h \
-    $$PWD/CommonMessages/abstractmessagehandler.h \
-    $$PWD/CommonMessages/abstractmessagehandlerfactory.h \
-    $$PWD/CommonMessages/conversionutils.h
+    $$PWD/CommonPacket/abstractpacket.h \
+    $$PWD/CommonPacket/abstractpackethandler.h \
+    $$PWD/CommonPacket/abstractpackethandlerfactory.h \
+    $$PWD/CommonPacket/conversionutils.h
 
 SOURCES += \
-    $$PWD/CommonMessages/abstractcommand.cpp \
-    $$PWD/CommonMessages/abstractmessagehandler.cpp \
-    $$PWD/CommonMessages/abstractmessagehandlerfactory.cpp \
-    $$PWD/CommonMessages/conversionutils.cpp
+    $$PWD/CommonPacket/abstractpacket.cpp \
+    $$PWD/CommonPacket/abstractpackethandler.cpp \
+    $$PWD/CommonPacket/abstractpackethandlerfactory.cpp \
+    $$PWD/CommonPacket/conversionutils.cpp
+
+@INCLUDE += CommonCommand
+
+INCLUDEPATH += CommonCommand
+DEPENDPATH += CommonCommand
+
+HEADERS += \
+    $$PWD/CommonCommand/abstractcommand.h \
+    $$PWD/CommonCommand/abstractcommandhandler.h \
+    $$PWD/CommonCommand/abstractcommandhandlerfactory.h
+
+SOURCES += \
+    $$PWD/CommonCommand/abstractcommand.cpp \
+    $$PWD/CommonCommand/abstractcommandhandler.cpp \
+    $$PWD/CommonCommand/abstractcommandhandlerfactory.cpp

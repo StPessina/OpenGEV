@@ -24,12 +24,12 @@ void UDPChannelTransmitter::processTheDatagram(QByteArray datagram, QHostAddress
         quint16 ackIdLSB = datagram.at(7);
         quint16 ackId = ackIdMSB*256+ackIdLSB;
 
-        if(commandCache[ackId]!=NULL) {
-            AbstractCommand* reqCmd = commandCache[ackId];
-            reqCmd->executeAnswer(datagram);
+        if(packetCache[ackId]!=NULL) {
+            AbstractPacket* reqPacket = packetCache[ackId];
+            reqPacket->executeAnswer(datagram);
             logger.debugStream()<<getLogMessageHeader()
                             <<"Ack message processed "
-                            <<"("<<reqCmd->toString()<<") "
+                            <<"("<<reqPacket->toString()<<") "
                             <<"Datagram: "<<datagram.toHex().data();
         } else {
             logger.warnStream()<<getLogMessageHeader()
@@ -43,20 +43,20 @@ void UDPChannelTransmitter::processTheDatagram(QByteArray datagram, QHostAddress
     }
 }
 
-int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
+int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
 {
     int result = -3;
     if(isSocketOpen()) {
         lastReqId++;
-        cmd->setRequestId(lastReqId);
-        commandCache[lastReqId]=cmd;
-        QByteArray* datagram = cmd->getCommandDatagram();
+        packet->setRequestId(lastReqId);
+        packetCache[lastReqId]=packet;
+        QByteArray* datagram = packet->getPacketDatagram();
 
         retryCounter = 1;
         while(retryCounter<=RETRY_SEND && result!=datagram->size()) {
             logger.debugStream()<<getLogMessageHeader()
                                 <<"Require write command "
-                                <<"("<<cmd->toString()<<") "
+                                <<"("<<packet->toString()<<") "
                                 <<"Datagram: "<<datagram->toHex().data()<<" "
                                 <<"Datagram size: "<<datagram->size()<<" "
                                <<"(Retry counter: "<<retryCounter<<")";
@@ -65,20 +65,20 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
             timeoutExpired=false;
 
             result = socket->writeDatagram(*datagram,
-                              cmd->getDestinationAddress(),
-                              cmd->getDestionationPort());
+                              packet->getDestinationAddress(),
+                              packet->getDestionationPort());
 
             if(result==-1)
                 logger.debugStream()<<getLogMessageHeader()
                                 <<"Command NOT writed cause error: "<<result<<" "
-                                <<"("<<cmd->toString()<<"); "
+                                <<"("<<packet->toString()<<"); "
                                 <<"(Retry counter: "<<retryCounter<<")";
             if(result==0)
                 logger.debugStream()<<getLogMessageHeader()
                                 <<"Command writed but with 0 byte: "
                                 <<"datagram size: "<<datagram->size()<<" "
                                 <<"byte sent: "<<result<<" "
-                                <<"("<<cmd->toString()<<") "
+                                <<"("<<packet->toString()<<") "
                                 <<"(Retry counter: "<<retryCounter<<")";
             if(result>0) {
                 if(result!=datagram->size()) {
@@ -86,13 +86,13 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
                                     <<"Command writed but datagram size mismatch: "
                                     <<"datagram size: "<<datagram->size()<<" "
                                     <<"byte sent: "<<result<<" "
-                                    <<"("<<cmd->toString()<<") "
+                                    <<"("<<packet->toString()<<") "
                                     <<"(Retry counter: "<<retryCounter<<")";
                 } else {
-                    if(cmd->isAckRequired()) {
+                    if(packet->isAckRequired()) {
                         logger.debugStream()<<getLogMessageHeader()
                                             <<"Command writed "
-                                            <<"("<<cmd->toString()<<") "
+                                            <<"("<<packet->toString()<<") "
                                             <<"and start waiting for ack"
                                             <<"(Retry counter: "<<retryCounter<<") "
                                             <<"(Timeout: "<<TIMEOUT_MS<<" ms)";
@@ -107,7 +107,7 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
                             result = -2;
                             logger.debugStream()<<getLogMessageHeader()
                                                 <<"Command write "
-                                                <<"("<<cmd->toString()<<") "
+                                                <<"("<<packet->toString()<<") "
                                                 <<"(Retry counter: "<<retryCounter<<") "
                                                 <<"but ack timeout is expired";
                         }
@@ -115,7 +115,7 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
                     } else {
                         logger.debugStream()<<getLogMessageHeader()
                                             <<"Command writed "
-                                            <<"("<<cmd->toString()<<") "
+                                            <<"("<<packet->toString()<<") "
                                             <<"(Retry counter: "<<retryCounter<<") "
                                             <<"and no ack is required";
                     }
@@ -125,12 +125,12 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
             retryCounter++;
         }
 
-        commandCache.erase(cmd->getRequestId());
+        packetCache.erase(packet->getRequestId());
 
         if(retryCounter>RETRY_SEND) {
             logger.warnStream()<<getLogMessageHeader()
                                 <<"Require write cmd "
-                                <<"("<<cmd->toString()<<") "
+                                <<"("<<packet->toString()<<") "
                                 <<"but retry counter is expired, "
                                 <<"Retry counter: "<<retryCounter;
         }
@@ -138,7 +138,7 @@ int UDPChannelTransmitter::sendCommand(AbstractCommand *cmd)
     } else {
         logger.warnStream()<<getLogMessageHeader()
                             <<"Require write cmd "
-                            <<"("<<cmd->toString()<<") "
+                            <<"("<<packet->toString()<<") "
                             <<"but socket is closed";
     }
 

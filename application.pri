@@ -25,11 +25,11 @@ SOURCES += \
     $$PWD/ApplicationCommand/readregistercommand.cpp \
     $$PWD/ApplicationCommand/writeregistercommand.cpp
 
-INCLUDEPATH += ApplicationMessageHandler
-DEPENDPATH += ApplicationMessageHandler
+INCLUDEPATH += ApplicationCommandHandler
+DEPENDPATH += ApplicationCommandHandler
 
-HEADERS += \
-    $$PWD/ApplicationMessageHandler/applicationmessagehandlerfactory.h
+HEADERS +=  \
+    $$PWD/ApplicationCommandHandler/applicationcommandhandlerfactory.h
 
 SOURCES += \
-    $$PWD/ApplicationMessageHandler/applicationmessagehandlerfactory.cpp
+    $$PWD/ApplicationCommandHandler/applicationcommandhandlerfactory.cpp

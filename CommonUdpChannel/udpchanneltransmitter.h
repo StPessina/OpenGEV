@@ -7,7 +7,7 @@
 
 #include "CommonUdpChannel/udpchannel.h"
 
-#include "CommonMessages/abstractcommand.h"
+#include "CommonCommand/abstractcommand.h"
 
 /**
  * @brief The ControlChannelMaster class provide control channel for the master of the GigE communication
@@ -36,7 +36,7 @@ public:
      * @param cmd command to send
      * @return 0 if the command is successfully sent
      */
-    int sendCommand(AbstractCommand* cmd);
+    int sendCommand(AbstractPacket* packet);
 
 signals:
     /**
@@ -55,7 +55,7 @@ private:
      * @brief commandCache store command waiting for ack,
      * the key of this map if the request id of a command
      */
-    std::unordered_map<int, AbstractCommand*> commandCache;
+    std::unordered_map<int, AbstractPacket*> packetCache;
 
     /**
      * @brief lastReqId will incremented at new command send request

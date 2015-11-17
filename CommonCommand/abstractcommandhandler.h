@@ -1,17 +1,19 @@
-#ifndef ABSTRACTMESSAGEHANDLER_H
-#define ABSTRACTMESSAGEHANDLER_H
+#ifndef ABSTRACTCOMMANDHANDLER_H
+#define ABSTRACTCOMMANDHANDLER_H
 
 #include <QString>
 #include <QHostAddress>
 
 #include "CommonComponent/gvcomponent.h"
-#include "CommonMessages/privilege.h"
+#include "CommonUdpChannel/privilege.h"
+
+#include "CommonPacket/abstractpackethandler.h"
 
 /**
  * \brief The AbstractMessageHandler class is generic handler
  * for incoming message on slave channel
  */
-class AbstractMessageHandler
+class AbstractCommandHandler : public AbstractPacketHandler
 {
 public:
     /**
@@ -22,7 +24,7 @@ public:
      * @param senderAddress who send the datagram
      * @param senderPort destination port of the datagram
      */
-    AbstractMessageHandler(GVComponent* target,
+    AbstractCommandHandler(GVComponent* target,
                            quint16 ackCode,
                            QByteArray datagram,
                            QHostAddress senderAddress,
@@ -32,40 +34,15 @@ public:
     /**
      * @brief ~AbstractMessageHandler decostructor
      */
-    virtual ~AbstractMessageHandler();
-
-    /**
-     * @brief getTarget
-     * @return target for this command
-     */
-    GVComponent* getTarget();
-
-    /**
-     * @brief getDatagram
-     * @return datagram received
-     */
-    QByteArray* getDatagram();
-
-    /**
-     * @brief getSenderAddress
-     * @return sender address
-     */
-    QHostAddress getSenderAddress();
-
-
-    quint16 getSenderPort();
-
-    /**
-     * @brief isAllowed
-     * @return true if this command is allowed on the target
-     */
-    virtual bool isAllowed(Privilege ctrlChannelPrivilege) = 0;
+    virtual ~AbstractCommandHandler();
 
     /**
      * @brief execute a command on the target
      * @return error code
      */
     virtual int execute() = 0;
+
+    virtual bool isAckRequired() final;
 
     /**
      * @brief isAckAllowed check if the command is allowed on the target
@@ -119,28 +96,12 @@ public:
     quint16 getResultStatus();
 
     /**
-     * @brief getAck
-     * @return message for acknowledgement
-     */
-    virtual QByteArray* getAckDatagram() final;
-
-    /**
      * @brief toString
      * @return handler major info as string
      */
     std::string toString();
 
 protected:
-    /*!
-     * \brief target component
-     */
-    GVComponent* target;
-
-    QByteArray datagram;
-
-    QHostAddress sender;
-
-    quint16 port;
 
     quint16 ackCode;
 
@@ -152,7 +113,7 @@ protected:
 
     quint16 reqId;
 
-    bool ackNotAllowed = false;
+    virtual quint16 getAckHeaderLength() final;
 
     /**
      * @brief getAckHeader
@@ -180,4 +141,4 @@ protected:
 
 };
 
-#endif // ABSTRACTMESSAGEHANDLER_H
+#endif // ABSTRACTCOMMANDHANDLER_H

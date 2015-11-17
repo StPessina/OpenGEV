@@ -4,14 +4,11 @@
 #include <vector>
 #include <unordered_map>
 
-#include "CommonMessages/abstractcommand.h"
+#include "CommonCommand/abstractcommand.h"
 
 #include "ApplicationCommand/applicationcommandcode.h"
 
-#include "DeviceMessageHandler/deviceackcode.h"
-
-#include "CommonMessages/conversionutils.h"
-
+#include "DeviceCommandHandler/deviceackcode.h"
 /**
  * @brief The ReadRegisterCommand class provide cmd for register read
  */

@@ -2,10 +2,10 @@
 
 UdpChannelReceiver::UdpChannelReceiver(QHostAddress sourceAddr,
                                          quint16 sourcePort,
-                                         AbstractMessageHandlerFactory *messageHandlerFactory)
+                                         AbstractPacketHandlerFactory *messageHandlerFactory)
     : UDPChannel(sourceAddr,sourcePort)
 {
-    this->messageHandlerFactory = messageHandlerFactory;
+    this->packetHandlerFactory = messageHandlerFactory;
 }
 
 UdpChannelReceiver::~UdpChannelReceiver()
@@ -15,35 +15,34 @@ UdpChannelReceiver::~UdpChannelReceiver()
 
 void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
 {
-    quint16 messageCode = ConversionUtils::getShortFromQByteArray(datagram,2);
+    quint16 handlerIdentifier = packetHandlerFactory->getPacketHandlerIdentifier(datagram);
 
-    AbstractMessageHandler* msg = messageHandlerFactory->createMessageHandler(messageCode, datagram,
+    AbstractPacketHandler* packetHandler = packetHandlerFactory->createPacketHandler(handlerIdentifier, datagram,
                                                                               sender, senderPort);
-    msg->execute();
+    packetHandler->execute();
 
-    bool ackRequired = datagram.at(1) & 1;
-    if(ackRequired) { //if ack is required
-        if(msg->isAckAllowed()) {
-            QByteArray* ackDatagram = msg->getAckDatagram();
+    if(packetHandler->isAckRequired()) { //if ack is required
+        if(packetHandler->isAckAllowed()) {
+            QByteArray* ackDatagram = packetHandler->getAckDatagram();
             socket->writeDatagram(*ackDatagram, sender, senderPort);
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack sent "
-                              <<"("<<msg->toString()<<") "
+                              <<"("<<packetHandler->toString()<<") "
                              <<"Ack datagram: "<<ackDatagram->toHex().data()<<" "
                             <<"Ack datagram size: "<<ackDatagram->size();
         } else
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack not allowed from msg handler "
-                              <<"("<<msg->toString()<<") "
+                              <<"("<<packetHandler->toString()<<") "
                              <<"Datagram: "<<datagram.toHex().data()<<" "
                             <<"Datagram size: "<<datagram.size();
     } else {
         logger.debugStream()<<getLogMessageHeader()
                            <<"Ack not required "
-                          <<"("<<msg->toString()<<") "
+                          <<"("<<packetHandler->toString()<<") "
                          <<"Datagram: "<<datagram.toHex().data()<<" "
                         <<"Datagram size: "<<datagram.size();
     }
 
-    delete msg;
+    delete packetHandler;
 }

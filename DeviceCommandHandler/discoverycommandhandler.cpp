@@ -1,17 +1,12 @@
-﻿#include "discoverymessagehandler.h"
+﻿#include "discoverycommandhandler.h"
 
-DiscoveryMessageHandler::DiscoveryMessageHandler(GVDevice* target, QByteArray datagram,
+DiscoveryCommandHandler::DiscoveryCommandHandler(GVDevice* target, QByteArray datagram,
                                                  QHostAddress senderAddress, quint16 senderPort)
-    : AbstractMessageHandler(target, DISCOVERY_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, DISCOVERY_ACK, datagram, senderAddress, senderPort)
 {
 }
 
-bool DiscoveryMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
-{
-    return true;
-}
-
-int DiscoveryMessageHandler::execute()
+int DiscoveryCommandHandler::execute()
 {
 
     if(!checkHeader()) {
@@ -23,14 +18,14 @@ int DiscoveryMessageHandler::execute()
     return 0;
 }
 
-quint16 DiscoveryMessageHandler::getAckDatagramLengthWithoutHeader()
+quint16 DiscoveryCommandHandler::getAckDatagramLengthWithoutHeader()
 {
     if(resultStatus==GEV_STATUS_SUCCESS)
         return 248;
     return 0;
 }
 
-char *DiscoveryMessageHandler::getAckDatagramWithoutHeader()
+char *DiscoveryCommandHandler::getAckDatagramWithoutHeader()
 {
     if(resultStatus!=GEV_STATUS_SUCCESS)
         return NULL;

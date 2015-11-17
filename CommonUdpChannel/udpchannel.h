@@ -12,7 +12,7 @@
 
 #include <log4cpp/Category.hh>
 
-#include "CommonMessages/abstractmessagehandlerfactory.h"
+#include "CommonCommand/abstractcommandhandlerfactory.h"
 #include "CommonUdpChannel/controlchannelprivilege.h"
 
 /*!

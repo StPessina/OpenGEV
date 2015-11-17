@@ -4,13 +4,13 @@
 #include "Device/deviceregisters.h"
 #include "CommonBootstrapRegister/bootstrapregister.h"
 
-#include "CommonMessages/abstractmessagehandler.h"
+#include "CommonCommand/abstractcommandhandler.h"
 #include "Device/gvdevice.h"
 
-#include "CommonMessages/conversionutils.h"
+#include "CommonPacket/conversionutils.h"
 
-#include "DeviceMessageHandler/deviceackcode.h"
-#include "DeviceMessageHandler/deviceackstatus.h"
+#include "DeviceCommandHandler/deviceackcode.h"
+#include "DeviceCommandHandler/deviceackstatus.h"
 
 #include "opengv_global.h"
 
@@ -18,15 +18,13 @@
  * @brief The WriteRegisterMessageHandler class implements ack for write message channel
  * required R-174c
  */
-class WriteRegisterMessageHandler : public AbstractMessageHandler
+class WriteRegisterCommandHandler : public AbstractCommandHandler
 {
 public:
-    WriteRegisterMessageHandler(GVDevice* target,
+    WriteRegisterCommandHandler(GVDevice* target,
                                QByteArray datagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);
-
-    bool isAllowed(Privilege ctrlChannelPrivilege);
 
     int execute();
 

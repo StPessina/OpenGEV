@@ -12,7 +12,7 @@
 #include "Device/networkinterfaceregisters.h"
 #include "Device/streamchanneltransmitter.h"
 
-#include "CommonMessages/privilege.h"
+#include "CommonUdpChannel/privilege.h"
 
 #include "CommonComponent/gvcomponent.h"
 #include "CommonUdpChannel/controlchannelprivilege.h"

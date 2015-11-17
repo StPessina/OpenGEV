@@ -1,14 +1,14 @@
 #ifndef CMDNOTSUPPORTEDMH_H
 #define CMDNOTSUPPORTEDMH_H
 
-#include "CommonMessages/abstractmessagehandler.h"
+#include "CommonCommand/abstractcommandhandler.h"
 
-#include "DeviceMessageHandler/deviceackstatus.h"
+#include "DeviceCommandHandler/deviceackstatus.h"
 
 /**
  * @brief The CmdNotSupportedMH class is special handler for not definied command code
  */
-class CmdNotSupportedMH : public AbstractMessageHandler
+class CmdNotSupportedMH : public AbstractCommandHandler
 {
 public:
     /**
@@ -26,8 +26,6 @@ public:
      * @brief ~CmdNotSupportedMH deconstructor
      */
     virtual ~CmdNotSupportedMH();
-
-    bool isAllowed(Privilege ctrlChannelPrivilege);
 
     int execute();
 

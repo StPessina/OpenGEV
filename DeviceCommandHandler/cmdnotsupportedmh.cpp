@@ -1,7 +1,7 @@
 #include "cmdnotsupportedmh.h"
 
 CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, quint16 cmdCode, QByteArray datagram, QHostAddress senderAddress,quint16 senderPort)
-    : AbstractMessageHandler(target,
+    : AbstractCommandHandler(target,
       cmdCode,
       datagram,
       senderAddress,
@@ -13,11 +13,6 @@ CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, quint16 cmdCode, QByte
 CmdNotSupportedMH::~CmdNotSupportedMH()
 {
 
-}
-
-bool CmdNotSupportedMH::isAllowed(Privilege ctrlChannelPrivilege)
-{
-    return true;
 }
 
 int CmdNotSupportedMH::execute()

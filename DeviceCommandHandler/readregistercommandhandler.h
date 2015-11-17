@@ -4,13 +4,13 @@
 #include "Device/deviceregisters.h"
 #include "CommonBootstrapRegister/bootstrapregister.h"
 
-#include "CommonMessages/abstractmessagehandler.h"
+#include "CommonCommand/abstractcommandhandler.h"
 #include "Device/gvdevice.h"
 
-#include "CommonMessages/conversionutils.h"
+#include "CommonPacket/conversionutils.h"
 
-#include "DeviceMessageHandler/deviceackcode.h"
-#include "DeviceMessageHandler/deviceackstatus.h"
+#include "DeviceCommandHandler/deviceackcode.h"
+#include "DeviceCommandHandler/deviceackstatus.h"
 
 #include "opengv_global.h"
 
@@ -18,15 +18,13 @@
  * @brief The ReadRegisterMessageHandler class implements read register handler
  * required (R-157cd)
  */
-class ReadRegisterMessageHandler : public AbstractMessageHandler
+class ReadRegisterCommandHandler : public AbstractCommandHandler
 {
 public:
-    ReadRegisterMessageHandler(GVDevice* target,
+    ReadRegisterCommandHandler(GVDevice* target,
                                QByteArray datagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);
-
-    bool isAllowed(Privilege ctrlChannelPrivilege);
 
     int execute();
 

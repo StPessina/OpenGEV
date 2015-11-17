@@ -1,32 +1,39 @@
-#ifndef ABSTRACTMESSAGEHANDLERFACTORY_H
-#define ABSTRACTMESSAGEHANDLERFACTORY_H
+#ifndef ABSTRACTPACKETHANDLERFACTORY_H
+#define ABSTRACTPACKETHANDLERFACTORY_H
 
 #include "CommonComponent/gvcomponent.h"
-#include "CommonMessages/abstractmessagehandler.h"
+#include "CommonPacket/abstractpackethandler.h"
 
 /**
- * @brief The AbstractMessageHandlerFactory class create new message handlers
+ * @brief The AbstractPacketHandlerFactory class create new message handlers
  */
-class AbstractMessageHandlerFactory
+class AbstractPacketHandlerFactory
 {
 public:
     /**
      * @brief AbstractMessageHandlerFactory constructor
      * @param target the component where the handler created will be executed
      */
-    AbstractMessageHandlerFactory(GVComponent* target);
+    AbstractPacketHandlerFactory(GVComponent* target);
 
     /**
      * @brief ~AbstractMessageHandlerFactory deconstructor
      */
-    virtual ~AbstractMessageHandlerFactory();
+    virtual ~AbstractPacketHandlerFactory();
+
+    /**
+     * @brief getPacketHandlerIdentifier
+     * @param datagram
+     * @return identifier of packet from datagram
+     */
+    virtual int getPacketHandlerIdentifier(QByteArray datagram) = 0;
 
     /**
      * @brief isValidCode check if a message code exist
      * @param messageCode
      * @return true if the code is valid and an handler exist
      */
-    virtual bool isValidCode(quint16 messageCode) = 0;
+    virtual bool isValidCode(quint16 handlerIdentifier) = 0;
 
     /**
      * @brief createMessageHandler
@@ -36,7 +43,7 @@ public:
      * @param senderPort
      * @return message handler for the requested message code
      */
-    virtual AbstractMessageHandler* createMessageHandler(quint16 messageCode,
+    virtual AbstractPacketHandler* createPacketHandler(quint16 handlerIdentifier,
                                                          QByteArray datagram,
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;
@@ -45,4 +52,4 @@ protected:
     GVComponent* target;
 };
 
-#endif // ABSTRACTMESSAGEHANDLERFACTORY_H
+#endif // ABSTRACTPACKETHANDLERFACTORY_H

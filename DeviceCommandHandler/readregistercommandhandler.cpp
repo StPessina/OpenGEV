@@ -1,18 +1,13 @@
-#include "readregistermessagehandler.h"
+#include "readregistercommandhandler.h"
 
-ReadRegisterMessageHandler::ReadRegisterMessageHandler(GVDevice *target, QByteArray datagram,
+ReadRegisterCommandHandler::ReadRegisterCommandHandler(GVDevice *target, QByteArray datagram,
                                                        QHostAddress senderAddress, quint16 senderPort)
-    : AbstractMessageHandler(target, READREG_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, READREG_ACK, datagram, senderAddress, senderPort)
 {
     numberOfRegisters = 0;
 }
 
-bool ReadRegisterMessageHandler::isAllowed(Privilege ctrlChannelPrivilege)
-{
-    return true;
-}
-
-int ReadRegisterMessageHandler::execute()
+int ReadRegisterCommandHandler::execute()
 {
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;
@@ -55,7 +50,7 @@ int ReadRegisterMessageHandler::execute()
     return resultStatus;
 }
 
-quint16 ReadRegisterMessageHandler::getAckDatagramLengthWithoutHeader()
+quint16 ReadRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
 {
     if(resultStatus==GEV_STATUS_SUCCESS)
         return numberOfRegisters*4;
@@ -65,7 +60,7 @@ quint16 ReadRegisterMessageHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-char *ReadRegisterMessageHandler::getAckDatagramWithoutHeader()
+char *ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
 {
     if(resultStatus!=GEV_STATUS_SUCCESS ||
             (numberOfRegisters==0 && resultStatus==GEV_STATUS_ACCESS_DENIED))

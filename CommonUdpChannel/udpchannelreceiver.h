@@ -3,7 +3,8 @@
 
 #include "CommonUdpChannel/udpchannel.h"
 
-#include "CommonMessages/conversionutils.h"
+#include "CommonPacket/abstractpackethandlerfactory.h"
+#include "CommonPacket/conversionutils.h"
 
 /**
  * @brief The ControlChannelSlave class provide a control channel that wait for new command
@@ -21,7 +22,7 @@ public:
      */
     UdpChannelReceiver(QHostAddress sourceAddr,
                          quint16 sourcePort,
-                         AbstractMessageHandlerFactory *messageHandlerFactory);
+                         AbstractPacketHandlerFactory *packetHandlerFactory);
 
     /**
      * @brief ~ControlChannelSlave deconstructor
@@ -35,7 +36,7 @@ private:
     /**
      * @brief messageHandlerFactory store factory reference used to generate a new message handler
      */
-    AbstractMessageHandlerFactory* messageHandlerFactory;
+    AbstractPacketHandlerFactory* packetHandlerFactory;
 };
 
 #endif // DEVICECONTROLCHANNEL_H

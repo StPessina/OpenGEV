@@ -4,14 +4,12 @@
 #include <vector>
 #include <unordered_map>
 
-#include "CommonMessages/abstractcommand.h"
+#include "CommonCommand/abstractcommand.h"
 
 #include "ApplicationCommand/applicationcommandcode.h"
 
-#include "DeviceMessageHandler/deviceackcode.h"
-#include "DeviceMessageHandler/deviceackstatus.h"
-
-#include "CommonMessages/conversionutils.h"
+#include "DeviceCommandHandler/deviceackcode.h"
+#include "DeviceCommandHandler/deviceackstatus.h"
 
 /**
  * @brief The WriteRegisterCommand class implements read register command

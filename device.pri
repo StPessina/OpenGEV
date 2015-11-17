@@ -15,23 +15,23 @@ SOURCES += \
     $$PWD/Device/networkinterfaceregisters.cpp \
     $$PWD/Device/streamchanneltransmitter.cpp
 
-@INCLUDE += DeviceMessageHandler
+@INCLUDE += DeviceCommandHandler
 
-INCLUDEPATH += DeviceMessageHandler
-DEPENDPATH += DeviceMessageHandler
+INCLUDEPATH += DeviceCommandHandler
+DEPENDPATH += DeviceCommandHandler
 
 HEADERS += \
-    $$PWD/DeviceMessageHandler/discoverymessagehandler.h \
-    $$PWD/DeviceMessageHandler/devicemessagehandlerfactory.h \
-    $$PWD/DeviceMessageHandler/deviceackcode.h \
-    $$PWD/DeviceMessageHandler/cmdnotsupportedmh.h \
-    $$PWD/DeviceMessageHandler/deviceackstatus.h \
-    $$PWD/DeviceMessageHandler/readregistermessagehandler.h \
-    $$PWD/DeviceMessageHandler/writeregistermessagehandler.h
+    $$PWD/DeviceCommandHandler/deviceackcode.h \
+    $$PWD/DeviceCommandHandler/cmdnotsupportedmh.h \
+    $$PWD/DeviceCommandHandler/deviceackstatus.h \
+    $$PWD/DeviceCommandHandler/devicecommandhandlerfactory.h \
+    $$PWD/DeviceCommandHandler/discoverycommandhandler.h \
+    $$PWD/DeviceCommandHandler/readregistercommandhandler.h \
+    $$PWD/DeviceCommandHandler/writeregistercommandhandler.h
 
 SOURCES += \
-    $$PWD/DeviceMessageHandler/discoverymessagehandler.cpp \
-    $$PWD/DeviceMessageHandler/cmdnotsupportedmh.cpp \
-    $$PWD/DeviceMessageHandler/devicemessagehandlerfactory.cpp \
-    $$PWD/DeviceMessageHandler/readregistermessagehandler.cpp \
-    $$PWD/DeviceMessageHandler/writeregistermessagehandler.cpp
+    $$PWD/DeviceCommandHandler/cmdnotsupportedmh.cpp \
+    $$PWD/DeviceCommandHandler/devicecommandhandlerfactory.cpp \
+    $$PWD/DeviceCommandHandler/discoverycommandhandler.cpp \
+    $$PWD/DeviceCommandHandler/readregistercommandhandler.cpp \
+    $$PWD/DeviceCommandHandler/writeregistercommandhandler.cpp

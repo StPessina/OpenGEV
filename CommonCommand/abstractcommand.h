@@ -12,12 +12,13 @@
 
 #include "CommonComponent/gvcomponent.h"
 
-#include "CommonMessages/conversionutils.h"
+#include "CommonPacket/abstractpacket.h"
+#include "CommonPacket//conversionutils.h"
 
 /**
  * @brief The AbstractCommand class provide generic rapresentation for a command
  */
-class AbstractCommand
+class AbstractCommand : public AbstractPacket
 {
 public:
     /**
@@ -40,58 +41,16 @@ public:
     virtual ~AbstractCommand();
 
     /**
-     * @brief getCommandDatagram method
-     * @return the datagram of the command
-     */
-    virtual QByteArray* getCommandDatagram() final;
-
-    /**
-     * @brief getDestinationAddress method
-     * @return the ip address of the destination of the command
-     */
-    virtual QHostAddress getDestinationAddress() final;
-
-    /**
-     * @brief getDestionationPort method
-     * @return the port of the destination of the command
-     */
-    virtual quint16 getDestionationPort() final;
-
-    /**
      * @brief getCommandCode method
      * @return command code
      */
     virtual quint16 getCommandCode() final;
 
     /**
-     * @brief setRequestId method
-     * @param reqId new request id value
-     */
-    virtual void setRequestId(quint16 reqId) final;
-
-    /**
-     * @brief getRequestId method
-     * @return the request id
-     */
-    virtual quint16 getRequestId() final;
-
-    /**
-     * @brief isAckRequired method
-     * @return true if the ack is required
-     */
-    virtual bool isAckRequired() final;
-
-    /**
      * @brief getLengthWithoutHeader
      * @return length of the command request
      */
     virtual quint16 getLengthWithoutHeader() = 0;
-
-    /**
-     * @brief isBroadcastMessage method
-     * @return true if the message is broadcast
-     */
-    virtual bool isBroadcastMessage() final;
 
     /**
      * @brief checkAckHeader method
@@ -128,10 +87,7 @@ public:
 
 protected:
 
-    /**
-     * @brief target where the command will be executed
-     */
-    GVComponent* target;
+    quint16 getHeaderLength();
 
     /*!
      * \brief getHeaderFlagFirstBits for custom bit flag redefine
@@ -147,32 +103,6 @@ protected:
      * \return flag bits
      */
     short getHeaderFlag();
-
-    /**
-     * @brief getCommandDatagramWithoutHeader
-     * @return the command datagram
-     */
-    virtual char* getCommandDatagramWithoutHeader() = 0;
-
-    /**
-     * @brief haveAnswer method
-     * @return if the answer was set
-     */
-    virtual bool haveAnswer() final;
-
-    /**
-     * @brief getAnswer method
-     * @return the answer received for this command, null if no answer is received
-     */
-    virtual QByteArray getAnswer() final;
-
-protected:
-    /**
-     * @brief answer received for this command
-     */
-    QByteArray answer;
-
-private:
 
     /*!
      * \brief getHeader
@@ -190,14 +120,18 @@ private:
     virtual char* getHeader() final;
 
     /**
-     * @brief destAddress the destination address
+     * @brief getCommandDatagramWithoutHeader
+     * @return the command datagram
      */
-    QHostAddress destAddress;
+    virtual char* getCommandDatagramWithoutHeader() = 0;
 
+protected:
     /**
-     * @brief destPort the destination port
+     * @brief answer received for this command
      */
-    quint16 destPort;
+    QByteArray answer;
+
+private:
 
     /**
      * @brief commandCode the command code
@@ -208,21 +142,6 @@ private:
      * @brief ackCommandCode the aspected ack code
      */
     quint16 ackCommandCode;
-
-    /**
-     * @brief reqId the request id
-     */
-    quint16 reqId;
-
-    /**
-     * @brief requireACK
-     */
-    bool requireACK;
-
-    /**
-     * @brief broadcast, true if this command is a broadcast message
-     */
-    bool broadcast;
 };
 
 #endif // ABSTRACTCOMMAND_H
