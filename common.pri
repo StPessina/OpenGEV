@@ -5,7 +5,7 @@ INCLUDEPATH += CommonBootstrapRegister
 HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
-    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
+    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h
 
 SOURCES += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
@@ -104,8 +104,10 @@ DEPENDPATH += ImageStream
 HEADERS += \
     $$PWD/ImageStream/pixelformat.h \
     $$PWD/ImageStream/pixelsmap.h \
-    $$PWD/ImageStream/abstractpixelformat.h
+    $$PWD/ImageStream/abstractpixelformat.h \
+    $$PWD/ImageStream/mono16.h
 
 SOURCES += \
     $$PWD/ImageStream/pixelsmap.cpp \
-    $$PWD/ImageStream/abstractpixelformat.cpp
+    $$PWD/ImageStream/abstractpixelformat.cpp \
+    $$PWD/ImageStream/mono16.cpp
