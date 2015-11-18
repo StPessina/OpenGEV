@@ -65,6 +65,16 @@ public:
     BootstrapRegister *getStreamChannelRegister(int id, int offsetRegisterCode);
 
     /**
+     * @brief setRegister
+     * @param registerCode
+     * @param value
+     * @param senderAddr
+     * @param senderPort
+     * @return status code
+     */
+    Status setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort);
+
+    /**
      * @brief getManufactureName
      * @return manufacture name
      */

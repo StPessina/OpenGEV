@@ -9,6 +9,12 @@
 
 #include "CommonUdpChannel/udpchanneltransmitter.h"
 
+#include "CommonStream/streamimagedataleader.h"
+#include "CommonStream/streamimagedatapayload.h"
+#include "CommonStream/streamimagedatatrailer.h"
+
+#include "ImageStream/pixelsmap.h"
+
 #include "Device/deviceregisters.h"
 
 class StreamChannelTransmitter
@@ -30,7 +36,7 @@ public:
 
     virtual bool isChannelOpen() final;
 
-    virtual void writeIncomingData(AbstractCommand* datapacket) = 0;
+    virtual void writeIncomingData(PixelsMap* datapacket) final;
 
 protected:
     QHostAddress destAddress;
@@ -39,6 +45,18 @@ protected:
 
 private:
     int id;
+
+    int channelPortRegCode;
+    int packetSizeRegCode;
+    int packetDelayRegCode;
+    int packetDestinationAddressRegCode;
+    int sourcePortRegCode;
+    int channelCapabilityRegCode;
+    int channelConfigurationRegCode;
+    int channelZoneRegCode;
+    int channelZoneDirectionRegCode;
+
+    int blockId=1;
 
     /**
      * @brief map of network register
@@ -51,6 +69,8 @@ private:
     void initRegisterMap();
 
     UDPChannelTransmitter* streamChannelTransmitter;
+
+    void setupStardardRegistersValue();
 
 
 };

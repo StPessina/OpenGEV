@@ -52,4 +52,5 @@ char *StreamImageDataLeader::getPacketDatagramWithoutHeader()
     ConversionUtils::setShortToCharArray(datagram, paddingy, 32);
     ConversionUtils::setShortToCharArray(datagram, paddingy, 34);
 
+    return datagram;
 }

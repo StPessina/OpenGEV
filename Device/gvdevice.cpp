@@ -38,7 +38,7 @@ BootstrapRegister *GVDevice::getRegister(int registerCode)
     if((registerCode>=0x0008 && registerCode<=0x0044) ||
             (registerCode>=0x064C && registerCode<=0x0900)) {
         int interfaceNumber = DeviceRegisterConverter::getInterfaceNumberFromNetworkRegister(registerCode);
-        return networkRegister[interfaceNumber]->getRegisterByAbsoluteRegCode(registerCode);
+        return networkRegister.at(interfaceNumber)->getRegisterByAbsoluteRegCode(registerCode);
     }
 
     //Stream registers
@@ -46,10 +46,10 @@ BootstrapRegister *GVDevice::getRegister(int registerCode)
         int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
         if(channelNumber<streamChannels.size())
             return NULL;
-        return streamChannels[channelNumber]->getRegisterByAbsoluteRegCode(registerCode);
+        return streamChannels.at(channelNumber)->getRegisterByAbsoluteRegCode(registerCode);
     }
 
-    return commonRegisters[registerCode];
+    return commonRegisters.at(registerCode);
 }
 
 BootstrapRegister *GVDevice::getNetworkRegister(int interface, int offsetRegisterCode)
@@ -60,6 +60,32 @@ BootstrapRegister *GVDevice::getNetworkRegister(int interface, int offsetRegiste
 BootstrapRegister *GVDevice::getStreamChannelRegister(int id, int offsetRegisterCode)
 {
     return streamChannels[id]->getRegister(offsetRegisterCode);
+}
+
+Status GVDevice::setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort)
+{
+    BootstrapRegister* reg = getRegister(registerCode);
+    if(reg==NULL) //CR-175cd
+        return GEV_STATUS_INVALID_ADDRESS;
+
+    int access = reg->getAccessType();
+
+    if(access==RegisterAccess::RA_READ) //CR-175cd
+        return GEV_STATUS_ACCESS_DENIED;
+
+    switch (registerCode) {
+        case REG_CONTROL_CHANNEL_PRIVILEGE:
+            if(value==0)
+                closeControlChannelPrivilege();
+            else
+                changeControlChannelPrivilege(value, senderAddr,senderPort);
+        break;
+    default:
+        reg->setValueNumb(value);
+        break;
+    }
+
+    return GEV_STATUS_SUCCESS;
 }
 
 string GVDevice::getManufactureName()

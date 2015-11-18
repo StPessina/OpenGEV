@@ -30,31 +30,12 @@ int WriteRegisterCommandHandler::execute()
                     for (int i = 0; i < numberOfRegisters*8; i+=8) { //CR-168cd
                         int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
                         int value = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i+4);
-                        BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
-                        if(reg==NULL) { //CR-175cd
-                            resultStatus = GEV_STATUS_INVALID_ADDRESS;
-                            break;
-                        }
-                        int access = reg->getAccessType();
 
-                        if(access==RegisterAccess::RA_READ) { //CR-175cd
-                            resultStatus = GEV_STATUS_ACCESS_DENIED;
-                            break;
-                        }
+                        resultStatus = dynamic_cast<GVDevice*>(target)->setRegister(regNumber, value,
+                                                                                    sender, port);
 
-                        switch (regNumber) {
-                        case REG_CONTROL_CHANNEL_PRIVILEGE:
-                            if(value==0)
-                                dynamic_cast<GVDevice*>(target)->closeControlChannelPrivilege();
-                            else
-                                dynamic_cast<GVDevice*>(target)->changeControlChannelPrivilege(value, sender,port);
-                            break;
-                        default:
-                            reg->setValueNumb(value);
-                            break;
-                        }
-
-                        accessibleRegisters++;
+                        if(resultStatus==GEV_STATUS_SUCCESS)
+                            accessibleRegisters++;
                     }
                     if(accessibleRegisters==numberOfRegisters)
                         resultStatus = GEV_STATUS_SUCCESS;

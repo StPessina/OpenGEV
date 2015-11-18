@@ -6,15 +6,12 @@ StreamRawDataPayload::StreamRawDataPayload(QHostAddress destAddress, quint16 des
     : AbstractStreamData(destAddress, destPort, PacketFormat::DATA_PAYLOAD_GENIRIC_FORMAT,
                          blockId64, packetId32)
 {
-    this->data = new char[dataByteLength];
-    for (int i = 0; i < dataByteLength; ++i)
-        this->data[i]=data[i];
+    this->data = data;
     this->dataByteLength = dataByteLength;
 }
 
 StreamRawDataPayload::~StreamRawDataPayload()
 {
-    delete data;
 }
 
 int StreamRawDataPayload::executeAnswer(QByteArray answer)
