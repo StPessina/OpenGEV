@@ -1,8 +1,6 @@
 #ifndef ABSTRACTCOMMAND_H
 #define ABSTRACTCOMMAND_H
 
-#define HEADER_LENGTH 8
-
 #include <QByteArray>
 
 #include <string>
@@ -47,12 +45,6 @@ public:
     virtual quint16 getCommandCode() final;
 
     /**
-     * @brief getLengthWithoutHeader
-     * @return length of the command request
-     */
-    virtual quint16 getLengthWithoutHeader() = 0;
-
-    /**
      * @brief checkAckHeader method
      * @param answer
      * @return true if the header of the message is a valid answer
@@ -73,21 +65,14 @@ public:
     virtual short getStatusCode() final;
 
     /**
-     * @brief executeAnswer method
-     * @param answer received for the command
-     * @return 0 if the answer is processed and executed successfully
-     */
-    virtual int executeAnswer(QByteArray answer) = 0;
-
-    /**
      * @brief toString
      * @return string value of the value
      */
-    std::string toString();
+    virtual std::string toString();
 
 protected:
 
-    quint16 getHeaderLength();
+    virtual quint16 getHeaderLength() final;
 
     /*!
      * \brief getHeaderFlagFirstBits for custom bit flag redefine
@@ -102,7 +87,7 @@ protected:
      * bit 7: ack required
      * \return flag bits
      */
-    short getHeaderFlag();
+    virtual short getHeaderFlag() final;
 
     /*!
      * \brief getHeader
@@ -118,12 +103,6 @@ protected:
      * \return char* with header
      */
     virtual char* getHeader() final;
-
-    /**
-     * @brief getCommandDatagramWithoutHeader
-     * @return the command datagram
-     */
-    virtual char* getCommandDatagramWithoutHeader() = 0;
 
 protected:
     /**

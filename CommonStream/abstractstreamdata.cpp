@@ -1,11 +1,12 @@
 #include "abstractstreamdata.h"
 
 AbstractStreamData::AbstractStreamData(GVComponent *target, QHostAddress destAddress, quint16 destPort,
-        quint16 commandCode, quint16 ackCommandCode)
+        PacketFormat packetFormat, quint64 blockId64, quint32 packetId32)
     : AbstractPacket(target, destAddress, destPort, 0, false, false)
 {
-    this->commandCode=commandCode;
-    this->ackCommandCode=ackCommandCode;
+    this->packetFormat = packetFormat;
+    this->blockId64 = blockId64;
+    this->packetId32 = packetId32;
 }
 
 AbstractStreamData::~AbstractStreamData()
@@ -13,48 +14,19 @@ AbstractStreamData::~AbstractStreamData()
 
 }
 
-
-quint16 AbstractStreamData::getCommandCode()
-{
-    return commandCode;
-}
-
-bool AbstractStreamData::checkAckHeader(QByteArray answer)
-{
-    if(answer.size()<HEADER_LENGTH)
-        return false;
-    if(ackCommandCode!=ConversionUtils::getShortFromQByteArray(answer,2))
-        return false;
-    if(getRequestId()!=ConversionUtils::getShortFromQByteArray(answer,6))
-        return false;
-    return true;
-}
-
-short AbstractStreamData::getStatusCodeFromAnswer(QByteArray answer)
-{
-    short statusCode = ConversionUtils::getShortFromQByteArray(answer,0);
-
-    return statusCode;
-}
-
-short AbstractStreamData::getStatusCode()
-{
-    return getStatusCodeFromAnswer(answer);
-}
-
 quint16 AbstractStreamData::getHeaderLength()
 {
-    return HEADER_LENGTH;
+    return 8;
 }
 
 char* AbstractStreamData::getHeader()
 {
-    char* header = new char[HEADER_LENGTH];
+    char* header = new char[getHeaderLength()];
     header[0]=0x42;
     header[1]=getHeaderFlag();
 
-    header[2]=commandCode >> 8;
-    header[3]=commandCode;
+    header[2]=0; //commandCode >> 8;
+    header[3]=0; //commandCode;
 
     int length = getLengthWithoutHeader();
     header[4]=length >> 8;
@@ -75,11 +47,22 @@ short AbstractStreamData::getHeaderFlag()
 
 std::string AbstractStreamData::toString()
 {
-    return getDestinationAddress().toString().toStdString() + ":" + std::to_string((int) getDestionationPort()) + "/"
+    return "STREAM_DATA /"
+            + getDestinationAddress().toString().toStdString() + ":" + std::to_string((int) getDestionationPort()) + "/"
             + std::to_string(getRequestId()) + "/"
-            + std::to_string(commandCode) + "/"
+            //+ std::to_string(commandCode) + "/"
             + std::to_string(isAckRequired()) + "/"
             + std::to_string(isBroadcastMessage());
+}
+
+quint64 AbstractStreamData::getBlockId64()
+{
+    return blockId64;
+}
+
+quint32 AbstractStreamData::getPacketId32()
+{
+    return packetId32;
 }
 
 

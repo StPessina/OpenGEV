@@ -25,7 +25,7 @@ QByteArray* AbstractPacket::getPacketDatagram()
         datagramChar[i]=header[i];
     delete header;
     if(datagramSize>getHeaderLength()) {
-        char* body = getCommandDatagramWithoutHeader();
+        char* body = getPacketDatagramWithoutHeader();
         for (int i = getHeaderLength(); i < datagramSize; ++i)
             datagramChar[i]=body[i-getHeaderLength()];
         delete body;
@@ -82,7 +82,8 @@ QByteArray AbstractPacket::getAnswer()
 
 std::string AbstractPacket::toString()
 {
-    return destAddress.toString().toStdString() + ":" + std::to_string((int) destPort) + "/"
+    return "ABSTRACT_PACKET /"
+            + destAddress.toString().toStdString() + ":" + std::to_string((int) destPort) + "/"
             + std::to_string(reqId) + "/"
             + std::to_string(broadcast);
 }

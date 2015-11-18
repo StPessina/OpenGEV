@@ -96,7 +96,7 @@ public:
      * @brief toString
      * @return string value of the value
      */
-    std::string toString();
+    virtual std::string toString();
 
 protected:
 
@@ -121,7 +121,7 @@ protected:
      * @brief getCommandDatagramWithoutHeader
      * @return the command datagram
      */
-    virtual char* getCommandDatagramWithoutHeader() = 0;
+    virtual char* getPacketDatagramWithoutHeader() = 0;
 
     /**
      * @brief haveAnswer method

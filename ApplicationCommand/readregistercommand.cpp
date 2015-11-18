@@ -29,7 +29,7 @@ quint16 ReadRegisterCommand::getLengthWithoutHeader()
     return registersData.size()*4;
 }
 
-char *ReadRegisterCommand::getCommandDatagramWithoutHeader()
+char *ReadRegisterCommand::getPacketDatagramWithoutHeader()
 {
     //R-163c
 
@@ -49,7 +49,7 @@ int ReadRegisterCommand::executeAnswer(QByteArray answer)
     if(checkAckHeader(answer))
         return 1;
 
-    if(answer.length()-HEADER_LENGTH!=getLengthWithoutHeader())
+    if(answer.length()-getHeaderLength()!=getLengthWithoutHeader())
         return 2;
 
     QByteArray answerWithoutHeader = answer.mid(8);

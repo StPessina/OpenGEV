@@ -9,15 +9,17 @@
 
 #include "CommonPacket/abstractpackethandler.h"
 
+#include "CommonPacket/status.h"
+
 /**
- * \brief The AbstractMessageHandler class is generic handler
- * for incoming message on slave channel
+ * \brief The AbstractCommandHandler class is generic handler
+ * for incoming command
  */
 class AbstractCommandHandler : public AbstractPacketHandler
 {
 public:
     /**
-     * @brief AbstractMessageHandler
+     * @brief AbstractCommandHandler
      * @param target component where the new message should be applied
      * @param ackCode acknoledgment code
      * @param datagram datagram received
@@ -32,23 +34,11 @@ public:
 
 
     /**
-     * @brief ~AbstractMessageHandler decostructor
+     * @brief ~AbstractCommandHandler decostructor
      */
     virtual ~AbstractCommandHandler();
 
-    /**
-     * @brief execute a command on the target
-     * @return error code
-     */
-    virtual int execute() = 0;
-
-    virtual bool isAckRequired() final;
-
-    /**
-     * @brief isAckAllowed check if the command is allowed on the target
-     * @return true if it's allowed
-     */
-    bool isAckAllowed();
+    bool isAckRequired() final;
 
     /**
      * @brief readRequestCommandCode extract command code from a datagram
@@ -62,7 +52,7 @@ public:
      * @param datagram
      * @return length
      */
-    static quint16 readRequestRequestLength(QByteArray* datagram);
+    static quint16 readRequestLength(QByteArray* datagram);
 
     /**
      * @brief readRequestRequestId extract request id from a datagram
@@ -75,37 +65,37 @@ public:
      * @brief getRequestCommandCode
      * @return request command code
      */
-    quint16 getRequestCommandCode();
+    virtual quint16 getRequestCommandCode() final;
 
     /**
      * @brief getRequestLength
      * @return request length
      */
-    quint16 getRequestLength();
+    virtual quint16 getRequestLength() final;
 
     /**
      * @brief getRequestId
      * @return request id
      */
-    quint16 getRequestId();
+    virtual quint16 getRequestId() final;
 
     /**
      * @brief getResultStatus
      * @return result of execution
      */
-    quint16 getResultStatus();
+    virtual Status getResultStatus() final;
 
     /**
      * @brief toString
      * @return handler major info as string
      */
-    std::string toString();
+    virtual std::string toString();
 
 protected:
 
     quint16 ackCode;
 
-    quint16 resultStatus;
+    Status resultStatus;
 
     quint16 requestCommandCode;
 
@@ -113,7 +103,7 @@ protected:
 
     quint16 reqId;
 
-    virtual quint16 getAckHeaderLength() final;
+    quint16 getAckHeaderLength() final;
 
     /**
      * @brief getAckHeader
@@ -126,18 +116,6 @@ protected:
      * @return true if header is good
      */
     virtual bool checkHeader() final;
-
-    /*!
-     * \brief getAck
-     * \return message for acknowledgement without header
-     */
-    virtual char* getAckDatagramWithoutHeader() = 0;
-
-    /*!
-     * \brief getAck message without length
-     * \return message for acknowledgement
-     */
-    virtual quint16 getAckDatagramLengthWithoutHeader() = 0;
 
 };
 

@@ -21,7 +21,7 @@ quint16 DiscoveryCommand::getLengthWithoutHeader()
     return 0;
 }
 
-char *DiscoveryCommand::getCommandDatagramWithoutHeader()
+char *DiscoveryCommand::getPacketDatagramWithoutHeader()
 {
     return NULL;
 }

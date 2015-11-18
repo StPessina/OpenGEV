@@ -47,7 +47,8 @@ HEADERS += \
     $$PWD/CommonPacket/abstractpacket.h \
     $$PWD/CommonPacket/abstractpackethandler.h \
     $$PWD/CommonPacket/abstractpackethandlerfactory.h \
-    $$PWD/CommonPacket/conversionutils.h
+    $$PWD/CommonPacket/conversionutils.h \
+    $$PWD/CommonPacket/status.h
 
 SOURCES += \
     $$PWD/CommonPacket/abstractpacket.cpp \
@@ -76,7 +77,8 @@ INCLUDEPATH += CommonStream
 DEPENDPATH += CommonStream
 
 HEADERS += \
-    $$PWD/CommonStream/abstractstreamdata.h
+    $$PWD/CommonStream/abstractstreamdata.h \
+    $$PWD/CommonStream/packetformat.h
 
 SOURCES += \
     $$PWD/CommonStream/abstractstreamdata.cpp

@@ -10,7 +10,6 @@
 #include "CommonPacket/conversionutils.h"
 
 #include "DeviceCommandHandler/deviceackcode.h"
-#include "DeviceCommandHandler/deviceackstatus.h"
 
 #include "opengv_global.h"
 

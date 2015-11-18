@@ -36,22 +36,22 @@ public:
      * @brief getTarget
      * @return target for this command
      */
-    GVComponent* getTarget();
+    virtual GVComponent* getTarget() final;
 
     /**
      * @brief getDatagram
      * @return datagram received
      */
-    QByteArray* getDatagram();
+    virtual QByteArray* getDatagram() final;
 
     /**
      * @brief getSenderAddress
      * @return sender address
      */
-    QHostAddress getSenderAddress();
+    virtual QHostAddress getSenderAddress() final;
 
 
-    quint16 getSenderPort();
+    virtual quint16 getSenderPort() final;
 
     /**
      * @brief execute a command on the target
@@ -69,7 +69,7 @@ public:
      * @brief isAckAllowed check if the command is allowed on the target
      * @return true if it's allowed
      */
-    bool isAckAllowed();
+    virtual bool isAckAllowed() final;
 
 
     /**
@@ -82,7 +82,7 @@ public:
      * @brief toString
      * @return handler major info as string
      */
-    std::string toString();
+    virtual std::string toString();
 
 protected:
     /*!

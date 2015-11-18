@@ -23,7 +23,6 @@ DEPENDPATH += DeviceCommandHandler
 HEADERS += \
     $$PWD/DeviceCommandHandler/deviceackcode.h \
     $$PWD/DeviceCommandHandler/cmdnotsupportedmh.h \
-    $$PWD/DeviceCommandHandler/deviceackstatus.h \
     $$PWD/DeviceCommandHandler/devicecommandhandlerfactory.h \
     $$PWD/DeviceCommandHandler/discoverycommandhandler.h \
     $$PWD/DeviceCommandHandler/readregistercommandhandler.h \

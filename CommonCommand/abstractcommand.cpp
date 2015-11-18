@@ -21,7 +21,7 @@ quint16 AbstractCommand::getCommandCode()
 
 bool AbstractCommand::checkAckHeader(QByteArray answer)
 {
-    if(answer.size()<HEADER_LENGTH)
+    if(answer.size()<getHeaderLength())
         return false;
     if(ackCommandCode!=ConversionUtils::getShortFromQByteArray(answer,2))
         return false;
@@ -44,12 +44,12 @@ short AbstractCommand::getStatusCode()
 
 quint16 AbstractCommand::getHeaderLength()
 {
-    return HEADER_LENGTH;
+    return 8;
 }
 
 char* AbstractCommand::getHeader()
 {
-    char* header = new char[HEADER_LENGTH];
+    char* header = new char[getHeaderLength()];
     header[0]=0x42;
     header[1]=getHeaderFlag();
 
@@ -75,7 +75,8 @@ short AbstractCommand::getHeaderFlag()
 
 std::string AbstractCommand::toString()
 {
-    return getDestinationAddress().toString().toStdString() + ":" + std::to_string((int) getDestionationPort()) + "/"
+    return "COMMAND /"
+            + getDestinationAddress().toString().toStdString() + ":" + std::to_string((int) getDestionationPort()) + "/"
             + std::to_string(getRequestId()) + "/"
             + std::to_string(commandCode) + "/"
             + std::to_string(isAckRequired()) + "/"

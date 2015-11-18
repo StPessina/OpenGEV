@@ -25,7 +25,7 @@ public:
      */
     virtual ~AbstractCommandHandlerFactory();
 
-    virtual int getPacketHandlerIdentifier(QByteArray datagram) final;
+    int getPacketHandlerIdentifier(QByteArray datagram) final;
 
     /**
      * @brief isValidCode check if a message code exist

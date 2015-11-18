@@ -55,7 +55,7 @@ public:
      * @brief getCommandDatagramWithoutHeader method
      * @return datagram
      */
-    char* getCommandDatagramWithoutHeader();
+    char* getPacketDatagramWithoutHeader();
 
     /**
      * @brief executeAnswer method will execute the command on the target

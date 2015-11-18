@@ -3,8 +3,6 @@
 
 #include "CommonCommand/abstractcommandhandler.h"
 
-#include "DeviceCommandHandler/deviceackstatus.h"
-
 /**
  * @brief The CmdNotSupportedMH class is special handler for not definied command code
  */

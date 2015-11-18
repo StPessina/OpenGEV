@@ -9,7 +9,6 @@
 #include "ApplicationCommand/applicationcommandcode.h"
 
 #include "DeviceCommandHandler/deviceackcode.h"
-#include "DeviceCommandHandler/deviceackstatus.h"
 
 /**
  * @brief The WriteRegisterCommand class implements read register command
@@ -61,7 +60,7 @@ public:
      * @brief getCommandDatagramWithoutHeader method
      * @return datagram
      */
-    char* getCommandDatagramWithoutHeader();
+    char* getPacketDatagramWithoutHeader();
 
     /**
      * @brief executeAnswer method will execute the command on the target

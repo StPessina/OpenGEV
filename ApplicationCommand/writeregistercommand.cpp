@@ -34,7 +34,7 @@ quint16 WriteRegisterCommand::getLengthWithoutHeader()
     return registersData.size()*8;
 }
 
-char *WriteRegisterCommand::getCommandDatagramWithoutHeader()
+char *WriteRegisterCommand::getPacketDatagramWithoutHeader()
 {
     //R-173c
 

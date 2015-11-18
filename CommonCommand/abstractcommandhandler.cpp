@@ -8,7 +8,7 @@ AbstractCommandHandler::AbstractCommandHandler(GVComponent* target, quint16 ackC
     this->datagram = datagram;
 
     this->requestCommandCode = readRequestCommandCode(&datagram);
-    this->requestLength = readRequestRequestLength(&datagram);
+    this->requestLength = readRequestLength(&datagram);
     this->reqId = readRequestRequestId(&datagram);
 }
 
@@ -30,7 +30,7 @@ quint16 AbstractCommandHandler::readRequestCommandCode(QByteArray *datagram)
     return valueMSB*256+valueLSB;
 }
 
-quint16 AbstractCommandHandler::readRequestRequestLength(QByteArray *datagram)
+quint16 AbstractCommandHandler::readRequestLength(QByteArray *datagram)
 {
     uint valueMSB = datagram->at(4);
     uint valueLSB = datagram->at(5);
@@ -59,7 +59,7 @@ quint16 AbstractCommandHandler::getRequestId()
     return reqId;
 }
 
-quint16 AbstractCommandHandler::getResultStatus()
+Status AbstractCommandHandler::getResultStatus()
 {
     return resultStatus;
 }

@@ -51,19 +51,19 @@ public:
      * @brief getSourceAddress method
      * @return addresses that can send message on this channel
      */
-    QHostAddress getSourceAddress();
+    virtual QHostAddress getSourceAddress() final;
 
     /**
      * @brief getSourcePort method
      * @return port where the channel is listen for new datagram
      */
-    quint16 getSourcePort();
+    virtual quint16 getSourcePort() final;
 
     /**
      * @brief isSocketOpen method
      * @return true if the socket is open
      */
-    bool isSocketOpen();
+    virtual bool isSocketOpen() final;
 
 public slots:
     /**
