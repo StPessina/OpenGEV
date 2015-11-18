@@ -78,7 +78,10 @@ DEPENDPATH += CommonStream
 
 HEADERS += \
     $$PWD/CommonStream/abstractstreamdata.h \
-    $$PWD/CommonStream/packetformat.h
+    $$PWD/CommonStream/packetformat.h \
+    $$PWD/CommonStream/payloadtype.h \
+    $$PWD/CommonStream/streamrawdataleader.h
 
 SOURCES += \
-    $$PWD/CommonStream/abstractstreamdata.cpp
+    $$PWD/CommonStream/abstractstreamdata.cpp \
+    $$PWD/CommonStream/streamrawdataleader.cpp

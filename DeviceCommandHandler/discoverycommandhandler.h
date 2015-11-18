@@ -25,11 +25,11 @@ public:
                             QHostAddress senderAddress,
                             quint16 senderPort);
 
-    int execute();
+    virtual int execute();
 
-    quint16 getAckDatagramLengthWithoutHeader();
+    virtual quint16 getAckDatagramLengthWithoutHeader();
 
-    char* getAckDatagramWithoutHeader();
+    virtual char* getAckDatagramWithoutHeader();
 };
 
 #endif // DEVICEDISCOVERYMESSAGEHANDLER_H

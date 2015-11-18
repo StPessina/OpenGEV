@@ -58,6 +58,12 @@ public:
      */
     virtual quint32 getPacketId32() final;
 
+    /**
+     * @brief getPacketFormat
+     * @return packet format
+     */
+    virtual PacketFormat getPacketFormat() final;
+
 protected:
 
     virtual quint16 getHeaderLength() final;

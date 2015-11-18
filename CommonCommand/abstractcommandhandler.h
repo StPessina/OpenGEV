@@ -38,7 +38,8 @@ public:
      */
     virtual ~AbstractCommandHandler();
 
-    bool isAckRequired() final;
+
+    virtual bool isAckRequired() final;
 
     /**
      * @brief readRequestCommandCode extract command code from a datagram
@@ -116,7 +117,6 @@ protected:
      * @return true if header is good
      */
     virtual bool checkHeader() final;
-
 };
 
 #endif // ABSTRACTCOMMANDHANDLER_H

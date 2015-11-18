@@ -15,15 +15,6 @@ public:
     ConversionUtils();
 
     /**
-     * @brief getStringFromQByteArray read string from QByteArray
-     * @param array
-     * @param size
-     * @param start
-     * @return string value if no out of bound
-     */
-    static QString getStringFromQByteArray(QByteArray array, int size, int start=0);
-
-    /**
      * @brief setShortToCharArray write short value in char array
      * @param array
      * @param value
@@ -42,12 +33,13 @@ public:
     static bool setIntToCharArray(char* array, int value, int start);
 
     /**
-     * @brief getIntFromQByteArray read integer value from a QByteArray
+     * @brief setLongToCharArray write long value from a char array
      * @param array
+     * @param value
      * @param start
-     * @return the integer value if no out of bound
+     * @return true if no out of bound
      */
-    static int getIntFromQByteArray(QByteArray array, int start=0);
+    static bool setLongToCharArray(char* array, long value, int start);
 
     /**
      * @brief getIntFromQByteArray read integer value from a QByteArray
@@ -56,6 +48,31 @@ public:
      * @return the unsigned short value if no out of bound
      */
     static short getShortFromQByteArray(QByteArray array, int start=0);
+
+    /**
+     * @brief getIntFromQByteArray read integer value from a QByteArray
+     * @param array
+     * @param start
+     * @return the integer value if no out of bound
+     */
+    static int getIntFromQByteArray(QByteArray array, int start=0);
+
+    /**
+     * @brief getLongToCharArray read long value from a QByteArray
+     * @param array
+     * @param start
+     * @return the long value if no out of bound
+     */
+    static long getLongToCharArray(QByteArray array, int start=0);
+
+    /**
+     * @brief getStringFromQByteArray read string from QByteArray
+     * @param array
+     * @param size
+     * @param start
+     * @return string value if no out of bound
+     */
+    static QString getStringFromQByteArray(QByteArray array, int size, int start=0);
 
 
 private:

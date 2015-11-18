@@ -16,43 +16,46 @@ AbstractStreamData::~AbstractStreamData()
 
 quint16 AbstractStreamData::getHeaderLength()
 {
-    return 8;
+    return 20;
 }
 
 char* AbstractStreamData::getHeader()
 {
     char* header = new char[getHeaderLength()];
-    header[0]=0x42;
-    header[1]=getHeaderFlag();
+    ConversionUtils::setShortToCharArray(header, status, 0);
 
-    header[2]=0; //commandCode >> 8;
-    header[3]=0; //commandCode;
+    short flags = getHeaderFlag();
+    ConversionUtils::setShortToCharArray(header, flags, 2);
 
-    int length = getLengthWithoutHeader();
-    header[4]=length >> 8;
-    header[5]=length;
+    header[4]=packetFormat >> 4;
+    header[4] |= ((short) extendDI) >> 7;
 
-    header[6]=getRequestId() >> 8;
-    header[7]=getRequestId();
+    //Reserved
+    header[5]=0;
+    header[6]=0;
+    header[7]=0;
+
+    ConversionUtils::setShortToCharArray(header, blockId64, 8);
+
+    ConversionUtils::setIntToCharArray(header, packetId32, 16);
+
     return header;
 }
 
 short AbstractStreamData::getHeaderFlag()
 {
-    if(isAckRequired())
-        return 0x1;
-    else
-        return 0x0;
+    return 0;
 }
 
 std::string AbstractStreamData::toString()
 {
     return "STREAM_DATA /"
             + getDestinationAddress().toString().toStdString() + ":" + std::to_string((int) getDestionationPort()) + "/"
-            + std::to_string(getRequestId()) + "/"
-            //+ std::to_string(commandCode) + "/"
             + std::to_string(isAckRequired()) + "/"
-            + std::to_string(isBroadcastMessage());
+            + std::to_string(isBroadcastMessage()) + "/"
+            + std::to_string(packetFormat) + "/"
+            + std::to_string(getBlockId64()) + "/"
+            + std::to_string(getPacketId32());
 }
 
 quint64 AbstractStreamData::getBlockId64()
@@ -63,6 +66,11 @@ quint64 AbstractStreamData::getBlockId64()
 quint32 AbstractStreamData::getPacketId32()
 {
     return packetId32;
+}
+
+PacketFormat AbstractStreamData::getPacketFormat()
+{
+    return packetFormat;
 }
 
 
