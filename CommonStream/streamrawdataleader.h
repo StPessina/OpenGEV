@@ -7,13 +7,15 @@
 
 /**
  * @brief The StreamRawDataLeader class implements data leader packet
- * for raw data stream type
+ * for raw data stream type (CR-294s)
  */
 class StreamRawDataLeader : public AbstractStreamData
 {
 public:
-    StreamRawDataLeader(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+    StreamRawDataLeader(QHostAddress destAddress, quint16 destPort,
                         quint64 blockId64, quint32 packetId32, quint64 payloadSize);
+
+    virtual ~StreamRawDataLeader();
 
     virtual int executeAnswer(QByteArray answer);
 

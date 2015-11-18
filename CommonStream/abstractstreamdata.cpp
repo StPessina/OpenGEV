@@ -1,8 +1,8 @@
 #include "abstractstreamdata.h"
 
-AbstractStreamData::AbstractStreamData(GVComponent *target, QHostAddress destAddress, quint16 destPort,
+AbstractStreamData::AbstractStreamData(QHostAddress destAddress, quint16 destPort,
         PacketFormat packetFormat, quint64 blockId64, quint32 packetId32)
-    : AbstractPacket(target, destAddress, destPort, 0, false, false)
+    : AbstractPacket(NULL, destAddress, destPort, 0, false, false)
 {
     this->packetFormat = packetFormat;
     this->blockId64 = blockId64;

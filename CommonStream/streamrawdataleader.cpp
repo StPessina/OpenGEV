@@ -1,10 +1,15 @@
 #include "streamrawdataleader.h"
 
-StreamRawDataLeader::StreamRawDataLeader(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+StreamRawDataLeader::StreamRawDataLeader(QHostAddress destAddress, quint16 destPort,
                                          quint64 blockId64, quint32 packetId32, quint64 payloadSize)
-    : AbstractStreamData(target, destAddress, destPort, PacketFormat::DATA_LEADER_FORMAT, blockId64, packetId32)
+    : AbstractStreamData(destAddress, destPort, PacketFormat::DATA_LEADER_FORMAT, blockId64, packetId32)
 {
     this->payloadSize = payloadSize;
+}
+
+StreamRawDataLeader::~StreamRawDataLeader()
+{
+
 }
 
 int StreamRawDataLeader::executeAnswer(QByteArray answer)

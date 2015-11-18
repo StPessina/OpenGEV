@@ -80,8 +80,12 @@ HEADERS += \
     $$PWD/CommonStream/abstractstreamdata.h \
     $$PWD/CommonStream/packetformat.h \
     $$PWD/CommonStream/payloadtype.h \
-    $$PWD/CommonStream/streamrawdataleader.h
+    $$PWD/CommonStream/streamrawdataleader.h \
+    $$PWD/CommonStream/streamrawdatatrailer.h \
+    $$PWD/CommonStream/streamrawdatapayload.h
 
 SOURCES += \
     $$PWD/CommonStream/abstractstreamdata.cpp \
-    $$PWD/CommonStream/streamrawdataleader.cpp
+    $$PWD/CommonStream/streamrawdataleader.cpp \
+    $$PWD/CommonStream/streamrawdatatrailer.cpp \
+    $$PWD/CommonStream/streamrawdatapayload.cpp

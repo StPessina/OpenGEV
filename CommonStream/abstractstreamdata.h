@@ -32,7 +32,7 @@ public:
      * @param commandCode
      * @param ackCommandCode aspected ack command code
      */
-    AbstractStreamData(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+    AbstractStreamData(QHostAddress destAddress, quint16 destPort,
                        PacketFormat packetFormat, quint64 blockId64, quint32 packetId32);
 
     /**
