@@ -5,7 +5,7 @@ INCLUDEPATH += CommonBootstrapRegister
 HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
-    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h
+    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
 
 SOURCES += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
@@ -79,13 +79,33 @@ DEPENDPATH += CommonStream
 HEADERS += \
     $$PWD/CommonStream/abstractstreamdata.h \
     $$PWD/CommonStream/packetformat.h \
-    $$PWD/CommonStream/payloadtype.h \
+    $$PWD/CommonStream/payloadtype.h  \
     $$PWD/CommonStream/streamrawdataleader.h \
     $$PWD/CommonStream/streamrawdatatrailer.h \
-    $$PWD/CommonStream/streamrawdatapayload.h
+    $$PWD/CommonStream/streamrawdatapayload.h \
+    $$PWD/CommonStream/streamimagedataleader.h \
+    $$PWD/CommonStream/streamimagedatatrailer.h \
+    $$PWD/CommonStream/streamimagedatapayload.h
 
 SOURCES += \
     $$PWD/CommonStream/abstractstreamdata.cpp \
     $$PWD/CommonStream/streamrawdataleader.cpp \
     $$PWD/CommonStream/streamrawdatatrailer.cpp \
-    $$PWD/CommonStream/streamrawdatapayload.cpp
+    $$PWD/CommonStream/streamrawdatapayload.cpp \
+    $$PWD/CommonStream/streamimagedataleader.cpp \
+    $$PWD/CommonStream/streamimagedatatrailer.cpp \
+    $$PWD/CommonStream/streamimagedatapayload.cpp
+
+@INCLUDE += ImageStream
+
+INCLUDEPATH += ImageStream
+DEPENDPATH += ImageStream
+
+HEADERS += \
+    $$PWD/ImageStream/pixelformat.h \
+    $$PWD/ImageStream/pixelsmap.h \
+    $$PWD/ImageStream/abstractpixelformat.h
+
+SOURCES += \
+    $$PWD/ImageStream/pixelsmap.cpp \
+    $$PWD/ImageStream/abstractpixelformat.cpp
