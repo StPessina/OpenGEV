@@ -58,12 +58,12 @@ public:
     static int getIntFromQByteArray(QByteArray array, int start=0);
 
     /**
-     * @brief getLongToCharArray read long value from a QByteArray
+     * @brief getLongFromQByteArray read long value from a QByteArray
      * @param array
      * @param start
      * @return the long value if no out of bound
      */
-    static long getLongToCharArray(QByteArray array, int start=0);
+    static long getLongFromQByteArray(QByteArray array, int start=0);
 
     /**
      * @brief getStringFromQByteArray read string from QByteArray

@@ -52,7 +52,7 @@ int ConversionUtils::getIntFromQByteArray(QByteArray array, int start)
     return valueLSB | (valueC << 8) | (valueB << 16) | (valueMSB << 24);
 }
 
-long ConversionUtils::getLongToCharArray(QByteArray array, int start)
+long ConversionUtils::getLongFromQByteArray(QByteArray array, int start)
 {
     if(!sanityCheck(array.size(), 4, start)) return 0;
 

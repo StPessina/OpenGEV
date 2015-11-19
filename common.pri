@@ -85,7 +85,8 @@ HEADERS += \
     $$PWD/CommonStream/streamrawdatapayload.h \
     $$PWD/CommonStream/streamimagedataleader.h \
     $$PWD/CommonStream/streamimagedatatrailer.h \
-    $$PWD/CommonStream/streamimagedatapayload.h
+    $$PWD/CommonStream/streamimagedatapayload.h \
+    $$PWD/CommonStream/abstractstreamdatahandler.h
 
 SOURCES += \
     $$PWD/CommonStream/abstractstreamdata.cpp \
@@ -94,7 +95,8 @@ SOURCES += \
     $$PWD/CommonStream/streamrawdatapayload.cpp \
     $$PWD/CommonStream/streamimagedataleader.cpp \
     $$PWD/CommonStream/streamimagedatatrailer.cpp \
-    $$PWD/CommonStream/streamimagedatapayload.cpp
+    $$PWD/CommonStream/streamimagedatapayload.cpp \
+    $$PWD/CommonStream/abstractstreamdatahandler.cpp
 
 @INCLUDE += ImageStream
 

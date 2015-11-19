@@ -27,7 +27,7 @@ char* AbstractStreamData::getHeader()
     short flags = getHeaderFlag();
     ConversionUtils::setShortToCharArray(header, flags, 2);
 
-    header[4]=packetFormat >> 4;
+    header[4]=(packetFormat & 0x0F);
     header[4] |= ((short) extendDI) >> 7;
 
     //Reserved

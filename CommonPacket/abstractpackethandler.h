@@ -7,6 +7,8 @@
 #include "CommonComponent/gvcomponent.h"
 #include "CommonUdpChannel/privilege.h"
 
+#include "CommonPacket/conversionutils.h"
+
 /**
  * \brief The AbstractMessageHandler class is generic handler
  * for incoming message on slave channel
