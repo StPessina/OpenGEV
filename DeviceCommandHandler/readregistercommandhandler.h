@@ -20,7 +20,7 @@
 class ReadRegisterCommandHandler : public AbstractCommandHandler
 {
 public:
-    ReadRegisterCommandHandler(GVDevice* target,
+    ReadRegisterCommandHandler(GVComponent* target,
                                QByteArray datagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);

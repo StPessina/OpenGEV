@@ -1,6 +1,6 @@
 #include "abstractcommandhandlerfactory.h"
 
-AbstractCommandHandlerFactory::AbstractCommandHandlerFactory(GVComponent *target)
+AbstractCommandHandlerFactory::AbstractCommandHandlerFactory(GVComponent * const target)
     : AbstractPacketHandlerFactory(target)
 {
     this->target = target;

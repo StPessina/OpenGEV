@@ -46,7 +46,7 @@ char *ReadRegisterCommand::getPacketDatagramWithoutHeader()
 int ReadRegisterCommand::executeAnswer(QByteArray answer)
 {
     this->answer = answer;
-    if(checkAckHeader(answer))
+    if(!checkAckHeader(answer))
         return 1;
 
     if(answer.length()-getHeaderLength()!=getLengthWithoutHeader())

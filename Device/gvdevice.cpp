@@ -20,6 +20,11 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
     commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //concatenation enabled R-458cd
 
     commonRegisters[REG_GVSP_CAPABILITY]->setBit(1); //concatenation enabled O-473cd
+
+    controlChannel = new UdpChannelReceiver(QHostAddress::Any,
+                                            CONTROL_CHANNEL_DEF_PORT,
+                                            new DeviceCommandHandlerFactory(this));
+    controlChannel->initSocket();
 }
 
 GVDevice::~GVDevice()
@@ -30,6 +35,7 @@ GVDevice::~GVDevice()
         delete netReg.second;
     foreach (auto streamReg, streamChannels)
         delete streamReg.second;
+    delete controlChannel;
 }
 
 BootstrapRegister *GVDevice::getRegister(int registerCode)
@@ -179,7 +185,7 @@ void GVDevice::closeControlChannelPrivilege()
     commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValue(0);
 }
 
-int GVDevice::addStreamChannel(StreamChannelTransmitter *channel)
+int GVDevice::createStreamChannel()
 {
     int actualStreamChannelSize = commonRegisters[REG_NR_STREAM_CHANNELS]->getValue();
     if(actualStreamChannelSize>=512)
@@ -187,11 +193,34 @@ int GVDevice::addStreamChannel(StreamChannelTransmitter *channel)
 
     actualStreamChannelSize++;
 
+    StreamChannelTransmitter* channel = new StreamChannelTransmitter(actualStreamChannelSize);
+
     streamChannels[actualStreamChannelSize] = channel;
 
     commonRegisters[REG_NR_STREAM_CHANNELS]->setValue(actualStreamChannelSize);
 
     return actualStreamChannelSize;
+}
+
+bool GVDevice::streamChannelExist(int streamChannelCode)
+{
+    int actualStreamChannelSize = commonRegisters[REG_NR_STREAM_CHANNELS]->getValue();
+
+    if(streamChannelCode==0)
+        return false;
+
+    if(actualStreamChannelSize>=streamChannelCode)
+        return true;
+
+    return false;
+}
+
+StreamChannelTransmitter *GVDevice::getStreamChannel(int streamChannelCode)
+{
+    if(!streamChannelExist(streamChannelCode))
+        return NULL;
+
+    return streamChannels[streamChannelCode];
 }
 
 void GVDevice::initCommonRegisterMap()

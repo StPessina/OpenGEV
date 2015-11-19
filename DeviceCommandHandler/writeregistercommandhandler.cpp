@@ -1,6 +1,6 @@
 #include "writeregistercommandhandler.h"
 
-WriteRegisterCommandHandler::WriteRegisterCommandHandler(GVDevice *target, QByteArray datagram,
+WriteRegisterCommandHandler::WriteRegisterCommandHandler(GVComponent *target, QByteArray datagram,
                                                          QHostAddress senderAddress, quint16 senderPort)
     : AbstractCommandHandler(target, WRITEREG_ACK, datagram, senderAddress, senderPort)
 {

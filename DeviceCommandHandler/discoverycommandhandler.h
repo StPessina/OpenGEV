@@ -20,7 +20,7 @@
 class DiscoveryCommandHandler : public AbstractCommandHandler
 {
 public:
-    DiscoveryCommandHandler(GVDevice* target,
+    DiscoveryCommandHandler(GVComponent* target,
                             QByteArray datagram,
                             QHostAddress senderAddress,
                             quint16 senderPort);

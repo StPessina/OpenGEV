@@ -18,7 +18,7 @@ public:
      * @brief AbstractMessageHandlerFactory constructor
      * @param target the component where the handler created will be executed
      */
-    AbstractCommandHandlerFactory(GVComponent* target);
+    AbstractCommandHandlerFactory(GVComponent* const target);
 
     /**
      * @brief ~AbstractMessageHandlerFactory deconstructor

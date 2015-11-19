@@ -4,13 +4,19 @@
 #include <string>
 #include <unordered_map>
 
+#include "opengv.h"
+
 #include <vector>
+
+#include "DeviceCommandHandler/devicecommandhandlerfactory.h"
 
 #include "CommonBootstrapRegister/bootstrapregister.h"
 #include "Device/deviceregisters.h"
 
 #include "Device/networkinterfaceregisters.h"
 #include "Device/streamchanneltransmitter.h"
+
+#include "CommonUdpChannel/udpchannelreceiver.h"
 
 #include "CommonUdpChannel/privilege.h"
 
@@ -115,13 +121,28 @@ public:
     void closeControlChannelPrivilege();
 
     /**
-     * @brief addStreamChannel
-     * @param channel
+     * @brief createStreamChannel
      * @return stream channel number (-1 if fail)
      */
-    int addStreamChannel(StreamChannelTransmitter* channel);
+    int createStreamChannel();
+
+    /**
+     * @brief streamChannelExist
+     * @param streamChannelCode
+     * @return true if the stream channel exist
+     */
+    bool streamChannelExist(int streamChannelCode);
+
+    /**
+     * @brief getStreamChannel
+     * @param streamChannelCode
+     * @return stream channel if exist
+     */
+    StreamChannelTransmitter* getStreamChannel(int streamChannelCode);
 
 private:
+
+    UdpChannelReceiver* controlChannel;
 
     /**
      * @brief commonRegisters map

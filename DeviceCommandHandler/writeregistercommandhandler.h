@@ -20,7 +20,7 @@
 class WriteRegisterCommandHandler : public AbstractCommandHandler
 {
 public:
-    WriteRegisterCommandHandler(GVDevice* target,
+    WriteRegisterCommandHandler(GVComponent* target,
                                QByteArray datagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);

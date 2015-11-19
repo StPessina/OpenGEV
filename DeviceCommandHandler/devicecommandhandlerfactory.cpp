@@ -1,7 +1,7 @@
 #include "devicecommandhandlerfactory.h"
 
-DeviceCommandHandlerFactory::DeviceCommandHandlerFactory(GVDevice *target)
-    : AbstractCommandHandlerFactory(dynamic_cast<GVComponent*>(target))
+DeviceCommandHandlerFactory::DeviceCommandHandlerFactory(GVComponent * const target)
+    : AbstractCommandHandlerFactory(target)
 {
 }
 

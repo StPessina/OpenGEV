@@ -1,6 +1,6 @@
 ﻿#include "discoverycommandhandler.h"
 
-DiscoveryCommandHandler::DiscoveryCommandHandler(GVDevice* target, QByteArray datagram,
+DiscoveryCommandHandler::DiscoveryCommandHandler(GVComponent *target, QByteArray datagram,
                                                  QHostAddress senderAddress, quint16 senderPort)
     : AbstractCommandHandler(target, DISCOVERY_ACK, datagram, senderAddress, senderPort)
 {

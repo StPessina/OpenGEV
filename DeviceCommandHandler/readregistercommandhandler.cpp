@@ -1,6 +1,6 @@
 #include "readregistercommandhandler.h"
 
-ReadRegisterCommandHandler::ReadRegisterCommandHandler(GVDevice *target, QByteArray datagram,
+ReadRegisterCommandHandler::ReadRegisterCommandHandler(GVComponent *target, QByteArray datagram,
                                                        QHostAddress senderAddress, quint16 senderPort)
     : AbstractCommandHandler(target, READREG_ACK, datagram, senderAddress, senderPort)
 {

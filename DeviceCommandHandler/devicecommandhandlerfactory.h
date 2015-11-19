@@ -3,8 +3,6 @@
 
 #include "CommonCommand/abstractcommandhandlerfactory.h"
 
-#include "Device/gvdevice.h"
-
 #include "ApplicationCommand/applicationcommandcode.h"
 
 #include "DeviceCommandHandler/cmdnotsupportedmh.h"
@@ -18,7 +16,7 @@
 class DeviceCommandHandlerFactory : public AbstractCommandHandlerFactory
 {
 public:
-    DeviceCommandHandlerFactory(GVDevice* target);
+    DeviceCommandHandlerFactory(GVComponent * const target);
 
     bool isValidCode(quint16 messageCode);
 
