@@ -179,6 +179,21 @@ void GVDevice::closeControlChannelPrivilege()
     commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValue(0);
 }
 
+int GVDevice::addStreamChannel(StreamChannelTransmitter *channel)
+{
+    int actualStreamChannelSize = commonRegisters[REG_NR_STREAM_CHANNELS]->getValue();
+    if(actualStreamChannelSize>=512)
+        return -1;
+
+    actualStreamChannelSize++;
+
+    streamChannels[actualStreamChannelSize] = channel;
+
+    commonRegisters[REG_NR_STREAM_CHANNELS]->setValue(actualStreamChannelSize);
+
+    return actualStreamChannelSize;
+}
+
 void GVDevice::initCommonRegisterMap()
 {
     commonRegisters[REG_VERSION]= new  BootstrapRegister(REG_VERSION, "Version",RA_READ, 4);

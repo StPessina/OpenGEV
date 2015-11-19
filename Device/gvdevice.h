@@ -114,6 +114,13 @@ public:
      */
     void closeControlChannelPrivilege();
 
+    /**
+     * @brief addStreamChannel
+     * @param channel
+     * @return stream channel number (-1 if fail)
+     */
+    int addStreamChannel(StreamChannelTransmitter* channel);
+
 private:
 
     /**
