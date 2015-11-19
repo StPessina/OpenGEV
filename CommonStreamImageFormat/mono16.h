@@ -3,8 +3,8 @@
 
 #include "CommonPacket/conversionutils.h"
 
-#include "ImageStream/abstractpixelformat.h"
-#include "ImageStream/pixelformat.h"
+#include "CommonStreamImageFormat/abstractpixelformat.h"
+#include "CommonStreamImageFormat/pixelformat.h"
 
 class Mono16 : public AbstractPixelFormat
 {

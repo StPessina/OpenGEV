@@ -34,7 +34,7 @@ short AbstractCommand::getStatusCodeFromAnswer(QByteArray answer)
 {
     short statusCode = ConversionUtils::getShortFromQByteArray(answer,0);
 
-    return statusCode;
+    return statusCode & 0x00FF;
 }
 
 short AbstractCommand::getStatusCode()

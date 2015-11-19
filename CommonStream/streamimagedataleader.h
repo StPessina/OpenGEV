@@ -3,7 +3,7 @@
 
 #include "CommonStream/abstractstreamdata.h"
 #include "CommonStream/payloadtype.h"
-#include "ImageStream/pixelformat.h"
+#include "CommonStreamImageFormat/pixelformat.h"
 
 /**
  * @brief The StreamRawDataLeader class implements data leader packet

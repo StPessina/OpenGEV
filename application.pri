@@ -5,11 +5,13 @@ DEPENDPATH += Application
 
 HEADERS += \
     $$PWD/Application/gvapplication.h \
-    $$PWD/Application/partnerdevice.h
+    $$PWD/Application/partnerdevice.h \
+    $$PWD/Application/streamdatareceiver.h
 
 SOURCES += \
     $$PWD/Application/gvapplication.cpp \
-    $$PWD/Application/partnerdevice.cpp
+    $$PWD/Application/partnerdevice.cpp \
+    $$PWD/Application/streamdatareceiver.cpp
 
 INCLUDEPATH += ApplicationCommand
 DEPENDPATH += ApplicationCommand
@@ -33,3 +35,14 @@ HEADERS +=  \
 
 SOURCES += \
     $$PWD/ApplicationCommandHandler/applicationcommandhandlerfactory.cpp
+
+INCLUDEPATH += ApplicationStreamDataHandler
+DEPENDPATH += ApplicationStreamDataHandler
+
+HEADERS +=  \
+    $$PWD/ApplicationStreamDataHandler/streamimagedatahandlerfactory.h \
+    $$PWD/ApplicationStreamDataHandler/streamimagedataleaderhandler.h
+
+SOURCES += \
+    $$PWD/ApplicationStreamDataHandler/streamimagedatahandlerfactory.cpp \
+    $$PWD/ApplicationStreamDataHandler/streamimagedataleaderhandler.cpp

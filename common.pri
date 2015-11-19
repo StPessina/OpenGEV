@@ -98,18 +98,18 @@ SOURCES += \
     $$PWD/CommonStream/streamimagedatapayload.cpp \
     $$PWD/CommonStream/abstractstreamdatahandler.cpp
 
-@INCLUDE += ImageStream
+@INCLUDE += CommonStreamImageFormat
 
-INCLUDEPATH += ImageStream
-DEPENDPATH += ImageStream
+INCLUDEPATH += CommonStreamImageFormat
+DEPENDPATH += CommonStreamImageFormat
 
 HEADERS += \
-    $$PWD/ImageStream/pixelformat.h \
-    $$PWD/ImageStream/pixelsmap.h \
-    $$PWD/ImageStream/abstractpixelformat.h \
-    $$PWD/ImageStream/mono16.h
+    $$PWD/CommonStreamImageFormat/pixelformat.h \
+    $$PWD/CommonStreamImageFormat/pixelsmap.h \
+    $$PWD/CommonStreamImageFormat/abstractpixelformat.h \
+    $$PWD/CommonStreamImageFormat/mono16.h
 
 SOURCES += \
-    $$PWD/ImageStream/pixelsmap.cpp \
-    $$PWD/ImageStream/abstractpixelformat.cpp \
-    $$PWD/ImageStream/mono16.cpp
+    $$PWD/CommonStreamImageFormat/pixelsmap.cpp \
+    $$PWD/CommonStreamImageFormat/abstractpixelformat.cpp \
+    $$PWD/CommonStreamImageFormat/mono16.cpp

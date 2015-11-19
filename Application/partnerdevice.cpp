@@ -99,3 +99,30 @@ int PartnerDevice::getStreamingChannelNumber()
     delete readReg;
     return value;
 }
+
+int PartnerDevice::openStreamChannel(int channel)
+{
+    if(!isChannelOpen())
+        return GEV_STATUS_ACCESS_DENIED;
+
+    if(getStreamingChannelNumber()<=channel)
+        return GEV_STATUS_INVALID_ADDRESS;
+
+    StreamDataReceiver* streamChannel = new StreamDataReceiver(ipAddress, 40000 + channel);
+    streamChannelsOpenMap[channel]=streamChannel;
+
+    WriteRegisterCommand* writeReg = new WriteRegisterCommand(this,
+           DeviceRegisterConverter::getStreamChannelRegister(channel,REG_STREAM_CHANNEL_PORT),
+                                                              40000 + channel,
+                                                              ipAddress,
+                                                              CONTROL_CHANNEL_DEF_PORT);
+    int result = controlChannel->sendCommand(writeReg);
+    delete writeReg;
+
+    if(result != GEV_STATUS_SUCCESS) {
+        streamChannelsOpenMap[channel]=NULL;
+        delete streamChannel;
+    }
+
+    return result;
+}

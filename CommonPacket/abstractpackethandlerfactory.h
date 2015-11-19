@@ -4,6 +4,8 @@
 #include "CommonComponent/gvcomponent.h"
 #include "CommonPacket/abstractpackethandler.h"
 
+#include "CommonPacket/conversionutils.h"
+
 /**
  * @brief The AbstractPacketHandlerFactory class create new message handlers
  */

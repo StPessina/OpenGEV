@@ -13,7 +13,7 @@
 #include "CommonStream/streamimagedatapayload.h"
 #include "CommonStream/streamimagedatatrailer.h"
 
-#include "ImageStream/pixelsmap.h"
+#include "CommonStreamImageFormat/pixelsmap.h"
 
 #include "Device/deviceregisters.h"
 

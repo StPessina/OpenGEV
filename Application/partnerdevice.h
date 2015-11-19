@@ -5,6 +5,7 @@
 
 #include <QString>
 #include <QHostAddress>
+#include <unordered_map>
 
 #include "opengv.h"
 
@@ -16,6 +17,8 @@
 
 #include "ApplicationCommand/readregistercommand.h"
 #include "ApplicationCommand/writeregistercommand.h"
+
+#include "Application/streamdatareceiver.h"
 
 /**
  * @brief The PartnerDevice class provide method for a discovered device
@@ -68,6 +71,13 @@ public:
     int getStreamingChannelNumber();
 
     /**
+     * @brief openStreamChannel
+     * @param channel
+     * @return status result
+     */
+    int openStreamChannel(int channel);
+
+    /**
      * @brief setControlAccessKey
      * @param device
      * @param key
@@ -78,6 +88,8 @@ public:
 private:
 
     UDPChannelTransmitter* controlChannel;
+
+    std::unordered_map<int, StreamDataReceiver*> streamChannelsOpenMap;
 
     bool channelOpen;
 

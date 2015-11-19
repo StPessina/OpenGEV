@@ -6,7 +6,7 @@
 
 #include <vector>
 
-#include "ImageStream/abstractpixelformat.h"
+#include "CommonStreamImageFormat/abstractpixelformat.h"
 
 class PixelsMap
 {
