@@ -87,9 +87,9 @@ void StreamChannelTransmitter::openStreamChannel(QHostAddress destAddress, quint
     BootstrapRegister* gvspSCP = registers[channelPortRegCode];
 
     gvspSCP->setValue(
-                (gvspSCP->getValue() | (destPort & 0x00FF)) //set new destination port value
+                (gvspSCP->getValue() | (destPort & 0x0000FFFF)) //set new destination port value
                 );
-    this->destPort = destPort;
+    this->destPort = destPort & 0x0000FFFF;
 
     BootstrapRegister* gvspSCDA =
             registers[packetDestinationAddressRegCode];
@@ -104,7 +104,7 @@ void StreamChannelTransmitter::closeStreamChannel()
     if(isChannelOpen()) {
         destPort = 0;
         BootstrapRegister* gvspSCP = registers[channelPortRegCode];
-        gvspSCP->setValue(gvspSCP->getValue() & 0xFF00); //Reset port
+        gvspSCP->setValue(gvspSCP->getValue() & 0xFFFF0000); //Reset port
 
 
         destAddress.clear();
@@ -121,7 +121,7 @@ bool StreamChannelTransmitter::isChannelOpen()
 {
     BootstrapRegister* gvspSCP = registers[channelPortRegCode];
 
-    if((gvspSCP->getValue() & 0xFF) != 0)
+    if((gvspSCP->getValue() & 0xFFFF) != 0)
         return true;
     return false;
 }
@@ -181,7 +181,7 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
         return;
 
     //CR-489cd
-    int packetSize = (registers[packetSizeRegCode]->getValue() & 0x00FF)
+    quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
             -20 //bytes IP header
             -8 //bytes UDP header
             -20; //bytes for GVSP header
@@ -201,14 +201,14 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     delete leader;
 
     //Compute how many packets need to be send
-    quint32 packetsToSend = datapacket->getDataLength() % packetSize;
-    quint32 lastPacketsDimension = datapacket->getDataLength() - packetsToSend*packetSize;
+    quint32 packetsToSend = floor(datapacket->getDataLength() / packetSize);
+    quint32 lastPacketsDimension = datapacket->getDataLength() % packetSize;
 
     //send packets
-    for (int i = 0; i < packetsToSend; ++i) {
+    for (quint32 i = 0; i < packetsToSend; ++i) {
         quint32 pointer = i*packetSize;
         char* actualPayloadData = new char[packetSize];
-        for (int i = 0; i < packetSize; ++i)
+        for (quint32 i = 0; i < packetSize; ++i)
             actualPayloadData[i]=data[pointer+i];
         packetId++;
         StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
@@ -231,11 +231,11 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
         packetId++;
         quint32 pointer = packetsToSend*packetSize;
         char* actualPayloadData = new char[lastPacketsDimension];
-        for (int i = 0; i < lastPacketsDimension; ++i)
+        for (quint32 i = 0; i < lastPacketsDimension; ++i)
             actualPayloadData[i]=data[pointer+i];
         StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
                                                                      blockId, packetId,
-                                                                     actualPayloadData, packetSize);
+                                                                     actualPayloadData, lastPacketsDimension);
         streamChannelTransmitter->sendCommand(payload);
         delete payload;
         delete actualPayloadData;
@@ -248,4 +248,7 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
 
     streamChannelTransmitter->sendCommand(trailer);
     delete trailer;
+
+    //Increment block id for the next data block
+    blockId++;
 }
