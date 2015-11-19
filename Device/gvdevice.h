@@ -41,6 +41,8 @@ public:
      */
     virtual ~GVDevice();
 
+
+
     /**
      * @brief getRegister
      * @param registerCode (use defined code)

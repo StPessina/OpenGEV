@@ -30,6 +30,8 @@ public:
 
     virtual BootstrapRegister *getRegisterByAbsoluteRegCode(int regCode) final;
 
+    virtual Status setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort) final;
+
     virtual void openStreamChannel(QHostAddress destAddress, quint16 port) final;
 
     virtual void closeStreamChannel() final;

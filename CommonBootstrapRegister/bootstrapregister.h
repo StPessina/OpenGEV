@@ -76,13 +76,13 @@ public:
      * @brief setValueNumb method
      * @param valueNumb number value for the register, if it's a number
      */
-    void setValueNumb(int valueNumb);
+    void setValue(int valueNumb);
 
     /**
      * @brief setValueNumb method assign new number value for the register, if it's a number
      * @param valueNumb new value
      */
-    void setValueNumb(long valueNumb);
+    void setValue(long valueNumb);
 
     /**
      * @brief setBit method set bit value in a number value for the register, if it's a number
@@ -115,7 +115,7 @@ public:
      * @brief getValueNumb method
      * @return the number value for this register, if it's a number
      */
-    long getValueNumb();
+    long getValue();
 
 private:
     /**

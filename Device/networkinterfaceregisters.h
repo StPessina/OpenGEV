@@ -11,6 +11,8 @@
 
 #include "CommonBootstrapRegister/bootstrapregister.h"
 
+#include "CommonPacket/status.h"
+
 using namespace std;
 
 /**
@@ -46,6 +48,16 @@ public:
     BootstrapRegister *getRegisterByAbsoluteRegCode(int regCode);
 
     /**
+     * @brief setRegister
+     * @param registerCode
+     * @param value
+     * @param senderAddr
+     * @param senderPort
+     * @return status code
+     */
+    Status setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort);
+
+    /**
      * @brief getInterfaceNumber
      * @return interface number
      */
@@ -69,17 +81,17 @@ private:
 
     QNetworkInterface netInterface;
 
-    int deviceMACAddressHigh;
-    int deviceMACAddessLow;
+    int deviceMACAddressHighRegCode;
+    int deviceMACAddessLowRegCode;
     int networkInterfaceCapability;
     int networkInterfaceConfiguration;
-    int currentIPAddress;
-    int currentSubnetMask;
-    int currentDefaultGateway;
-    int persintentIPAddress;
-    int persistentSubnetMask;
-    int persistentDefaultGateway;
-    int linkSpeed;
+    int currentIPAddressRegCode;
+    int currentSubnetMaskRegCode;
+    int currentDefaultGatewayRegCode;
+    int persintentIPAddressRegCode;
+    int persistentSubnetMaskRegCode;
+    int persistentDefaultGatewayRegCode;
+    int linkSpeedRegCode;
 
     /**
      * @brief getInterfaceListWithoutLoopBack

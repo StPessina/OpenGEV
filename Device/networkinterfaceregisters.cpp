@@ -7,7 +7,7 @@ NetworkInterfaceRegisters::NetworkInterfaceRegisters(QNetworkInterface netInterf
     initRegisterMap();
     updateNetworkStatus();
 
-    BootstrapRegister* networkCapabilitieReg = (BootstrapRegister*) registers.at(
+    BootstrapRegister* networkCapabilitieReg = registers.at(
                     DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_NETWORK_INTERFACE_CAPABILITIES));
     networkCapabilitieReg->setBit(29); //Link-local address
     networkCapabilitieReg->setBit(30); //DHCP
@@ -22,7 +22,7 @@ NetworkInterfaceRegisters::~NetworkInterfaceRegisters()
 
 BootstrapRegister *NetworkInterfaceRegisters::getRegister(int offsetRegisterCode)
 {
-    BootstrapRegister* reg = (BootstrapRegister*) registers.at(
+    BootstrapRegister* reg = registers.at(
                 DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, offsetRegisterCode));
     return reg;
 }
@@ -33,6 +33,22 @@ BootstrapRegister *NetworkInterfaceRegisters::getRegisterByAbsoluteRegCode(int r
     return getRegister(regType);
 }
 
+Status NetworkInterfaceRegisters::setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort)
+{
+    BootstrapRegister* reg = getRegisterByAbsoluteRegCode(registerCode);
+    if(reg==NULL) //CR-175cd
+        return GEV_STATUS_INVALID_ADDRESS;
+
+    int access = reg->getAccessType();
+
+    if(access==RegisterAccess::RA_READ) //CR-175cd
+        return GEV_STATUS_ACCESS_DENIED;
+
+    reg->setValue(value);
+
+    return GEV_STATUS_SUCCESS;
+}
+
 int NetworkInterfaceRegisters::getInterfaceNumber()
 {
     return interfaceNumber;
@@ -40,23 +56,23 @@ int NetworkInterfaceRegisters::getInterfaceNumber()
 
 void NetworkInterfaceRegisters::initRegisterMap()
 {
-    deviceMACAddressHigh=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_DEVICE_MAC_ADD_HIGH);
-    deviceMACAddessLow=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_DEVICE_MAC_ADD_LOW);
+    deviceMACAddressHighRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_DEVICE_MAC_ADD_HIGH);
+    deviceMACAddessLowRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_DEVICE_MAC_ADD_LOW);
     networkInterfaceCapability=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_NETWORK_INTERFACE_CAPABILITIES);
     networkInterfaceConfiguration=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_NETWORK_INTERFACE_CONF);
-    currentIPAddress=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_IP_ADD);
-    currentSubnetMask=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_SUBNET_MASK);
-    currentDefaultGateway=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_DEFAULT_GATEWAY);
-    persintentIPAddress=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_IP_ADD);
-    persistentSubnetMask=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_SUBNET_MASK);
-    persistentDefaultGateway=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_DEFAULT_GATEWAY);
-    linkSpeed=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_LINK_SPEED);
+    currentIPAddressRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_IP_ADD);
+    currentSubnetMaskRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_SUBNET_MASK);
+    currentDefaultGatewayRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_CURRENT_DEFAULT_GATEWAY);
+    persintentIPAddressRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_IP_ADD);
+    persistentSubnetMaskRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_SUBNET_MASK);
+    persistentDefaultGatewayRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_PERSISTENT_DEFAULT_GATEWAY);
+    linkSpeedRegCode=DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber, REG_LINK_SPEED);
 
-    registers[deviceMACAddressHigh]
-            = new  BootstrapRegister(deviceMACAddressHigh, "Device MAC Address - High (Network interface #" +
+    registers[deviceMACAddressHighRegCode]
+            = new  BootstrapRegister(deviceMACAddressHighRegCode, "Device MAC Address - High (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ, 4);
-    registers[deviceMACAddessLow]
-     = new  BootstrapRegister(deviceMACAddessLow, "Device MAC Address - Low (Network interface #" +
+    registers[deviceMACAddessLowRegCode]
+     = new  BootstrapRegister(deviceMACAddessLowRegCode, "Device MAC Address - Low (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ, 4);
     registers[networkInterfaceCapability]
      = new  BootstrapRegister(networkInterfaceCapability, "Network Interface Capability (Network interface #" +
@@ -64,26 +80,26 @@ void NetworkInterfaceRegisters::initRegisterMap()
     registers[networkInterfaceConfiguration]
      = new  BootstrapRegister(networkInterfaceConfiguration, "Network Interface Configuration (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ_WRITE, 4);
-    registers[currentIPAddress]
-     = new  BootstrapRegister(currentIPAddress, "Current IP Address (Network interface #" +
+    registers[currentIPAddressRegCode]
+     = new  BootstrapRegister(currentIPAddressRegCode, "Current IP Address (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ, 4);
-    registers[currentSubnetMask]
-     = new  BootstrapRegister(currentSubnetMask, "Current Subnet Mask (Network interface #" +
+    registers[currentSubnetMaskRegCode]
+     = new  BootstrapRegister(currentSubnetMaskRegCode, "Current Subnet Mask (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ, 4);
-    registers[currentDefaultGateway]
-     = new  BootstrapRegister(currentDefaultGateway, "Current Default Gateway (Network interface #" +
+    registers[currentDefaultGatewayRegCode]
+     = new  BootstrapRegister(currentDefaultGatewayRegCode, "Current Default Gateway (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ, 4);
-    registers[persintentIPAddress]
-     = new  BootstrapRegister(persintentIPAddress, "Persistent IP Address (Network interface #" +
+    registers[persintentIPAddressRegCode]
+     = new  BootstrapRegister(persintentIPAddressRegCode, "Persistent IP Address (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ_WRITE, 4);
-    registers[persistentSubnetMask]
-     = new  BootstrapRegister(persistentSubnetMask, "Persistent Subnet Mask (Network interface #" +
+    registers[persistentSubnetMaskRegCode]
+     = new  BootstrapRegister(persistentSubnetMaskRegCode, "Persistent Subnet Mask (Network interface #" +
                                      to_string(interfaceNumber) + ")",RA_READ_WRITE, 4);
-    registers[persistentDefaultGateway]
-     = new  BootstrapRegister(persistentDefaultGateway, "Persistent Default Gateway (Network interface #" +
+    registers[persistentDefaultGatewayRegCode]
+     = new  BootstrapRegister(persistentDefaultGatewayRegCode, "Persistent Default Gateway (Network interface #" +
                                      to_string(interfaceNumber) + ")", RA_READ_WRITE, 4);
-    registers[linkSpeed]
-     = new  BootstrapRegister(linkSpeed, "Link Speed (Network interface #" +
+    registers[linkSpeedRegCode]
+     = new  BootstrapRegister(linkSpeedRegCode, "Link Speed (Network interface #" +
                               to_string(interfaceNumber) + ")",RA_READ, 4);
 }
 
@@ -93,19 +109,15 @@ void NetworkInterfaceRegisters::updateNetworkStatus()
     bool* ok = new bool;
     int MACHigh1 = MACAddr.section(':',1,1).toInt(ok,16);
     int MACHigh2 = MACAddr.section(':',0,0).toInt(ok,16);
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_DEVICE_MAC_ADD_HIGH)))
-            ->setValueNumb((MACHigh1 | (MACHigh2 << 8))); //R-431cd
+    registers.at(deviceMACAddressHighRegCode)
+            ->setValue((MACHigh1 | (MACHigh2 << 8))); //R-431cd
 
     int MACLow1 = MACAddr.section(':',5,5).toInt(ok,16);
     int MACLow2 = MACAddr.section(':',4,4).toInt(ok,16);
     int MACLow3 = MACAddr.section(':',3,3).toInt(ok,16);
     int MACLow4 = MACAddr.section(':',2,2).toInt(ok,16);
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_DEVICE_MAC_ADD_LOW)))
-            ->setValueNumb(MACLow1 | (MACLow2 << 8) | (MACLow3 << 16) | (MACLow4 << 24));
+    registers.at(deviceMACAddessLowRegCode)
+            ->setValue(MACLow1 | (MACLow2 << 8) | (MACLow3 << 16) | (MACLow4 << 24));
     delete ok;
 
     int ip = 0;
@@ -113,45 +125,31 @@ void NetworkInterfaceRegisters::updateNetworkStatus()
         QNetworkAddressEntry host = netInterface.addressEntries().at(0);
         ip = host.ip().toIPv4Address();
     }
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_CURRENT_IP_ADD)))
-            ->setValueNumb(ip);
+    registers.at(currentIPAddressRegCode)
+            ->setValue(ip);
 
     int subnetMask = 0;
     if(netInterface.addressEntries().size()>0)
         subnetMask = (int) netInterface.addressEntries().at(0).netmask().toIPv4Address();
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_CURRENT_SUBNET_MASK)))
-            ->setValueNumb(subnetMask);
+    registers.at(currentSubnetMaskRegCode)
+            ->setValue(subnetMask);
 
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_CURRENT_DEFAULT_GATEWAY)))
-            ->setValueNumb(0);
+    registers.at(currentDefaultGatewayRegCode)
+            ->setValue(0);
 
     //Persistent IP CR-447cd
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_PERSISTENT_IP_ADD)))
-            ->setValueNumb(0);
+    registers.at(persintentIPAddressRegCode)
+            ->setValue(0);
 
     //Persistent subnet mask CR-448cd
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_PERSISTENT_SUBNET_MASK)))
-            ->setValueNumb(0);
+    registers.at(persistentSubnetMaskRegCode)
+            ->setValue(0);
 
     //Persistent default gateway CR-449cd
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_PERSISTENT_DEFAULT_GATEWAY)))
-            ->setValueNumb(0);
+    registers.at(persistentDefaultGatewayRegCode)
+            ->setValue(0);
 
     //Link speed CR-450cd
-    ((BootstrapRegister*) registers.at(
-                DeviceRegisterConverter::getNetworkInterfaceRegister(interfaceNumber,
-                                                                     REG_LINK_SPEED)))
-            ->setValueNumb(0);
+    registers.at(linkSpeedRegCode)
+            ->setValue(0);
 }

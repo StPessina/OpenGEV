@@ -35,14 +35,14 @@ char *DiscoveryCommandHandler::getAckDatagramWithoutHeader()
     ConversionUtils::setShortToCharArray(answer, SPEC_VERSION_MAJOR, 0);
     ConversionUtils::setShortToCharArray(answer, SPEC_VERSION_MINOR, 2);
 
-    int deviceMode = (dynamic_cast<GVDevice*>(target))->getRegister(REG_DEVICE_MODE)->getValueNumb();
+    int deviceMode = (dynamic_cast<GVDevice*>(target))->getRegister(REG_DEVICE_MODE)->getValue();
     ConversionUtils::setIntToCharArray(answer, deviceMode, 4);
 
     answer[8]=0; //RESERVED
     answer[9]=0; //RESERVED
 
-    int MACHigh = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_HIGH)->getValueNumb();
-    int MACLow = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_LOW)->getValueNumb();
+    int MACHigh = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_HIGH)->getValue();
+    int MACLow = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_DEVICE_MAC_ADD_LOW)->getValue();
 
     ConversionUtils::setShortToCharArray(answer, MACHigh, 10);
     ConversionUtils::setIntToCharArray(answer, MACLow, 12);
@@ -58,7 +58,7 @@ char *DiscoveryCommandHandler::getAckDatagramWithoutHeader()
         answer[var]=0;
 
     //Current IP
-    int currentIP = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_IP_ADD)->getValueNumb();
+    int currentIP = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_IP_ADD)->getValue();
     ConversionUtils::setIntToCharArray(answer, currentIP, 36);
 
     //12 byte reserved
@@ -66,7 +66,7 @@ char *DiscoveryCommandHandler::getAckDatagramWithoutHeader()
         answer[var]=0;
 
     //Subnet mask
-    int subnetMask = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_SUBNET_MASK)->getValueNumb();
+    int subnetMask = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_SUBNET_MASK)->getValue();
     ConversionUtils::setIntToCharArray(answer, subnetMask, 52);
 
     //12 byte reserved
@@ -74,7 +74,7 @@ char *DiscoveryCommandHandler::getAckDatagramWithoutHeader()
         answer[var]=0;
 
     //Default gateway
-    int defGateway = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_DEFAULT_GATEWAY)->getValueNumb();
+    int defGateway = (dynamic_cast<GVDevice*>(target))->getNetworkRegister(0, REG_CURRENT_DEFAULT_GATEWAY)->getValue();
     ConversionUtils::setIntToCharArray(answer, defGateway, 68);
 
     //Manufacture name 32 byte

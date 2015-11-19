@@ -75,7 +75,7 @@ char *ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
         BootstrapRegister* reg = dynamic_cast<GVDevice*>(target)->getRegister(regNumber);
         int value = 0;
         if(reg!=NULL)
-            value = reg->getValueNumb();
+            value = reg->getValue();
         ConversionUtils::setIntToCharArray(answer, value, i);
     }
 

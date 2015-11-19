@@ -13,9 +13,9 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
     commonRegisters[REG_DEVICE_MODE]->setBit(31); //Code UTF-8 (R-430cd)
     commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //Allow multiple read (R-158cd) (R-167cd)
 
-    commonRegisters[REG_NR_MESSAGE_CHANNELS]->setValueNumb(0); //R-451cd
-    commonRegisters[REG_NR_STREAM_CHANNELS]->setValueNumb(0); //R-452cd
-    commonRegisters[REG_NR_ACTION_SIGNAL_CHANNELS]->setValueNumb(0); //R-452cd
+    commonRegisters[REG_NR_MESSAGE_CHANNELS]->setValue(0); //R-451cd
+    commonRegisters[REG_NR_STREAM_CHANNELS]->setValue(0); //R-452cd
+    commonRegisters[REG_NR_ACTION_SIGNAL_CHANNELS]->setValue(0); //R-452cd
 
     commonRegisters[REG_GVCP_CAPABILITY]->setBit(31); //concatenation enabled R-458cd
 
@@ -64,6 +64,21 @@ BootstrapRegister *GVDevice::getStreamChannelRegister(int id, int offsetRegister
 
 Status GVDevice::setRegister(int registerCode, int value, QHostAddress senderAddr, quint16 senderPort)
 {
+    //Network interface registers
+    if((registerCode>=0x0008 && registerCode<=0x0044) ||
+            (registerCode>=0x064C && registerCode<=0x0900)) {
+        int interfaceNumber = DeviceRegisterConverter::getInterfaceNumberFromNetworkRegister(registerCode);
+        return networkRegister.at(interfaceNumber)->setRegister(registerCode, value, senderAddr, senderPort);
+    }
+
+    //Stream registers
+    if(registerCode>=0x0D00) {
+        int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
+        if(channelNumber<streamChannels.size())
+            return GEV_STATUS_INVALID_ADDRESS;
+        return streamChannels.at(channelNumber)->setRegister(registerCode, value, senderAddr, senderPort);
+    }
+
     BootstrapRegister* reg = getRegister(registerCode);
     if(reg==NULL) //CR-175cd
         return GEV_STATUS_INVALID_ADDRESS;
@@ -81,7 +96,7 @@ Status GVDevice::setRegister(int registerCode, int value, QHostAddress senderAdd
                 changeControlChannelPrivilege(value, senderAddr,senderPort);
         break;
     default:
-        reg->setValueNumb(value);
+        reg->setValue(value);
         break;
     }
 
@@ -122,8 +137,8 @@ Privilege GVDevice::checkChannelPrivilege(QHostAddress senderAddr, quint16 sende
     }
 
 
-    quint32 applicationAddr = commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->getValueNumb();
-    quint16 applicationPort = commonRegisters[REG_PRIMARY_APPLICATION_PORT]->getValueNumb();
+    quint32 applicationAddr = commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->getValue();
+    quint16 applicationPort = commonRegisters[REG_PRIMARY_APPLICATION_PORT]->getValue();
 
     switch (ctrlChannelPrivilege) {
         case MONITOR:
@@ -151,17 +166,17 @@ Privilege GVDevice::checkChannelPrivilege(QHostAddress senderAddr, quint16 sende
 
 void GVDevice::changeControlChannelPrivilege(int value, QHostAddress primary_address, quint16 primary_port)
 {
-    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(value);
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValue(value);
     int addr = primary_address.toIPv4Address();
-    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValueNumb(addr);
-    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValueNumb((ushort) primary_port);
+    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValue(addr);
+    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValue((ushort) primary_port);
 }
 
 void GVDevice::closeControlChannelPrivilege()
 {
-    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValueNumb(0);
-    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValueNumb(0);
-    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValueNumb(0);
+    commonRegisters[REG_CONTROL_CHANNEL_PRIVILEGE]->setValue(0);
+    commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS]->setValue(0);
+    commonRegisters[REG_PRIMARY_APPLICATION_PORT]->setValue(0);
 }
 
 void GVDevice::initCommonRegisterMap()
@@ -222,7 +237,7 @@ void GVDevice::initNetworkRegisters()
         }
     }
 
-    commonRegisters[REG_NR_ACTIVE_LINKS]->setValueNumb(interfaceNumber+1); //Number of active links R-455cd
+    commonRegisters[REG_NR_ACTIVE_LINKS]->setValue(interfaceNumber+1); //Number of active links R-455cd
 
     foreach (QNetworkInterface interface, validNotConnected) {
         logger.debugStream()<<"GVDevice adding network NOT connected interface #"<<to_string(interfaceNumber)
@@ -232,5 +247,5 @@ void GVDevice::initNetworkRegisters()
         interfaceNumber++;
     }
 
-    commonRegisters[REG_NR_NETWORK_INTERFACE]->setValueNumb(interfaceNumber+1); //Number of network interface R-446cd
+    commonRegisters[REG_NR_NETWORK_INTERFACE]->setValue(interfaceNumber+1); //Number of network interface R-446cd
 }

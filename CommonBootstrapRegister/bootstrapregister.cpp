@@ -60,12 +60,12 @@ string BootstrapRegister::getValueString()
     return valueString;
 }
 
-void BootstrapRegister::setValueNumb(int valueNumb)
+void BootstrapRegister::setValue(int valueNumb)
 {
     this->valueNumb = valueNumb;
 }
 
-void BootstrapRegister::setValueNumb(long valueNumb)
+void BootstrapRegister::setValue(long valueNumb)
 {
     this->valueNumb = valueNumb;
 }
@@ -102,7 +102,7 @@ int BootstrapRegister::getMask(int bitPosition, bool reset)
         return pow(2,bitPosition);
 }
 
-long BootstrapRegister::getValueNumb()
+long BootstrapRegister::getValue()
 {
     return valueNumb;
 }
