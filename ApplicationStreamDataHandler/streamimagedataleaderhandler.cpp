@@ -15,18 +15,23 @@ int StreamImageDataLeaderHandler::execute()
         if(datagram.length()!=56) //20 Header + 36 Body for image leader package
             resultStatus = GEV_STATUS_INVALID_PARAMETER;
 
-        quint32 pixelFormat = ConversionUtils::getIntFromQByteArray(datagram, 12);
+        QByteArray datagramWithoutHeader = datagram.mid(20);
 
-        quint32 sizex = ConversionUtils::getIntFromQByteArray(datagram, 16);
-        quint32 sizey = ConversionUtils::getIntFromQByteArray(datagram, 20);
-        quint32 offsetx = ConversionUtils::getIntFromQByteArray(datagram, 24);
-        quint32 offsety = ConversionUtils::getIntFromQByteArray(datagram, 28);
-        quint32 paddingx = ConversionUtils::getShortFromQByteArray(datagram, 32);
-        quint32 paddingy = ConversionUtils::getShortFromQByteArray(datagram, 34);
+        quint32 pixelFormat = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 12);
 
-        dynamic_cast<StreamDataReceiver*>(target)->openStreamData(pixelFormat, sizex, sizey,
-                                                                  offsetx, offsety,
-                                                                  paddingx, paddingy);
+        quint32 sizex = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 16);
+        quint32 sizey = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 20);
+        quint32 offsetx = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 24);
+        quint32 offsety = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 28);
+        quint32 paddingx = ConversionUtils::getShortFromQByteArray(datagramWithoutHeader, 32);
+        quint32 paddingy = ConversionUtils::getShortFromQByteArray(datagramWithoutHeader, 34);
+
+        StreamDataReceiver* receiver = (StreamDataReceiver*) target;
+
+        receiver->openStreamData(getRequestBlockId(),
+                    pixelFormat, sizex, sizey,
+                    offsetx, offsety,
+                    paddingx, paddingy);
     }
 
     return resultStatus;

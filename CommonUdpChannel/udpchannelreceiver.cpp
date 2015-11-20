@@ -17,6 +17,14 @@ void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress se
 {
     quint16 handlerIdentifier = packetHandlerFactory->getPacketHandlerIdentifier(datagram);
 
+    if(!packetHandlerFactory->isValidCode(handlerIdentifier)) {
+        logger.warnStream()<<getLogMessageHeader()
+                           <<"Unknow handler identifier "
+                         <<"Datagram: "<<datagram.toHex().data()<<" "
+                        <<"Datagram size: "<<datagram.size();
+        return;
+    }
+
     AbstractPacketHandler* packetHandler = packetHandlerFactory->createPacketHandler(handlerIdentifier, datagram,
                                                                               sender, senderPort);
     packetHandler->execute();

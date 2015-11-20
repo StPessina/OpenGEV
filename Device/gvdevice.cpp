@@ -31,10 +31,16 @@ GVDevice::~GVDevice()
 {
     foreach (auto reg, commonRegisters)
         delete reg.second;
+    commonRegisters.clear();
+
     foreach (auto netReg, networkRegister)
         delete netReg.second;
+    networkRegister.clear();
+
     foreach (auto streamReg, streamChannels)
         delete streamReg.second;
+    streamChannels.clear();
+
     delete controlChannel;
 }
 
@@ -80,7 +86,7 @@ Status GVDevice::setRegister(int registerCode, int value, QHostAddress senderAdd
     //Stream registers
     if(registerCode>=0x0D00) {
         int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
-        if(channelNumber<streamChannels.size())
+        if(channelNumber>=streamChannels.size())
             return GEV_STATUS_INVALID_ADDRESS;
         return streamChannels.at(channelNumber)->setRegister(registerCode, value, senderAddr, senderPort);
     }
@@ -192,24 +198,22 @@ int GVDevice::createStreamChannel()
         return -1;
 
     actualStreamChannelSize++;
+    int newChannelIndex = actualStreamChannelSize-1;
 
-    StreamChannelTransmitter* channel = new StreamChannelTransmitter(actualStreamChannelSize);
+    StreamChannelTransmitter* channel = new StreamChannelTransmitter(newChannelIndex);
 
-    streamChannels[actualStreamChannelSize] = channel;
+    streamChannels[newChannelIndex] = channel;
 
     commonRegisters[REG_NR_STREAM_CHANNELS]->setValue(actualStreamChannelSize);
 
-    return actualStreamChannelSize;
+    return newChannelIndex;
 }
 
 bool GVDevice::streamChannelExist(int streamChannelCode)
 {
     int actualStreamChannelSize = commonRegisters[REG_NR_STREAM_CHANNELS]->getValue();
 
-    if(streamChannelCode==0)
-        return false;
-
-    if(actualStreamChannelSize>=streamChannelCode)
+    if(streamChannelCode<actualStreamChannelSize)
         return true;
 
     return false;

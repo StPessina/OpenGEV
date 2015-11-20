@@ -6,6 +6,8 @@
 #include "CommonComponent/gvcomponent.h"
 
 #include "ApplicationStreamDataHandler/streamimagedataleaderhandler.h"
+#include "ApplicationStreamDataHandler/streamimagedatapayloadhandler.h"
+#include "ApplicationStreamDataHandler/streamimagedatatrailerhandler.h"
 
 #include "DeviceCommandHandler/cmdnotsupportedmh.h"
 

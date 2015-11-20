@@ -24,16 +24,22 @@ bool AbstractStreamDataHandler::isAckRequired()
 
 quint32 AbstractStreamDataHandler::readRequestPacketFormat(QByteArray *datagram)
 {
+    if(datagram->size()<21)
+        return -1;
     return (datagram->at(4) & 0x0F);
 }
 
 quint32 AbstractStreamDataHandler::readRequestPacketId(QByteArray *datagram)
 {
+    if(datagram->size()<21)
+        return -1;
     return ConversionUtils::getIntFromQByteArray(*datagram, 16);
 }
 
 quint64 AbstractStreamDataHandler::readRequestBlockId(QByteArray *datagram)
 {
+    if(datagram->size()<21)
+        return -1;
     return ConversionUtils::getLongFromQByteArray(*datagram, 8);
 }
 

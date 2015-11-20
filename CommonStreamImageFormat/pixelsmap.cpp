@@ -20,6 +20,14 @@ PixelsMap::PixelsMap(quint32 pixelFormat,
     pixels.reserve(pixelsSize);
 }
 
+PixelsMap::~PixelsMap()
+{
+    foreach (AbstractPixelFormat* pixel, pixels)
+        delete pixel;
+
+    pixels.clear();
+}
+
 quint32 PixelsMap::getPixelFormat()
 {
     return pixelFormat;
@@ -32,6 +40,9 @@ void PixelsMap::addPixel(AbstractPixelFormat *pixel)
 
 char *PixelsMap::getImagePixelData()
 {
+    if(pixels.size()==0)
+        return new char[0];
+
     char* data = new char[getDataLength()];
     int pointer = 0;
     foreach (AbstractPixelFormat* pixel, pixels) {
@@ -46,7 +57,11 @@ char *PixelsMap::getImagePixelData()
     return data;
 }
 
-quint32 PixelsMap::getDataLength()
+quint32 PixelsMap::getDataLength() {
+    return pixels.size()*bytePerPixel;
+}
+
+quint32 PixelsMap::getDeclaredDataLength()
 {
     return bytePerPixel*pixelsSize;
 }

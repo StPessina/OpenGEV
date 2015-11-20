@@ -35,7 +35,7 @@ char* AbstractStreamData::getHeader()
     header[6]=0;
     header[7]=0;
 
-    ConversionUtils::setShortToCharArray(header, blockId64, 8);
+    ConversionUtils::setLongToCharArray(header, blockId64, 8);
 
     ConversionUtils::setIntToCharArray(header, packetId32, 16);
 

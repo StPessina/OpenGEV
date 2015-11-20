@@ -180,6 +180,9 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     if(!isChannelOpen())
         return;
 
+    if(datapacket->getDataLength()<=0)
+        return;
+
     //CR-489cd
     quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
             -20 //bytes IP header

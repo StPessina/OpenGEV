@@ -7,6 +7,10 @@ PartnerDevice::PartnerDevice()
 
 PartnerDevice::~PartnerDevice()
 {
+    foreach (auto channel, streamChannelsOpenMap)
+        delete channel.second;
+    streamChannelsOpenMap.clear();
+
     if(isChannelOpen())
         delete controlChannel;
 }
@@ -116,7 +120,8 @@ int PartnerDevice::openStreamChannel(int channel)
                                                               40000 + channel,
                                                               ipAddress,
                                                               CONTROL_CHANNEL_DEF_PORT);
-    int result = controlChannel->sendCommand(writeReg);
+    controlChannel->sendCommand(writeReg);
+    short result = writeReg->getStatusCode();
     delete writeReg;
 
     if(result != GEV_STATUS_SUCCESS) {
@@ -125,4 +130,15 @@ int PartnerDevice::openStreamChannel(int channel)
     }
 
     return result;
+}
+
+const StreamDataReceiver *PartnerDevice::getStreamChannel(int channel)
+{
+    if(!isChannelOpen())
+        return NULL;
+
+    if(getStreamingChannelNumber()<=channel)
+        return NULL;
+
+    return streamChannelsOpenMap[channel];
 }

@@ -9,6 +9,8 @@ GVApplication::GVApplication(int primaryChannelport)
 
 GVApplication::~GVApplication()
 {
+    devices.clear();
+
     delete masterChannel;
 }
 

@@ -27,15 +27,25 @@ public:
 
     virtual ~StreamDataReceiver();
 
-    void openStreamData(quint32 pixelFormat, quint32 sizex, quint32 sizey,
+    virtual void openStreamData(quint64 blockId,
+                        quint32 pixelFormat, quint32 sizex, quint32 sizey,
                         quint32 offsetx, quint32 offsety,
                         quint16 paddingx, quint16 paddingy);
 
-    void addStreamData(AbstractPixelFormat* pixel);
+    virtual bool checkNewPayload(quint64 blockId, quint32 packetId);
 
-    void closeStreamData();
+    virtual void addStreamData(quint64 blockId,
+                               AbstractPixelFormat *pixel);
 
-    PixelsMap getStreamData();
+    virtual void closeStreamData(quint64 blockId, quint32 packetId);
+
+    virtual PixelsMap getStreamData();
+
+    virtual quint32 getPixelFormat();
+
+    virtual quint64 getBlockId();
+
+    virtual quint32 getLastPacketId();
 
 signals:
     void newDataAvailable();
@@ -44,6 +54,10 @@ private:
     UdpChannelReceiver* streamReceiver;
 
     PixelsMap* streamData;
+
+    quint64 blockId;
+
+    quint32 lastPacketId;
 
 };
 

@@ -15,6 +15,8 @@ public:
               quint32 offsetx, quint32 offsety,
               quint16 paddingx, quint16 paddingy);
 
+    virtual ~PixelsMap();
+
     virtual quint32 getPixelFormat() final;
 
     virtual void addPixel(AbstractPixelFormat* pixel);
@@ -22,6 +24,8 @@ public:
     virtual char* getImagePixelData();
 
     virtual quint32 getDataLength() final;
+
+    virtual quint32 getDeclaredDataLength() final;
 
     virtual quint32 getSizeX() final;
 

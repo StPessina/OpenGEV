@@ -77,6 +77,9 @@ public:
      */
     int openStreamChannel(int channel);
 
+
+    const StreamDataReceiver *getStreamChannel(int channel);
+
     /**
      * @brief setControlAccessKey
      * @param device
