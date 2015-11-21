@@ -38,6 +38,7 @@ void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress se
                               <<"("<<packetHandler->toString()<<") "
                              <<"Ack datagram: "<<ackDatagram->toHex().data()<<" "
                             <<"Ack datagram size: "<<ackDatagram->size();
+            ackDatagram->clear();
         } else
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack not allowed from msg handler "

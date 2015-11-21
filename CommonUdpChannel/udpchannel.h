@@ -45,7 +45,7 @@ public:
      * @brief initSocket method create a new socket and register readPendingDatagrams method
      * for receive updates if new datagram is received
      */
-    void initSocket();
+    bool initSocket();
 
     /**
      * @brief getSourceAddress method

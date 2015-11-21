@@ -12,7 +12,7 @@ class StreamImageDataPayload : public AbstractStreamData
 public:
     StreamImageDataPayload(QHostAddress destAddress, quint16 destPort,
                          quint64 blockId64, quint32 packetId32,
-                         char* data, quint32 dataByteLength);
+                         QByteArray data);
 
     virtual ~StreamImageDataPayload();
 
@@ -26,9 +26,9 @@ protected:
 
 private:
 
-    char* data;
+    QByteArray data;
 
-    quint32 dataByteLength;
+    //quint32 dataByteLength;
 };
 
 #endif // STREAMIMAGEDATAPAYLOAD_H

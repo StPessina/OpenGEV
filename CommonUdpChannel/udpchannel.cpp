@@ -1,7 +1,7 @@
 #include "udpchannel.h"
 
 UDPChannel::UDPChannel(QHostAddress sourceAddr,
-                               quint16 sourcePort)
+                       quint16 sourcePort)
 {
     this->sourceAddr = sourceAddr;
     this->sourcePort = sourcePort;
@@ -17,15 +17,20 @@ UDPChannel::~UDPChannel()
     delete timeoutTimer;
 }
 
-void UDPChannel::initSocket()
+bool UDPChannel::initSocket()
 {
     socket = new QUdpSocket(this);
-    socket->bind(sourceAddr, sourcePort);
+    if(socket->bind(sourceAddr, sourcePort)) {
 
-    connect(socket, SIGNAL(readyRead()),
-            this, SLOT(readPendingDatagrams()));
+        connect(socket, SIGNAL(readyRead()),
+                this, SLOT(readPendingDatagrams()));
 
-    logger.infoStream()<<getLogMessageHeader()<<"Init socket";
+        logger.infoStream()<<getLogMessageHeader()<<"Socket bind successful";
+        return true;
+    } else {
+        logger.errorStream()<<getLogMessageHeader()<<"Can't init socket";
+        return false;
+    }
 }
 
 
@@ -45,13 +50,13 @@ void UDPChannel::readPendingDatagrams()
         quint16 senderPort;
 
         socket->readDatagram(datagram.data(), datagram.size(),
-                                &sender, &senderPort);
+                             &sender, &senderPort);
 
         logger.debugStream()<<getLogMessageHeader()<<"New datagram received from "
-                            <<sender.toString().toStdString()
-                            <<":"<<(int) senderPort<<"; "
-                            <<"datagram: "<<datagram.toHex().data()<<" "
-                            <<"size: "<<datagram.size()<<" Byte";
+                           <<sender.toString().toStdString()
+                          <<":"<<(int) senderPort<<"; "
+                         <<"datagram: "<<datagram.toHex().data()<<" "
+                        <<"size: "<<datagram.size()<<" Byte";
 
         processTheDatagram(datagram, sender, senderPort);
     }

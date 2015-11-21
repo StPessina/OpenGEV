@@ -39,7 +39,7 @@ void UDPChannelTransmitter::processTheDatagram(QByteArray datagram, QHostAddress
         if(!socket->hasPendingDatagrams()) {
             waitForAck = false;
             emit stopWaitingAck();
-        } else timeoutTimer->start(TIMEOUT_MS);
+        }
     }
 }
 
@@ -103,6 +103,8 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
                         connect(this, SIGNAL(stopWaitingAck()), &loop, SLOT(quit()));
                         loop.exec();
 
+                        timeoutTimer->stop();
+
                         if(timeoutExpired) {
                             result = -2;
                             logger.debugStream()<<getLogMessageHeader()
@@ -125,6 +127,8 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
             retryCounter++;
         }
 
+        datagram->clear();
+
         packetCache.erase(packet->getRequestId());
 
         if(retryCounter>RETRY_SEND) {
@@ -134,7 +138,6 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
                                 <<"but retry counter is expired, "
                                 <<"Retry counter: "<<retryCounter;
         }
-
     } else {
         logger.warnStream()<<getLogMessageHeader()
                             <<"Require write cmd "

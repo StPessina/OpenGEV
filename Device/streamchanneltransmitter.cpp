@@ -210,16 +210,17 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     //send packets
     for (quint32 i = 0; i < packetsToSend; ++i) {
         quint32 pointer = i*packetSize;
-        char* actualPayloadData = new char[packetSize];
-        for (quint32 i = 0; i < packetSize; ++i)
-            actualPayloadData[i]=data[pointer+i];
+        char* actualPayloadDataChar = new char[lastPacketsDimension];
+        for (quint32 i = 0; i < lastPacketsDimension; ++i)
+            actualPayloadDataChar[i]=data[pointer+i];
+        QByteArray actualPayloadData(actualPayloadDataChar);
+        delete actualPayloadDataChar;
         packetId++;
         StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
                                                                      blockId, packetId,
-                                                                     actualPayloadData, packetSize);
-        streamChannelTransmitter->sendCommand(payload);
+                                                                     actualPayloadData);
+        streamChannelTransmitter->sendCommand(payload);        
         delete payload;
-        delete actualPayloadData;
 
         //CR-491cd delay
         /*
@@ -233,15 +234,16 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     if(lastPacketsDimension>0) {
         packetId++;
         quint32 pointer = packetsToSend*packetSize;
-        char* actualPayloadData = new char[lastPacketsDimension];
+        char* actualPayloadDataChar = new char[lastPacketsDimension];
         for (quint32 i = 0; i < lastPacketsDimension; ++i)
-            actualPayloadData[i]=data[pointer+i];
+            actualPayloadDataChar[i]=data[pointer+i];
+        QByteArray actualPayloadData(actualPayloadDataChar);
+        delete actualPayloadDataChar;
         StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
                                                                      blockId, packetId,
-                                                                     actualPayloadData, lastPacketsDimension);
+                                                                     actualPayloadData);
         streamChannelTransmitter->sendCommand(payload);
         delete payload;
-        delete actualPayloadData;
     }
 
     //send trailer packet
