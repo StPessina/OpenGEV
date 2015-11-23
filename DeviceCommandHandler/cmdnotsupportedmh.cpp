@@ -20,9 +20,10 @@ int CmdNotSupportedMH::execute()
     return -1;
 }
 
-char *CmdNotSupportedMH::getAckDatagramWithoutHeader()
+QByteArray CmdNotSupportedMH::getAckDatagramWithoutHeader()
 {
-    return NULL;
+    QByteArray body;
+    return body;
 }
 
 quint16 CmdNotSupportedMH::getAckDatagramLengthWithoutHeader()

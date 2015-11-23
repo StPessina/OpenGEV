@@ -47,22 +47,25 @@ quint16 AbstractCommand::getHeaderLength()
     return 8;
 }
 
-char* AbstractCommand::getHeader()
+QByteArray AbstractCommand::getHeader()
 {
-    char* header = new char[getHeaderLength()];
-    header[0]=0x42;
-    header[1]=getHeaderFlag();
+    QByteArray datagram;
+    datagram.reserve(getHeaderLength());
 
-    header[2]=commandCode >> 8;
-    header[3]=commandCode;
+    datagram.append(0x42);
+    datagram.append(getHeaderFlag());
+
+    datagram.append(commandCode >> 8);
+    datagram.append(commandCode);
 
     int length = getLengthWithoutHeader();
-    header[4]=length >> 8;
-    header[5]=length;
+    datagram.append(length >> 8);
+    datagram.append(length);
 
-    header[6]=getRequestId() >> 8;
-    header[7]=getRequestId();
-    return header;
+    datagram.append(getRequestId() >> 8);
+    datagram.append(getRequestId());
+
+    return datagram;
 }
 
 short AbstractCommand::getHeaderFlag()

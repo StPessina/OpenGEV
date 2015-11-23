@@ -26,8 +26,9 @@ quint16 StreamImageDataTrailerHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-char *StreamImageDataTrailerHandler::getAckDatagramWithoutHeader()
+QByteArray StreamImageDataTrailerHandler::getAckDatagramWithoutHeader()
 {
-    return NULL;
+    QByteArray answer;
+    return answer;
 }
 

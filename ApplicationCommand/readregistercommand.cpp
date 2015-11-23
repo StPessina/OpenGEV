@@ -29,18 +29,16 @@ quint16 ReadRegisterCommand::getLengthWithoutHeader()
     return registersData.size()*4;
 }
 
-char *ReadRegisterCommand::getPacketDatagramWithoutHeader()
+QByteArray ReadRegisterCommand::getPacketDatagramWithoutHeader()
 {
     //R-163c
+    QByteArray datagram;
+    datagram.reserve(getLengthWithoutHeader());
 
-    char* body = new char[registersData.size()*4];
+    foreach (auto reg, registersData)
+        ConversionUtils::appendIntToQByteArray(&datagram,reg.first);
 
-    int pointer = 0;
-    foreach (auto reg, registersData) {
-        ConversionUtils::setIntToCharArray(body, reg.first,pointer);
-        pointer +=4;
-    }
-    return body;
+    return datagram;
 }
 
 int ReadRegisterCommand::executeAnswer(QByteArray answer)

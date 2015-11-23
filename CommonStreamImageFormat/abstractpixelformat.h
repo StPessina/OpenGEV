@@ -12,7 +12,7 @@ public:
 
     virtual quint32 getPixelFormat() final;
 
-    virtual char* getCharRapresentation() = 0;
+    virtual QByteArray getCharRapresentation() = 0;
 
 private:
 

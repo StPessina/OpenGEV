@@ -32,9 +32,9 @@ quint16 StreamImageDataLeader::getLengthWithoutHeader()
     return 36;
 }
 
-char *StreamImageDataLeader::getPacketDatagramWithoutHeader()
+QByteArray StreamImageDataLeader::getPacketDatagramWithoutHeader()
 {
-    char* datagram = new char[getLengthWithoutHeader()];
+    char datagram[getLengthWithoutHeader()];
 
     datagram[0] = 0; //Field id and field count
     datagram[1] = 0; //Reserved
@@ -52,5 +52,6 @@ char *StreamImageDataLeader::getPacketDatagramWithoutHeader()
     ConversionUtils::setShortToCharArray(datagram, paddingy, 32);
     ConversionUtils::setShortToCharArray(datagram, paddingy, 34);
 
-    return datagram;
+    QByteArray body (datagram, getLengthWithoutHeader());
+    return body;
 }

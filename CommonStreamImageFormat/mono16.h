@@ -11,7 +11,7 @@ class Mono16 : public AbstractPixelFormat
 public:
     Mono16(quint16 value);
 
-    virtual char* getCharRapresentation();
+    virtual QByteArray getCharRapresentation();
 
 private:
     quint16 value;

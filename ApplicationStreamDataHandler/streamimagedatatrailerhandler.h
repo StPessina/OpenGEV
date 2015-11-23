@@ -31,7 +31,7 @@ public:
      * @brief getAckDatagramWithoutHeader
      * @return datagram (R-164c)
      */
-    char* getAckDatagramWithoutHeader();
+    QByteArray getAckDatagramWithoutHeader();
 
 };
 

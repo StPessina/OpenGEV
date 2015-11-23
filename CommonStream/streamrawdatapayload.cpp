@@ -2,12 +2,11 @@
 
 StreamRawDataPayload::StreamRawDataPayload(QHostAddress destAddress, quint16 destPort,
                                            quint64 blockId64, quint32 packetId32,
-                                           char* data, quint32 dataByteLength)
+                                           QByteArray datagram)
     : AbstractStreamData(destAddress, destPort, PacketFormat::DATA_PAYLOAD_GENIRIC_FORMAT,
                          blockId64, packetId32)
 {
-    this->data = data;
-    this->dataByteLength = dataByteLength;
+    this->data = datagram;
 }
 
 StreamRawDataPayload::~StreamRawDataPayload()
@@ -21,10 +20,10 @@ int StreamRawDataPayload::executeAnswer(QByteArray answer)
 
 quint16 StreamRawDataPayload::getLengthWithoutHeader()
 {
-    return dataByteLength;
+    return data.size();
 }
 
-char *StreamRawDataPayload::getPacketDatagramWithoutHeader()
+QByteArray StreamRawDataPayload::getPacketDatagramWithoutHeader()
 {
     return data;
 }

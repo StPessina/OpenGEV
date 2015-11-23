@@ -102,7 +102,7 @@ protected:
      * @brief getAckHeader
      * @return header for ack message
      */
-    virtual char* getAckHeader() final;
+    virtual QByteArray getAckHeader() final;
 
     /**
      * @brief checkHeader check received datagram

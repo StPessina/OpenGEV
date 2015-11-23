@@ -25,10 +25,7 @@ quint16 StreamImageDataPayload::getLengthWithoutHeader()
     return data.size();
 }
 
-char *StreamImageDataPayload::getPacketDatagramWithoutHeader()
+QByteArray StreamImageDataPayload::getPacketDatagramWithoutHeader()
 {
-    char* datagram = new char[data.size()];
-    for (int i = 0; i < data.size(); ++i)
-        datagram[i]=data.at(i);
-    return datagram;
+    return data;
 }

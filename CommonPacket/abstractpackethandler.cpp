@@ -19,9 +19,9 @@ GVComponent* AbstractPacketHandler::getTarget()
     return target;
 }
 
-QByteArray *AbstractPacketHandler::getDatagram()
+QByteArray AbstractPacketHandler::getDatagram()
 {
-    return &datagram;
+    return datagram;
 }
 
 QHostAddress AbstractPacketHandler::getSenderAddress()
@@ -39,22 +39,21 @@ bool AbstractPacketHandler::isAckAllowed()
     return !ackNotAllowed;
 }
 
-QByteArray *AbstractPacketHandler::getAckDatagram()
+QByteArray AbstractPacketHandler::getAckDatagram()
 {
     int datagramSize = getAckHeaderLength() + getAckDatagramLengthWithoutHeader();
-    char* datagramChar = new char[datagramSize];
-    char* header = getAckHeader();
+    char datagramChar[datagramSize];
+    QByteArray header = getAckHeader();
     for (int i = 0; i < getAckHeaderLength(); ++i)
-        datagramChar[i]=header[i];
-    delete header;
+        datagramChar[i]=header.at(i);
+
     if(datagramSize>getAckHeaderLength()) {
-        char* body = getAckDatagramWithoutHeader();
+        QByteArray body = getAckDatagramWithoutHeader();
         for (int i = getAckHeaderLength(); i < datagramSize; ++i)
-            datagramChar[i]=body[i-getAckHeaderLength()];
-        delete body;
+            datagramChar[i]=body.at(i-getAckHeaderLength());
     }
-    QByteArray* datagram = new QByteArray(datagramChar, datagramSize);
-    delete datagramChar;
+
+    QByteArray datagram (datagramChar, datagramSize);
     return datagram;
 }
 

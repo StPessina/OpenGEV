@@ -60,7 +60,7 @@ quint16 ReadRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-char *ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
+QByteArray ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
 {
     if(resultStatus!=GEV_STATUS_SUCCESS ||
             (numberOfRegisters==0 && resultStatus==GEV_STATUS_ACCESS_DENIED))
@@ -68,7 +68,7 @@ char *ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
 
     QByteArray datagramWithoutHeader = datagram.mid(8);
 
-    char* answer = new char[numberOfRegisters*4];
+    char answerChar[numberOfRegisters*4];
 
     for (int i = 0; i < numberOfRegisters*4; i+=4) { //CR-159cd
         int regNumber = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, i);
@@ -76,9 +76,10 @@ char *ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
         int value = 0;
         if(reg!=NULL)
             value = reg->getValue();
-        ConversionUtils::setIntToCharArray(answer, value, i);
+        ConversionUtils::setIntToCharArray(answerChar, value, i);
     }
 
+    QByteArray answer (answerChar, numberOfRegisters*4);
     return answer;
 }
 

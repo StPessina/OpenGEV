@@ -22,14 +22,15 @@ quint16 StreamRawDataTrailer::getLengthWithoutHeader()
     return 4;
 }
 
-char *StreamRawDataTrailer::getPacketDatagramWithoutHeader()
+QByteArray StreamRawDataTrailer::getPacketDatagramWithoutHeader()
 {
-    char* datagram = new char[getLengthWithoutHeader()];
+    char datagram[getLengthWithoutHeader()];
 
     datagram[0] = 0; //reserved
     datagram[1] = 0; //reserved
 
     ConversionUtils::setShortToCharArray(datagram, PayloadType::RAW_DATA, 2);
 
-    return datagram;
+    QByteArray body (datagram, getLengthWithoutHeader());
+    return body;
 }

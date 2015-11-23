@@ -20,6 +20,7 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
                                         quint32 offsetx, quint32 offsety,
                                         quint16 paddingx, quint16 paddingy)
 {
+    delete streamData;
     streamData = new PixelsMap(pixelFormat, sizex, sizey,
                                offsetx, offsety,
                                paddingx, paddingy);
@@ -52,7 +53,7 @@ void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
 
 PixelsMap StreamDataReceiver::getStreamData()
 {
-    return * streamData;
+    return *streamData;
 }
 
 quint32 StreamDataReceiver::getPixelFormat()

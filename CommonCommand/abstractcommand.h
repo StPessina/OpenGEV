@@ -102,7 +102,7 @@ protected:
      * byte 7: req_id LSB
      * \return char* with header
      */
-    virtual char* getHeader() final;
+    virtual QByteArray getHeader() final;
 
 protected:
     /**

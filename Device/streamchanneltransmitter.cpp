@@ -189,19 +189,18 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
-    char* data = datapacket->getImagePixelData();
+    QByteArray data = datapacket->getImagePixelData();
 
     //Send data leader packet
     quint32 packetId=1;
 
-    StreamImageDataLeader* leader = new StreamImageDataLeader(destAddress, destPort,
+    StreamImageDataLeader leader (destAddress, destPort,
            blockId, packetId, datapacket->getPixelFormat(),
            datapacket->getSizeX(), datapacket->getSizeY(),
            datapacket->getOffsetX(), datapacket->getOffsetY(),
            datapacket->getPaddingX(), datapacket->getPaddingY());
 
-    streamChannelTransmitter->sendCommand(leader);
-    delete leader;
+    streamChannelTransmitter->sendCommand(&leader);
 
     //Compute how many packets need to be send
     quint32 packetsToSend = floor(datapacket->getDataLength() / packetSize);
@@ -210,17 +209,17 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     //send packets
     for (quint32 i = 0; i < packetsToSend; ++i) {
         quint32 pointer = i*packetSize;
-        char* actualPayloadDataChar = new char[lastPacketsDimension];
-        for (quint32 i = 0; i < lastPacketsDimension; ++i)
-            actualPayloadDataChar[i]=data[pointer+i];
-        QByteArray actualPayloadData(actualPayloadDataChar);
-        delete actualPayloadDataChar;
+        char actualPayloadDataChar[packetSize];
+        for (quint32 i = 0; i < packetSize; ++i)
+            actualPayloadDataChar[i]=data.at(pointer+i);
+
+        QByteArray actualPayloadData(actualPayloadDataChar, packetSize);
+
         packetId++;
-        StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
-                                                                     blockId, packetId,
-                                                                     actualPayloadData);
-        streamChannelTransmitter->sendCommand(payload);        
-        delete payload;
+        StreamImageDataPayload payload (destAddress, destPort,
+                                        blockId, packetId,
+                                        actualPayloadData);
+        streamChannelTransmitter->sendCommand(&payload);
 
         //CR-491cd delay
         /*
@@ -234,25 +233,27 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
     if(lastPacketsDimension>0) {
         packetId++;
         quint32 pointer = packetsToSend*packetSize;
-        char* actualPayloadDataChar = new char[lastPacketsDimension];
+        char actualPayloadDataChar[lastPacketsDimension];
         for (quint32 i = 0; i < lastPacketsDimension; ++i)
-            actualPayloadDataChar[i]=data[pointer+i];
-        QByteArray actualPayloadData(actualPayloadDataChar);
-        delete actualPayloadDataChar;
-        StreamImageDataPayload* payload = new StreamImageDataPayload(destAddress, destPort,
-                                                                     blockId, packetId,
-                                                                     actualPayloadData);
-        streamChannelTransmitter->sendCommand(payload);
-        delete payload;
+            actualPayloadDataChar[i]=data.at(pointer+i);
+
+        QByteArray actualPayloadData(actualPayloadDataChar,lastPacketsDimension);
+
+        StreamImageDataPayload payload (destAddress, destPort,
+                                        blockId, packetId,
+                                        actualPayloadData);
+        streamChannelTransmitter->sendCommand(&payload);
     }
 
     //send trailer packet
     packetId++;
-    StreamImageDataTrailer* trailer = new StreamImageDataTrailer(destAddress, destPort,
+    StreamImageDataTrailer trailer(destAddress, destPort,
            blockId, packetId, datapacket->getSizeY());
 
-    streamChannelTransmitter->sendCommand(trailer);
-    delete trailer;
+    streamChannelTransmitter->sendCommand(&trailer);
+
+    //Delete generated data
+    data.clear();
 
     //Increment block id for the next data block
     blockId++;

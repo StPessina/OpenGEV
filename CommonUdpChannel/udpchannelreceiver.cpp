@@ -31,14 +31,14 @@ void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress se
 
     if(packetHandler->isAckRequired()) { //if ack is required
         if(packetHandler->isAckAllowed()) {
-            QByteArray* ackDatagram = packetHandler->getAckDatagram();
-            socket->writeDatagram(*ackDatagram, sender, senderPort);
+            QByteArray ackDatagram = packetHandler->getAckDatagram();
+            socket->writeDatagram(ackDatagram, sender, senderPort);
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack sent "
                               <<"("<<packetHandler->toString()<<") "
-                             <<"Ack datagram: "<<ackDatagram->toHex().data()<<" "
-                            <<"Ack datagram size: "<<ackDatagram->size();
-            ackDatagram->clear();
+                             <<"Ack datagram: "<<ackDatagram.toHex().data()<<" "
+                            <<"Ack datagram size: "<<ackDatagram.size();
+            ackDatagram.clear();
         } else
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack not allowed from msg handler "

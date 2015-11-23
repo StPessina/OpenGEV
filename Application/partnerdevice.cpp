@@ -132,7 +132,7 @@ int PartnerDevice::openStreamChannel(int channel)
     return result;
 }
 
-const StreamDataReceiver *PartnerDevice::getStreamChannel(int channel)
+StreamDataReceiver *PartnerDevice::getStreamChannel(int channel)
 {
     if(!isChannelOpen())
         return NULL;

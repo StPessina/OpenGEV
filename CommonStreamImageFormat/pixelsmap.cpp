@@ -38,23 +38,27 @@ void PixelsMap::addPixel(AbstractPixelFormat *pixel)
     pixels.push_back(pixel);
 }
 
-char *PixelsMap::getImagePixelData()
+QByteArray PixelsMap::getImagePixelData()
 {
-    if(pixels.size()==0)
-        return new char[0];
+    QByteArray data;
 
-    char* data = new char[getDataLength()];
-    int pointer = 0;
-    foreach (AbstractPixelFormat* pixel, pixels) {
-        char* pixelData = pixel->getCharRapresentation();
-        for (int i = 0; i < bytePerPixel; ++i) {
-            data[pointer+i] = pixelData[i];
-        }
-        delete pixelData;
-        pointer += bytePerPixel;
-    }
+    if(pixels.size()==0)
+        return data;
+
+    data.reserve(getDataLength());
+
+    foreach (AbstractPixelFormat* pixel, pixels)
+        data.append(pixel->getCharRapresentation());
 
     return data;
+}
+
+quint32 PixelsMap::getSizeInPixel() {
+    return pixels.size();
+}
+
+quint32 PixelsMap::getDeclaredSizeInPixel() {
+    return pixelsSize;
 }
 
 quint32 PixelsMap::getDataLength() {

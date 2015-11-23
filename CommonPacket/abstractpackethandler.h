@@ -44,7 +44,7 @@ public:
      * @brief getDatagram
      * @return datagram received
      */
-    virtual QByteArray* getDatagram() final;
+    virtual QByteArray getDatagram() final;
 
     /**
      * @brief getSenderAddress
@@ -78,7 +78,7 @@ public:
      * @brief getAck
      * @return message for acknowledgement
      */
-    virtual QByteArray* getAckDatagram() final;
+    virtual QByteArray getAckDatagram() final;
 
     /**
      * @brief toString
@@ -110,13 +110,13 @@ protected:
      * @brief getAckHeader
      * @return header for ack message
      */
-    virtual char* getAckHeader() = 0;
+    virtual QByteArray getAckHeader() = 0;
 
     /*!
      * \brief getAck
      * \return message for acknowledgement without header
      */
-    virtual char* getAckDatagramWithoutHeader() = 0;
+    virtual QByteArray getAckDatagramWithoutHeader() = 0;
 
     /*!
      * \brief getAck message without length

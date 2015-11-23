@@ -29,7 +29,7 @@ public:
 
     virtual quint16 getAckDatagramLengthWithoutHeader();
 
-    virtual char* getAckDatagramWithoutHeader();
+    virtual QByteArray getAckDatagramWithoutHeader();
 };
 
 #endif // DEVICEDISCOVERYMESSAGEHANDLER_H

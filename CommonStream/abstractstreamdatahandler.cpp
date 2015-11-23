@@ -58,9 +58,10 @@ quint64 AbstractStreamDataHandler::getRequestBlockId()
     return requestBlockId;
 }
 
-char *AbstractStreamDataHandler::getAckHeader()
+QByteArray AbstractStreamDataHandler::getAckHeader()
 {
-    return NULL;
+    QByteArray answer;
+    return answer;
 }
 
 bool AbstractStreamDataHandler::checkHeader()

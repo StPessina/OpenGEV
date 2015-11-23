@@ -8,7 +8,7 @@ class StreamRawDataPayload : public AbstractStreamData
 public:
     StreamRawDataPayload(QHostAddress destAddress, quint16 destPort,
                          quint64 blockId64, quint32 packetId32,
-                         char* data, quint32 dataByteLength);
+                         QByteArray datagram);
 
     virtual ~StreamRawDataPayload();
 
@@ -18,11 +18,11 @@ protected:
 
     virtual quint16 getLengthWithoutHeader();
 
-    virtual char* getPacketDatagramWithoutHeader();
+    virtual QByteArray getPacketDatagramWithoutHeader();
 
 private:
 
-    char* data;
+    QByteArray data;
 
     quint32 dataByteLength;
 };

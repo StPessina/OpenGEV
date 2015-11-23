@@ -60,7 +60,7 @@ public:
      * @brief getCommandDatagramWithoutHeader method
      * @return datagram
      */
-    char* getPacketDatagramWithoutHeader();
+    QByteArray getPacketDatagramWithoutHeader();
 
     /**
      * @brief executeAnswer method will execute the command on the target

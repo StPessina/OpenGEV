@@ -45,7 +45,7 @@ public:
      * @param senderPort
      * @return message handler for the requested message code
      */
-    virtual AbstractPacketHandler* createPacketHandler(quint16 handlerIdentifier,
+    virtual AbstractPacketHandler *createPacketHandler(quint16 handlerIdentifier,
                                                          QByteArray datagram,
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;

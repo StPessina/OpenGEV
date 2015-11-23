@@ -42,6 +42,33 @@ public:
     static bool setLongToCharArray(char* array, long value, int start);
 
     /**
+     * @brief setShortToQByteArray write short value in char array
+     * @param array
+     * @param value
+     * @param start
+     * @return true if the value is set
+     */
+    static bool appendShortToQByteArray(QByteArray *array, short value);
+
+    /**
+     * @brief setIntToQByteArray write integer value from a char array
+     * @param array
+     * @param value
+     * @param start
+     * @return true if no out of bound
+     */
+    static bool appendIntToQByteArray(QByteArray *array, int value);
+
+    /**
+     * @brief setLongToQByteArray write long value from a char array
+     * @param array
+     * @param value
+     * @param start
+     * @return true if no out of bound
+     */
+    static bool appendLongToQByteArray(QByteArray *array, long value);
+
+    /**
      * @brief getIntFromQByteArray read integer value from a QByteArray
      * @param array
      * @param start

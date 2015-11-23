@@ -25,7 +25,7 @@ protected:
 
     virtual quint16 getLengthWithoutHeader();
 
-    virtual char* getPacketDatagramWithoutHeader();
+    virtual QByteArray getPacketDatagramWithoutHeader();
 
 private:
     quint64 payloadSize;

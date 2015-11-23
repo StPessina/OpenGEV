@@ -19,9 +19,9 @@ quint16 AbstractStreamData::getHeaderLength()
     return 20;
 }
 
-char* AbstractStreamData::getHeader()
+QByteArray AbstractStreamData::getHeader()
 {
-    char* header = new char[getHeaderLength()];
+    char header[getHeaderLength()];
     ConversionUtils::setShortToCharArray(header, status, 0);
 
     short flags = getHeaderFlag();
@@ -39,7 +39,8 @@ char* AbstractStreamData::getHeader()
 
     ConversionUtils::setIntToCharArray(header, packetId32, 16);
 
-    return header;
+    QByteArray datagram(header, getHeaderLength());
+    return datagram;
 }
 
 short AbstractStreamData::getHeaderFlag()

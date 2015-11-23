@@ -50,21 +50,21 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
         lastReqId++;
         packet->setRequestId(lastReqId);
         packetCache[lastReqId]=packet;
-        QByteArray* datagram = packet->getPacketDatagram();
+        QByteArray datagram = packet->getPacketDatagram();
 
         retryCounter = 1;
-        while(retryCounter<=RETRY_SEND && result!=datagram->size()) {
+        while(retryCounter<=RETRY_SEND && result!=datagram.size()) {
             logger.debugStream()<<getLogMessageHeader()
                                 <<"Require write command "
                                 <<"("<<packet->toString()<<") "
-                                <<"Datagram: "<<datagram->toHex().data()<<" "
-                                <<"Datagram size: "<<datagram->size()<<" "
+                                <<"Datagram: "<<datagram.toHex().data()<<" "
+                                <<"Datagram size: "<<datagram.size()<<" "
                                <<"(Retry counter: "<<retryCounter<<")";
 
             waitForAck=true;
             timeoutExpired=false;
 
-            result = socket->writeDatagram(*datagram,
+            result = socket->writeDatagram(datagram,
                               packet->getDestinationAddress(),
                               packet->getDestionationPort());
 
@@ -76,15 +76,15 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
             if(result==0)
                 logger.debugStream()<<getLogMessageHeader()
                                 <<"Command writed but with 0 byte: "
-                                <<"datagram size: "<<datagram->size()<<" "
+                                <<"datagram size: "<<datagram.size()<<" "
                                 <<"byte sent: "<<result<<" "
                                 <<"("<<packet->toString()<<") "
                                 <<"(Retry counter: "<<retryCounter<<")";
             if(result>0) {
-                if(result!=datagram->size()) {
+                if(result!=datagram.size()) {
                         logger.debugStream()<<getLogMessageHeader()
                                     <<"Command writed but datagram size mismatch: "
-                                    <<"datagram size: "<<datagram->size()<<" "
+                                    <<"datagram size: "<<datagram.size()<<" "
                                     <<"byte sent: "<<result<<" "
                                     <<"("<<packet->toString()<<") "
                                     <<"(Retry counter: "<<retryCounter<<")";
@@ -127,7 +127,7 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
             retryCounter++;
         }
 
-        datagram->clear();
+        datagram.clear();
 
         packetCache.erase(packet->getRequestId());
 

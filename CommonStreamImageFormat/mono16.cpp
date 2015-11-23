@@ -6,9 +6,12 @@ Mono16::Mono16(quint16 value)
     this->value = value;
 }
 
-char *Mono16::getCharRapresentation()
+QByteArray Mono16::getCharRapresentation()
 {
-    char* data = new char[2];
-    ConversionUtils::setShortToCharArray(data, value, 0);
+    QByteArray data;
+    data.reserve(2);
+
+    ConversionUtils::appendShortToQByteArray(&data,value);
+
     return data;
 }

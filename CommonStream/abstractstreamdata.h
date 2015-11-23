@@ -79,7 +79,7 @@ protected:
      * \brief getHeader
      * \return char* with header
      */
-    virtual char* getHeader() final;
+    virtual QByteArray getHeader() final;
 
     /**
      * @brief answer received for this command

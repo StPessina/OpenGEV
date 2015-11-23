@@ -21,7 +21,11 @@ public:
 
     virtual void addPixel(AbstractPixelFormat* pixel);
 
-    virtual char* getImagePixelData();
+    virtual QByteArray getImagePixelData();
+
+    virtual quint32 getSizeInPixel();
+
+    virtual quint32 getDeclaredSizeInPixel() final;
 
     virtual quint32 getDataLength() final;
 

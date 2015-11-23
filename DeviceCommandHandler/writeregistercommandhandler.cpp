@@ -54,16 +54,16 @@ quint16 WriteRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
     return 4;
 }
 
-char *WriteRegisterCommandHandler::getAckDatagramWithoutHeader()
+QByteArray WriteRegisterCommandHandler::getAckDatagramWithoutHeader()
 {
     //R-174c
 
-    char* answer = new char[4];
+    char answerChar[4];
 
-    ConversionUtils::setIntToCharArray(answer,
+    ConversionUtils::setIntToCharArray(answerChar,
                                        numberOfRegisters,
                                        0);
-
+    QByteArray answer (answerChar, 4);
     return answer;
 }
 

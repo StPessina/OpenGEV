@@ -28,9 +28,9 @@ quint16 StreamRawDataLeader::getLengthWithoutHeader()
     return 20;
 }
 
-char *StreamRawDataLeader::getPacketDatagramWithoutHeader()
+QByteArray StreamRawDataLeader::getPacketDatagramWithoutHeader()
 {
-    char* datagram = new char[getLengthWithoutHeader()];
+    char datagram[getLengthWithoutHeader()];
 
     datagram[0]=0; //Reserved
     datagram[1]=0; //Reserved
@@ -41,5 +41,6 @@ char *StreamRawDataLeader::getPacketDatagramWithoutHeader()
 
     ConversionUtils::setLongToCharArray(datagram, payloadSize, 12);
 
-    return datagram;
+    QByteArray body (datagram, getLengthWithoutHeader());
+    return body;
 }

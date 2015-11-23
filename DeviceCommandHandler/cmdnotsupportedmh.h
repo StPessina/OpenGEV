@@ -28,7 +28,7 @@ public:
     int execute();
 
 protected:
-    char* getAckDatagramWithoutHeader();
+    QByteArray getAckDatagramWithoutHeader();
 
     quint16 getAckDatagramLengthWithoutHeader();
 };

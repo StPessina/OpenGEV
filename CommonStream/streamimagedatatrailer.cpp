@@ -24,9 +24,9 @@ quint16 StreamImageDataTrailer::getLengthWithoutHeader()
     return 8;
 }
 
-char *StreamImageDataTrailer::getPacketDatagramWithoutHeader()
+QByteArray StreamImageDataTrailer::getPacketDatagramWithoutHeader()
 {
-    char* datagram = new char[getLengthWithoutHeader()];
+    char datagram[getLengthWithoutHeader()];
 
     datagram[0] = 0; //reserved
     datagram[1] = 0; //reserved
@@ -35,5 +35,6 @@ char *StreamImageDataTrailer::getPacketDatagramWithoutHeader()
 
     ConversionUtils::setIntToCharArray(datagram, sizey, 4);
 
-    return datagram;
+    QByteArray body (datagram,getLengthWithoutHeader());
+    return body;
 }

@@ -21,9 +21,10 @@ quint16 DiscoveryCommand::getLengthWithoutHeader()
     return 0;
 }
 
-char *DiscoveryCommand::getPacketDatagramWithoutHeader()
+QByteArray DiscoveryCommand::getPacketDatagramWithoutHeader()
 {
-    return NULL;
+    QByteArray datagram;
+    return datagram;
 }
 
 int DiscoveryCommand::executeAnswer(QByteArray answer)

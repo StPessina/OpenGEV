@@ -41,7 +41,7 @@ public:
      * @brief getCommandDatagram method
      * @return the datagram of the command
      */
-    virtual QByteArray* getPacketDatagram() final;
+    virtual QByteArray getPacketDatagram() final;
 
     /**
      * @brief getDestinationAddress method
@@ -121,7 +121,7 @@ protected:
      * @brief getCommandDatagramWithoutHeader
      * @return the command datagram
      */
-    virtual char* getPacketDatagramWithoutHeader() = 0;
+    virtual QByteArray getPacketDatagramWithoutHeader() = 0;
 
     /**
      * @brief haveAnswer method
@@ -143,9 +143,9 @@ protected:
 
     /*!
      * \brief getHeader
-     * \return char* with header
+     * \return QByteArray with header
      */
-    virtual char* getHeader() = 0;
+    virtual QByteArray getHeader() = 0;
 
 private:
 

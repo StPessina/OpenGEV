@@ -64,23 +64,24 @@ Status AbstractCommandHandler::getResultStatus()
     return resultStatus;
 }
 
-char *AbstractCommandHandler::getAckHeader()
+QByteArray AbstractCommandHandler::getAckHeader()
 {
-    char* header = new char[8];
+    char headerChar[getAckHeaderLength()];
 
-    header[0]=resultStatus >> 8;
-    header[1]=resultStatus;
+    headerChar[0]=resultStatus >> 8;
+    headerChar[1]=resultStatus;
 
-    header[2]=ackCode >> 8;
-    header[3]=ackCode;
+    headerChar[2]=ackCode >> 8;
+    headerChar[3]=ackCode;
 
     int length = getAckDatagramLengthWithoutHeader();
-    header[4]=length >> 8;
-    header[5]=length;
+    headerChar[4]=length >> 8;
+    headerChar[5]=length;
 
-    header[6]=reqId >> 8;
-    header[7]=reqId;
+    headerChar[6]=reqId >> 8;
+    headerChar[7]=reqId;
 
+    QByteArray header (headerChar,getAckHeaderLength());
     return header;
 }
 

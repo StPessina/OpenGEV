@@ -16,22 +16,20 @@ AbstractPacket::~AbstractPacket()
 
 }
 
-QByteArray* AbstractPacket::getPacketDatagram()
+QByteArray AbstractPacket::getPacketDatagram()
 {
     int datagramSize = getHeaderLength() + getLengthWithoutHeader(); //8 byte for header
-    char* datagramChar = new char[datagramSize];
-    char* header = getHeader();
+    char datagramChar[datagramSize];
+    QByteArray header = getHeader();
     for (int i = 0; i < getHeaderLength(); ++i)
-        datagramChar[i]=header[i];
-    delete header;
+        datagramChar[i]=header.at(i);
     if(datagramSize>getHeaderLength()) {
-        char* body = getPacketDatagramWithoutHeader();
+        QByteArray body = getPacketDatagramWithoutHeader();
         for (int i = getHeaderLength(); i < datagramSize; ++i)
-            datagramChar[i]=body[i-getHeaderLength()];
-        delete body;
+            datagramChar[i]=body.at(i-getHeaderLength());
     }
-    QByteArray* datagram = new QByteArray(datagramChar, datagramSize);
-    delete datagramChar;
+
+    QByteArray datagram(datagramChar, datagramSize);
     return datagram;
 }
 
