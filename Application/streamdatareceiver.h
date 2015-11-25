@@ -7,8 +7,7 @@
 
 #include "CommonUdpChannel/udpchannelreceiver.h"
 
-#include "CommonStreamImageFormat/abstractpixelformat.h"
-#include "CommonStreamImageFormat/pixelsmap.h"
+#include "CommonStreamImageFormat/PixelMap.h"
 
 #include "ApplicationStreamDataHandler/streamimagedatahandlerfactory.h"
 
@@ -32,14 +31,22 @@ public:
                         quint32 offsetx, quint32 offsety,
                         quint16 paddingx, quint16 paddingy);
 
+    virtual void checkNewAllocation(quint32 pixelFormat, quint32 sizex, quint32 sizey,
+                               quint32 offsetx, quint32 offsety,
+                               quint16 paddingx, quint16 paddingy);
+
     virtual bool checkNewPayload(quint64 blockId, quint32 packetId);
 
-    virtual void addStreamData(quint64 blockId,
-                               AbstractPixelFormat *pixel);
+    virtual void addStreamData(quint64 blockId, quint32 packetId,
+                               Pixel pixel);
+
+    /*
+    virtual void addStreamData(quint64 blockId, quint32 packetId,
+                               int position, Pixel *pixel);*/
 
     virtual void closeStreamData(quint64 blockId, quint32 packetId);
 
-    virtual PixelsMap getStreamData();
+    virtual PixelMap<Pixel>::Ptr getStreamData();
 
     virtual quint32 getPixelFormat();
 
@@ -53,11 +60,21 @@ signals:
 private:
     UdpChannelReceiver* streamReceiver;
 
-    PixelsMap* streamData;
+    PixelMap<Pixel>::Ptr streamData;
 
     quint64 blockId;
 
     quint32 lastPacketId;
+
+    bool blockOpen;
+
+    log4cpp::Category &logger = log4cpp::Category::getInstance("StreamReceiverLog");
+
+    quint32 pixelFormat, sizex, sizey;
+    quint32 offsetx, offsety;
+    quint16 paddingx, paddingy;
+
+    int lastPixelId = 0;
 
 };
 

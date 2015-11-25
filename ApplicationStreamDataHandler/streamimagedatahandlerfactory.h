@@ -1,6 +1,8 @@
 #ifndef APPLICATIONCOMMANDHANDLERFACTORY_H
 #define APPLICATIONCOMMANDHANDLERFACTORY_H
 
+#include <stdio.h>
+
 #include "CommonCommand/abstractcommandhandlerfactory.h"
 
 #include "CommonComponent/gvcomponent.h"

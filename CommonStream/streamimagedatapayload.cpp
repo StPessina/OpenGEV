@@ -10,6 +10,12 @@ StreamImageDataPayload::StreamImageDataPayload(QHostAddress destAddress, quint16
     //this->dataByteLength = dataByteLength;
 }
 
+void StreamImageDataPayload::renew(quint32 packetId32, QByteArray data)
+{
+    this->packetId32=packetId32;
+    this->data = data;
+}
+
 StreamImageDataPayload::~StreamImageDataPayload()
 {
 

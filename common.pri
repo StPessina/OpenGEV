@@ -105,11 +105,4 @@ DEPENDPATH += CommonStreamImageFormat
 
 HEADERS += \
     $$PWD/CommonStreamImageFormat/pixelformat.h \
-    $$PWD/CommonStreamImageFormat/pixelsmap.h \
-    $$PWD/CommonStreamImageFormat/abstractpixelformat.h \
-    $$PWD/CommonStreamImageFormat/mono16.h
-
-SOURCES += \
-    $$PWD/CommonStreamImageFormat/pixelsmap.cpp \
-    $$PWD/CommonStreamImageFormat/abstractpixelformat.cpp \
-    $$PWD/CommonStreamImageFormat/mono16.cpp
+    $$PWD/CommonStreamImageFormat/PixelMap.h

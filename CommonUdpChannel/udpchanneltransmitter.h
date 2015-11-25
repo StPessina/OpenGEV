@@ -38,6 +38,12 @@ public:
      */
     int sendCommand(AbstractPacket* packet);
 
+    /**
+     * @brief send without check, session id and ack
+     * @param cmd command to send
+     */
+    void fastSendCommand(AbstractPacket* packet);
+
 signals:
     /**
      * @brief stopWaitingAck signal used for manage stop wait for ack

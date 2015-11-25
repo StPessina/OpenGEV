@@ -17,7 +17,7 @@ PartnerDevice::~PartnerDevice()
 
 bool PartnerDevice::openControlChannel(quint16 port)
 {
-    controlChannel = new UDPChannelTransmitter(ipAddress, port);
+    controlChannel = new UDPChannelTransmitter(QHostAddress::Any, port);
 
     controlChannel->initSocket();
 

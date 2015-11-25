@@ -86,6 +86,8 @@ protected:
      */
     QByteArray answer;
 
+    quint32 packetId32;
+
 private:
 
     Status status = GEV_STATUS_SUCCESS;
@@ -101,8 +103,6 @@ private:
     PacketFormat packetFormat;
 
     quint64 blockId64;
-
-    quint32 packetId32;
 };
 
 #endif // STREAMDATALEADER_H

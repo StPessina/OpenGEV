@@ -35,7 +35,6 @@ public:
      * @return datagram (R-164c)
      */
     QByteArray getAckDatagramWithoutHeader();
-
 };
 
 #endif // STREAMIMAGEDATAPAYLOADHANDLER_H

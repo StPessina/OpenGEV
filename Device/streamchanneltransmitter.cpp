@@ -175,13 +175,13 @@ void StreamChannelTransmitter::setupStardardRegistersValue()
     registers[packetDelayRegCode]->setValue(0);
 }
 
-void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
+int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
 {
     if(!isChannelOpen())
-        return;
+        return 0;
 
-    if(datapacket->getDataLength()<=0)
-        return;
+    if(datapacket->dataLength<=0)
+        return 0;
 
     //CR-489cd
     quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
@@ -189,66 +189,59 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
-    QByteArray data = datapacket->getImagePixelData();
+    QByteArray data (datapacket->getImagePixelData(), datapacket->dataLength);
 
     //Send data leader packet
     quint32 packetId=1;
 
     StreamImageDataLeader leader (destAddress, destPort,
-           blockId, packetId, datapacket->getPixelFormat(),
-           datapacket->getSizeX(), datapacket->getSizeY(),
-           datapacket->getOffsetX(), datapacket->getOffsetY(),
-           datapacket->getPaddingX(), datapacket->getPaddingY());
+           blockId, packetId, datapacket->pixelFormat,
+           datapacket->sizex, datapacket->sizey,
+           datapacket->offsetx, datapacket->offsety,
+           datapacket->paddingx, datapacket->paddingy);
 
     streamChannelTransmitter->sendCommand(&leader);
 
     //Compute how many packets need to be send
-    quint32 packetsToSend = floor(datapacket->getDataLength() / packetSize);
-    quint32 lastPacketsDimension = datapacket->getDataLength() % packetSize;
+    quint32 packetsToSend = floor(datapacket->dataLength / packetSize);
+    quint32 lastPacketsDimension = datapacket->dataLength % packetSize;
 
     //send packets
+    QByteArray empty;
+    StreamImageDataPayload payload (destAddress, destPort,
+                                    blockId, 0,
+                                    empty);
     for (quint32 i = 0; i < packetsToSend; ++i) {
-        quint32 pointer = i*packetSize;
-        char actualPayloadDataChar[packetSize];
-        for (quint32 i = 0; i < packetSize; ++i)
-            actualPayloadDataChar[i]=data.at(pointer+i);
-
-        QByteArray actualPayloadData(actualPayloadDataChar, packetSize);
-
         packetId++;
-        StreamImageDataPayload payload (destAddress, destPort,
-                                        blockId, packetId,
-                                        actualPayloadData);
-        streamChannelTransmitter->sendCommand(&payload);
+        payload.renew(packetId,
+                      data.mid(((packetId-2)*packetSize),packetSize));
+
+        streamChannelTransmitter->fastSendCommand(&payload);
 
         //CR-491cd delay
-        /*
-        if(registers[packetDelayRegCode]->getValue()>0) {
-            //TODO: not implementet yet
+        quint32 delay = registers[packetDelayRegCode]->getValue();
+        if(delay>0) {
+            QTimer delayTimer(streamChannelTransmitter);
+            QEventLoop loop;
+            streamChannelTransmitter->connect(&delayTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
+            delayTimer.start(2);
+            loop.exec();
         }
-        */
     }
 
     //send last packets if need
     if(lastPacketsDimension>0) {
         packetId++;
-        quint32 pointer = packetsToSend*packetSize;
-        char actualPayloadDataChar[lastPacketsDimension];
-        for (quint32 i = 0; i < lastPacketsDimension; ++i)
-            actualPayloadDataChar[i]=data.at(pointer+i);
-
-        QByteArray actualPayloadData(actualPayloadDataChar,lastPacketsDimension);
-
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        actualPayloadData);
+                                        data.mid(((packetId-2)*packetSize)));
         streamChannelTransmitter->sendCommand(&payload);
     }
 
     //send trailer packet
     packetId++;
     StreamImageDataTrailer trailer(destAddress, destPort,
-           blockId, packetId, datapacket->getSizeY());
+           blockId, packetId, datapacket->sizey);
 
     streamChannelTransmitter->sendCommand(&trailer);
 
@@ -257,4 +250,6 @@ void StreamChannelTransmitter::writeIncomingData(PixelsMap *datapacket)
 
     //Increment block id for the next data block
     blockId++;
+
+    return packetsToSend+1;
 }

@@ -28,7 +28,8 @@ QByteArray AbstractStreamData::getHeader()
     ConversionUtils::setShortToCharArray(header, flags, 2);
 
     header[4]=(packetFormat & 0x0F);
-    header[4] |= ((short) extendDI) >> 7;
+    if(extendDI)
+        header[4] |= 0x80;
 
     //Reserved
     header[5]=0;

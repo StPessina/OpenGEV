@@ -44,6 +44,8 @@ public:
     /**
      * @brief initSocket method create a new socket and register readPendingDatagrams method
      * for receive updates if new datagram is received
+     *
+     * this method will init SIGNAL/SLOT on udpSocket
      */
     bool initSocket();
 

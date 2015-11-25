@@ -14,6 +14,7 @@
 class UdpChannelReceiver : public UDPChannel
 {
 public:
+
     /**
      * @brief ControlChannelSlave constructor
      * @param sourceAddr
@@ -23,6 +24,18 @@ public:
     UdpChannelReceiver(QHostAddress sourceAddr,
                          quint16 sourcePort,
                          AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
+     * @brief ControlChannelSlave constructor
+     * @param sourceAddr
+     * @param sourcePort
+     * @param messageHandlerFactory factory used to generate a new message handler
+     * @param disableAck always disable ack
+     */
+    UdpChannelReceiver(QHostAddress sourceAddr,
+                         quint16 sourcePort,
+                         AbstractPacketHandlerFactory *packetHandlerFactory,
+                       bool disableAck);
 
     /**
      * @brief ~ControlChannelSlave deconstructor
@@ -37,6 +50,8 @@ private:
      * @brief messageHandlerFactory store factory reference used to generate a new message handler
      */
     AbstractPacketHandlerFactory* packetHandlerFactory;
+
+    bool disableAck;
 };
 
 #endif // DEVICECONTROLCHANNEL_H

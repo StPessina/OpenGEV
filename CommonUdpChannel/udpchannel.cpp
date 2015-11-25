@@ -20,6 +20,7 @@ UDPChannel::~UDPChannel()
 bool UDPChannel::initSocket()
 {
     socket = new QUdpSocket(this);
+
     if(socket->bind(sourceAddr, sourcePort)) {
 
         connect(socket, SIGNAL(readyRead()),
@@ -32,7 +33,6 @@ bool UDPChannel::initSocket()
         return false;
     }
 }
-
 
 std::string UDPChannel::getLogMessageHeader()
 {
@@ -55,7 +55,7 @@ void UDPChannel::readPendingDatagrams()
         logger.debugStream()<<getLogMessageHeader()<<"New datagram received from "
                            <<sender.toString().toStdString()
                           <<":"<<(int) senderPort<<"; "
-                         <<"datagram: "<<datagram.toHex().data()<<" "
+                         //<<"datagram: "<<datagram.toHex().data()<<" "
                         <<"size: "<<datagram.size()<<" Byte";
 
         processTheDatagram(datagram, sender, senderPort);

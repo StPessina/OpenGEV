@@ -47,6 +47,8 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
 {
     int result = -3;
     if(isSocketOpen()) {
+        if(lastReqId>65000)
+            lastReqId=0;
         lastReqId++;
         packet->setRequestId(lastReqId);
         packetCache[lastReqId]=packet;
@@ -146,6 +148,11 @@ int UDPChannelTransmitter::sendCommand(AbstractPacket *packet)
     }
 
     return result;
+}
+
+void UDPChannelTransmitter::fastSendCommand(AbstractPacket *packet)
+{
+    socket->writeDatagram(packet->getPacketDatagram(),packet->getDestinationAddress(),packet->getDestionationPort());
 }
 
 void UDPChannelTransmitter::timeoutAck()

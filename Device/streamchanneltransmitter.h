@@ -13,9 +13,11 @@
 #include "CommonStream/streamimagedatapayload.h"
 #include "CommonStream/streamimagedatatrailer.h"
 
-#include "CommonStreamImageFormat/pixelsmap.h"
+#include "CommonStreamImageFormat/PixelMap.h"
 
 #include "Device/deviceregisters.h"
+
+#include <chrono>
 
 class StreamChannelTransmitter
 {
@@ -38,7 +40,7 @@ public:
 
     virtual bool isChannelOpen() final;
 
-    virtual void writeIncomingData(PixelsMap* datapacket) final;
+    int writeIncomingData(PixelMap<Pixel>::Ptr datapacket);
 
 protected:
     QHostAddress destAddress;
@@ -71,6 +73,8 @@ private:
     void initRegisterMap();
 
     UDPChannelTransmitter* streamChannelTransmitter;
+
+    log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
 
     void setupStardardRegistersValue();
 
