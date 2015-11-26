@@ -1,6 +1,8 @@
 #ifndef DEVICEREGISTERS_H
 #define DEVICEREGISTERS_H
 
+#include "math.h"
+
 #define REG_VERSION 0x0000 //R-429cd
 #define REG_DEVICE_MODE 0x0004 //R-430cd
 

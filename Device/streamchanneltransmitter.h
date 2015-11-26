@@ -1,6 +1,8 @@
 #ifndef DEVICESTREAMCHANNEL_H
 #define DEVICESTREAMCHANNEL_H
 
+#include <QObject>
+
 #include <map>
 #include <math.h>
 
@@ -17,11 +19,17 @@
 
 #include "Device/deviceregisters.h"
 
-#include <chrono>
-
-class StreamChannelTransmitter
+class StreamChannelTransmitter : public QObject
 {
+    Q_OBJECT
 public:
+
+    /**
+     * @brief StreamChannelTransmitter explict constructor for QObject
+     * @param parent
+     */
+    explicit StreamChannelTransmitter(QObject* parent = 0);
+
     StreamChannelTransmitter(int id);
 
     StreamChannelTransmitter(int id, int sourcePort);
@@ -78,7 +86,10 @@ private:
 
     void setupStardardRegistersValue();
 
+    void initStreamDataDelayTimer();
 
+    QTimer* dataStreamDelay;
+    QEventLoop* dataStreamDelayLoop;
 };
 
 #endif // DEVICESTREAMCHANNEL_H

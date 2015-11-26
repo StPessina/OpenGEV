@@ -5,6 +5,7 @@
 
 #include <QString>
 #include <QHostAddress>
+#include <QThread>
 #include <unordered_map>
 
 #include "opengv.h"
@@ -87,6 +88,8 @@ public:
      * @return false if the channel is not open
      */
     bool setActionControlAccessKey(int key);
+
+    bool setStreamChannelDelay(int channel, int delay);
 
 private:
 

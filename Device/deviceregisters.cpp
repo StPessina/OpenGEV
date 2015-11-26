@@ -85,10 +85,10 @@ int DeviceRegisterConverter::getStreamChannelRegister(int streamChannelId, int r
 
 int DeviceRegisterConverter::getChannelNumberFromStreamChannel(int regCode)
 {
-    return (regCode-0x0D00) % 0x40;
+    return floor((regCode-0x0D00) / 0x40);
 }
 
 int DeviceRegisterConverter::getRegTypeFromStreamChannel(int regCode)
 {
-    return regCode - 0x0D00 - ((regCode-0x0D00) % 0x40)*0x40;
+    return regCode - 0x0D00 - getChannelNumberFromStreamChannel(regCode)*0x40;
 }

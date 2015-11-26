@@ -89,6 +89,22 @@ bool PartnerDevice::setActionControlAccessKey(int key)
     return result == GEV_STATUS_SUCCESS;
 }
 
+bool PartnerDevice::setStreamChannelDelay(int channel, int delay)
+{
+    if(!isChannelOpen())
+        return GEV_STATUS_ACCESS_DENIED;
+
+    WriteRegisterCommand writeReg(this,
+                 DeviceRegisterConverter::getStreamChannelRegister(channel,REG_STREAM_CHANNEL_PACKET_DELAY),
+                 delay,
+                 ipAddress,
+                 CONTROL_CHANNEL_DEF_PORT);
+
+    int result = controlChannel->sendCommand(&writeReg);
+
+    return result == GEV_STATUS_SUCCESS;
+}
+
 int PartnerDevice::getStreamingChannelNumber()
 {
     if(!isChannelOpen())

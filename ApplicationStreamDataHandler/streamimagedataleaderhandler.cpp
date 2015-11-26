@@ -32,6 +32,8 @@ int StreamImageDataLeaderHandler::execute()
                     pixelFormat, sizex, sizey,
                     offsetx, offsety,
                     paddingx, paddingy);
+
+        resultStatus = GEV_STATUS_SUCCESS;
     }
 
     return resultStatus;

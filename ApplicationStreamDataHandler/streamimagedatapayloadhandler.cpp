@@ -19,24 +19,27 @@ int StreamImageDataPayloadHandler::execute()
 
         QByteArray datagramWithoutHeader = datagram.mid(20);
 
-        receiver->checkNewPayload(getRequestBlockId(), getRequestPacketId());
+        if(!receiver->checkNewPayload(getRequestBlockId(), getRequestPacketId()))
+            return GEV_STATUS_ERROR;
 
         switch (pixelFormat) {
         case GVSP_PIX_MONO16: {
             int size = datagramWithoutHeader.size() / 2;
+            quint16 data;
+            Pixel p;
             for (int i = 0; i < size; ++i) {
-                quint16 data = ConversionUtils::getShortFromQByteArray(datagramWithoutHeader,i*2);
-                Pixel p;
+                data = ConversionUtils::getShortFromQByteArray(datagramWithoutHeader,i*2);
                 p.pixelFormat=pixelFormat;
                 p.value = data;
-                receiver->addStreamData(getRequestBlockId(), getRequestPacketId(),
-                                        p);
+                receiver->addStreamData(getRequestBlockId(), getRequestPacketId(), p);
             }
             break;
         }
         default:
             break;
         }
+
+        resultStatus = GEV_STATUS_SUCCESS;
     }
 
     return resultStatus;

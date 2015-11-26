@@ -39,6 +39,8 @@ struct PixelMap {
 
     quint32 lastId = -1;
 
+    PixelMap() {}
+
     PixelMap(quint32 pixelFormat, quint32 sizex, quint32 sizey,
              quint32 offsetx, quint32 offsety,
              quint16 paddingx, quint16 paddingy) :

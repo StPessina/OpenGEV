@@ -8,8 +8,6 @@
 #include "CommonStream/packetformat.h"
 #include "CommonStreamImageFormat/pixelformat.h"
 
-#include "CommonStreamImageFormat/mono16.h"
-
 #include "opengv_global.h"
 
 #include "Application/streamdatareceiver.h"

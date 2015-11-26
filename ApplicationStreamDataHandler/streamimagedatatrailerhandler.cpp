@@ -16,6 +16,7 @@ int StreamImageDataTrailerHandler::execute()
 
         receiver->closeStreamData(getRequestBlockId(), getRequestPacketId());
 
+        resultStatus=GEV_STATUS_SUCCESS;
     }
 
     return resultStatus;

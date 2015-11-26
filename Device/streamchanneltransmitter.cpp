@@ -3,6 +3,7 @@
 StreamChannelTransmitter::StreamChannelTransmitter(int id)
 {
     this->id = id;
+    initStreamDataDelayTimer();
     initRegisterMap();
 
     int sourcePort = rand()*10000+40000; //select random port between rangeport 40000-50000
@@ -30,6 +31,9 @@ StreamChannelTransmitter::~StreamChannelTransmitter()
 
     foreach(auto reg, registers)
         delete reg.second;
+
+    delete dataStreamDelay;
+    delete dataStreamDelayLoop;
 }
 
 BootstrapRegister *StreamChannelTransmitter::getRegister(int regType)
@@ -81,7 +85,7 @@ void StreamChannelTransmitter::openStreamChannel(QHostAddress destAddress, quint
 
     BootstrapRegister* gvspSCPD = registers[sourcePortRegCode];
 
-    streamChannelTransmitter = new UDPChannelTransmitter(destAddress, gvspSCPD->getValue());
+    streamChannelTransmitter = new UDPChannelTransmitter(QHostAddress::Any, gvspSCPD->getValue());
     streamChannelTransmitter->initSocket();
 
     BootstrapRegister* gvspSCP = registers[channelPortRegCode];
@@ -175,6 +179,18 @@ void StreamChannelTransmitter::setupStardardRegistersValue()
     registers[packetDelayRegCode]->setValue(0);
 }
 
+void StreamChannelTransmitter::initStreamDataDelayTimer()
+{
+    this->dataStreamDelay = new QTimer(this);
+    this->dataStreamDelay->setSingleShot(true);
+
+    this->dataStreamDelay->setTimerType(Qt::PreciseTimer);
+
+    this->dataStreamDelayLoop = new QEventLoop(this);
+
+    connect(dataStreamDelay, SIGNAL(timeout()), dataStreamDelayLoop, SLOT(quit()));
+}
+
 int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
 {
     if(!isChannelOpen())
@@ -200,7 +216,11 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
            datapacket->offsetx, datapacket->offsety,
            datapacket->paddingx, datapacket->paddingy);
 
-    streamChannelTransmitter->sendCommand(&leader);
+    streamChannelTransmitter->fastSendCommand(&leader);
+
+    //Delay before start payloads
+    dataStreamDelay->start(1);
+    dataStreamDelayLoop->exec();
 
     //Compute how many packets need to be send
     quint32 packetsToSend = floor(datapacket->dataLength / packetSize);
@@ -221,11 +241,8 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
         //CR-491cd delay
         quint32 delay = registers[packetDelayRegCode]->getValue();
         if(delay>0) {
-            QTimer delayTimer(streamChannelTransmitter);
-            QEventLoop loop;
-            streamChannelTransmitter->connect(&delayTimer, SIGNAL(timeout()), &loop, SLOT(quit()));
-            delayTimer.start(2);
-            loop.exec();
+            dataStreamDelay->start(delay);
+            dataStreamDelayLoop->exec();
         }
     }
 
@@ -235,15 +252,19 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
                                         data.mid(((packetId-2)*packetSize)));
-        streamChannelTransmitter->sendCommand(&payload);
+        streamChannelTransmitter->fastSendCommand(&payload);
     }
+
+    //Delay before send data trailer after payloads
+    dataStreamDelay->start(1);
+    dataStreamDelayLoop->exec();
 
     //send trailer packet
     packetId++;
     StreamImageDataTrailer trailer(destAddress, destPort,
            blockId, packetId, datapacket->sizey);
 
-    streamChannelTransmitter->sendCommand(&trailer);
+    streamChannelTransmitter->fastSendCommand(&trailer);
 
     //Delete generated data
     data.clear();

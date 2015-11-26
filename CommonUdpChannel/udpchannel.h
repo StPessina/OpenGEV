@@ -6,8 +6,6 @@
 #include <QUdpSocket>
 #include <QHostAddress>
 
-#include <QLoggingCategory>
-
 #include <QTimer>
 
 #include <log4cpp/Category.hh>
