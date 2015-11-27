@@ -14,6 +14,7 @@ void StreamImageDataPayload::renew(quint32 packetId32, QByteArray data)
 {
     this->packetId32=packetId32;
     this->data = data;
+    //this->dataByteLength = dataByteLength;
 }
 
 StreamImageDataPayload::~StreamImageDataPayload()

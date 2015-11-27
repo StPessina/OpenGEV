@@ -10,6 +10,7 @@
  */
 class StreamImageDataTrailer : public AbstractStreamData
 {
+    friend class StreamImageDataAllIn;
 public:
     StreamImageDataTrailer(QHostAddress destAddress, quint16 destPort,
                          quint64 blockId64, quint32 packetId32,

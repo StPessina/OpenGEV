@@ -191,7 +191,7 @@ void StreamChannelTransmitter::initStreamDataDelayTimer()
     connect(dataStreamDelay, SIGNAL(timeout()), dataStreamDelayLoop, SLOT(quit()));
 }
 
-int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
+int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapacket)
 {
     if(!isChannelOpen())
         return 0;
@@ -205,7 +205,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
-    QByteArray data (datapacket->getImagePixelData(), datapacket->dataLength);
+    QByteArray data = datapacket->getImagePixelData();
 
     //Send data leader packet
     quint32 packetId=1;
@@ -234,7 +234,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
     for (quint32 i = 0; i < packetsToSend; ++i) {
         packetId++;
         payload.renew(packetId,
-                      data.mid(((packetId-2)*packetSize),packetSize));
+                      data.mid((packetId-2)*packetSize,packetSize));
 
         streamChannelTransmitter->fastSendCommand(&payload);
 
@@ -251,7 +251,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
         packetId++;
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        data.mid(((packetId-2)*packetSize)));
+                                        data.mid((packetId-2)*packetSize,packetSize));
         streamChannelTransmitter->fastSendCommand(&payload);
     }
 
@@ -266,11 +266,38 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel>::Ptr datapacket)
 
     streamChannelTransmitter->fastSendCommand(&trailer);
 
-    //Delete generated data
-    data.clear();
-
     //Increment block id for the next data block
     blockId++;
 
     return packetsToSend+1;
+}
+
+int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::Ptr datapacket)
+{
+    if(!isChannelOpen())
+        return 0;
+
+    if(datapacket->dataLength<=0)
+        return 0;
+
+    //CR-489cd
+    quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
+            -20 //bytes IP header
+            -8 //bytes UDP header
+            -20; //bytes for GVSP header
+
+    QByteArray data = datapacket->getImagePixelData();
+
+    StreamImageDataAllIn allInPacket (destAddress, destPort,
+           blockId, datapacket->pixelFormat,
+           datapacket->sizex, datapacket->sizey,
+           datapacket->offsetx, datapacket->offsety,
+           datapacket->paddingx, datapacket->paddingy, data);
+
+    streamChannelTransmitter->fastSendCommand(&allInPacket);
+
+    //Increment block id for the next data block
+    blockId++;
+
+    return 1;
 }

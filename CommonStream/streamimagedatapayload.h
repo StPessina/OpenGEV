@@ -9,6 +9,7 @@
  */
 class StreamImageDataPayload : public AbstractStreamData
 {
+    friend class StreamImageDataAllIn;
 public:
 
     StreamImageDataPayload(QHostAddress destAddress, quint16 destPort,

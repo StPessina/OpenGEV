@@ -1,25 +1,28 @@
-#ifndef STREAMIMAGEDATALEADER_H
-#define STREAMIMAGEDATALEADER_H
+#ifndef STREAMIMAGEDATAALLIN_H
+#define STREAMIMAGEDATAALLIN_H
 
 #include "CommonStream/abstractstreamdata.h"
 #include "CommonStream/payloadtype.h"
 #include "CommonStreamImageFormat/pixelformat.h"
 
+#include "CommonStream/streamimagedataleader.h"
+#include "CommonStream/streamimagedatatrailer.h"
+
 /**
- * @brief The StreamRawDataLeader class implements data leader packet
+ * @brief The StreamImageDataAllIn class implements data leader packet
  * for image stream type (CR-288s)
  */
-class StreamImageDataLeader : public AbstractStreamData
+class StreamImageDataAllIn : public AbstractStreamData
 {
-    friend class StreamImageDataAllIn;
 public:
-    StreamImageDataLeader(QHostAddress destAddress, quint16 destPort,
-                          quint64 blockId64, quint32 packetId32,
+    StreamImageDataAllIn(QHostAddress destAddress, quint16 destPort,
+                          quint64 blockId64,
                           quint32 pixelFormat, quint32 sizex, quint32 sizey,
                           quint32 offsetx, quint32 offsety,
-                          quint16 paddingx, quint16 paddingy);
+                          quint16 paddingx, quint16 paddingy,
+                          QByteArray data);
 
-    virtual ~StreamImageDataLeader();
+    virtual ~StreamImageDataAllIn();
 
     virtual int executeAnswer(QByteArray answer);
 
@@ -39,6 +42,9 @@ private:
     quint32 sizex, sizey;
     quint32 offsetx, offsety;
     quint16 paddingx, paddingy;
+
+    QByteArray data;
 };
 
-#endif // STREAMIMAGEDATALEADER_H
+
+#endif // STREAMIMAGEDATAALLIN_H

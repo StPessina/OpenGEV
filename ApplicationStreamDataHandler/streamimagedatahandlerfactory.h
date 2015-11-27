@@ -10,6 +10,7 @@
 #include "ApplicationStreamDataHandler/streamimagedataleaderhandler.h"
 #include "ApplicationStreamDataHandler/streamimagedatapayloadhandler.h"
 #include "ApplicationStreamDataHandler/streamimagedatatrailerhandler.h"
+#include "ApplicationStreamDataHandler/streamimagedataallinhandler.h"
 
 #include "DeviceCommandHandler/cmdnotsupportedmh.h"
 

@@ -10,12 +10,13 @@
 
 #include "CommonPacket/conversionutils.h"
 
-typedef struct {
-    boost::uint32_t pixelFormat;
-    boost::uint64_t value;
-}Pixel;
+template<int size>
+struct Pixel {
 
-template<typename T = Pixel>
+};
+
+
+template<typename T>
 struct PixelMap {
 
     PixelMap<T> *ptr;
@@ -34,10 +35,9 @@ struct PixelMap {
     quint32 offsetx, offsety;
     quint16 paddingx, paddingy;
 
-    T *data;
-    char* datagram;
+    char* data;
 
-    quint32 lastId = -1;
+    quint32 lastId = 0;
 
     PixelMap() {}
 
@@ -49,47 +49,35 @@ struct PixelMap {
         offsetx(offsetx), offsety(offsety),
         paddingx(paddingx), paddingy(paddingy)
     {
-        //pixelFormat = T.pixelFormat;
-
         declaredPixelsSize = sizex*sizey;
+        pixelMapSize=declaredPixelsSize;
 
         bytePerPixel = ((pixelFormat & 0x00FF0000) >> 16) / 8; //need byte so divied by 8
 
-        data = (T*) malloc(declaredPixelsSize*sizeof(T));
-        datagram = (char*) malloc(declaredPixelsSize*bytePerPixel*sizeof(char));
+        data = (char*) malloc(declaredPixelsSize*bytePerPixel*sizeof(char));
+        dataLength = declaredPixelsSize*bytePerPixel;
     }
 
     void destroyPixelMap() {
         free(data);
-        free(datagram);
     }
 
-    void setNextPixel(T pixel) {
-        lastId++;
-        data[lastId]=pixel;
-
-        switch (bytePerPixel) {
-        case 2:
-            ConversionUtils::setShortToCharArray(datagram,pixel.value, lastId*bytePerPixel);
-            break;
-        default:
-            break;
-        }
-
-        pixelMapSize++;
-        dataLength+=bytePerPixel;
+    void setNextPixel(char* pixel) {
+        memcpy(&data[lastId],pixel,bytePerPixel);
+        /*
+        for (int i = 0; i < bytePerPixel; ++i)
+            data[lastId+i]=pixel[i];
+        */
+        lastId+=bytePerPixel;
     }
 
-    const char* getImagePixelData() {
-        return datagram;
+    char* getImagePixelData() {
+        return (char*) data;
     } 
 };
 
 /*
-struct Mono16 : public Pixel {
-
-    Mono16(boost::uint16_t value) :
-        value(value), format(GVSP_PIX_MONO16) {}
+struct Mono16 {
 
 };
 */

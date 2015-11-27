@@ -43,10 +43,12 @@ HEADERS +=  \
     $$PWD/ApplicationStreamDataHandler/streamimagedatahandlerfactory.h \
     $$PWD/ApplicationStreamDataHandler/streamimagedataleaderhandler.h \
     $$PWD/ApplicationStreamDataHandler/streamimagedatapayloadhandler.h \
-    $$PWD/ApplicationStreamDataHandler/streamimagedatatrailerhandler.h
+    $$PWD/ApplicationStreamDataHandler/streamimagedatatrailerhandler.h \
+    $$PWD/ApplicationStreamDataHandler/streamimagedataallinhandler.h
 
 SOURCES += \
     $$PWD/ApplicationStreamDataHandler/streamimagedatahandlerfactory.cpp \
     $$PWD/ApplicationStreamDataHandler/streamimagedataleaderhandler.cpp \
     $$PWD/ApplicationStreamDataHandler/streamimagedatapayloadhandler.cpp \
-    $$PWD/ApplicationStreamDataHandler/streamimagedatatrailerhandler.cpp
+    $$PWD/ApplicationStreamDataHandler/streamimagedatatrailerhandler.cpp \
+    $$PWD/ApplicationStreamDataHandler/streamimagedataallinhandler.cpp

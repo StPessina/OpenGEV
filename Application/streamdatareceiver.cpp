@@ -7,7 +7,7 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address, quint16 port)
                                             true);
     streamReceiver->initSocket();
 
-    streamData = new PixelMap<Pixel>::Ptr[30];
+    streamData = new PixelMap<Pixel<2>>::Ptr[30];
 
     blockId = new quint64[30];
     for (int i = 0; i < streamDataCacheSize; ++i)
@@ -42,7 +42,7 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
     if(getStreamDataIndexFromBlockId(blockId)==-1) {
         int i = getFreeStreamData();
         this->blockId[i] = blockId;
-        streamData[i] = new PixelMap<Pixel>(pixelFormat, sizex, sizey,
+        streamData[i] = new PixelMap<Pixel<2>>(pixelFormat, sizex, sizey,
                                            offsetx, offsety,
                                            paddingx, paddingy);
         this->packetId[i] = 1;
@@ -68,18 +68,24 @@ void StreamDataReceiver::checkNewAllocation(quint32 pixelFormat, quint32 sizex, 
 bool StreamDataReceiver::checkNewPayload(quint64 blockId, quint32 packetId)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
-    if(i==-1)
-        return false;
 
-    bool sequentiallyCheckResult = (packetId==this->packetId[i]+1);
+    bool sequentiallyCheckResult = false;
+
+    sequentiallyCheckResult = (i!=-1);
+
+    if(sequentiallyCheckResult)
+        sequentiallyCheckResult = (packetId==this->packetId[i]+1);
 
     this->packetId[i] = packetId;
+
+    if(!sequentiallyCheckResult)
+        std::cout<<"E"<<endl;
     return sequentiallyCheckResult;
 }
 
-
+/*
 void StreamDataReceiver::addStreamData(quint64 blockId, quint32 packetId,
-                                       Pixel pixel)
+                                       Pixel<2> pixel)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
     if(i!=-1)
@@ -87,7 +93,7 @@ void StreamDataReceiver::addStreamData(quint64 blockId, quint32 packetId,
     else
         logger.warnStream()<<"Stream was not open "<<blockId<<" "<<packetId;
 }
-
+*/
 /*
 void StreamDataReceiver::addStreamData(quint64 blockId, quint32 packetId,
                                        int position, Pixel pixel)
@@ -107,9 +113,17 @@ void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
         logger.warnStream()<<"Stream was not open "<<blockId<<" "<<packetId;
 }
 
-PixelMap<Pixel>::Ptr StreamDataReceiver::getStreamData()
+PixelMap<Pixel<2>>::Ptr StreamDataReceiver::getStreamData()
 {
     return streamData[lastClosedStream];
+}
+
+PixelMap<Pixel<2>>::Ptr StreamDataReceiver::getStreamData(quint64 blockId)
+{
+    int i = getStreamDataIndexFromBlockId(blockId);
+    if(i!=-1)
+        return streamData[i];
+    return NULL;
 }
 
 quint32 StreamDataReceiver::getPixelFormat()
@@ -148,6 +162,7 @@ int StreamDataReceiver::freeStreamData(int index)
     streamData[index]->destroyPixelMap();
     delete streamData[index];
     blockId[index]=-1;
+    return 0;
 }
 
 int StreamDataReceiver::clearOldCache(quint64 lastBlockId)
@@ -156,4 +171,5 @@ int StreamDataReceiver::clearOldCache(quint64 lastBlockId)
         if(this->blockId[i]<=lastBlockId-(streamDataCacheSize-1)
                 && this->blockId[i]!=-1)
             freeStreamData(i);
+    return 0;
 }

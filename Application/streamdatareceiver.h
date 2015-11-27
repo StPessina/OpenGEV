@@ -39,8 +39,9 @@ public:
 
     virtual bool checkNewPayload(quint64 blockId, quint32 packetId);
 
+    /*
     virtual void addStreamData(quint64 blockId, quint32 packetId,
-                               Pixel pixel);
+                               Pixel<2> pixel);*/
 
     /*
     virtual void addStreamData(quint64 blockId, quint32 packetId,
@@ -48,7 +49,9 @@ public:
 
     virtual void closeStreamData(quint64 blockId, quint32 packetId);
 
-    virtual PixelMap<Pixel>::Ptr getStreamData();
+    virtual PixelMap<Pixel<2>>::Ptr getStreamData();
+
+    virtual PixelMap<Pixel<2>>::Ptr getStreamData(quint64 blockId);
 
     virtual quint32 getPixelFormat();
 
@@ -63,7 +66,7 @@ signals:
 private:
     UdpChannelReceiver* streamReceiver;
 
-    PixelMap<Pixel>::Ptr* streamData;
+    PixelMap<Pixel<2>>::Ptr* streamData;
     quint64* blockId;
     quint32* packetId;
 

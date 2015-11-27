@@ -5,7 +5,8 @@ INCLUDEPATH += CommonBootstrapRegister
 HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
-    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h
+    $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
+    $$PWD/CommonStream/streamimagedataallin.h
 
 SOURCES += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
@@ -86,6 +87,7 @@ HEADERS += \
     $$PWD/CommonStream/streamimagedataleader.h \
     $$PWD/CommonStream/streamimagedatatrailer.h \
     $$PWD/CommonStream/streamimagedatapayload.h \
+    $$PWD/CommonStream/streamimagedataallin.h \
     $$PWD/CommonStream/abstractstreamdatahandler.h
 
 SOURCES += \
@@ -96,6 +98,7 @@ SOURCES += \
     $$PWD/CommonStream/streamimagedataleader.cpp \
     $$PWD/CommonStream/streamimagedatatrailer.cpp \
     $$PWD/CommonStream/streamimagedatapayload.cpp \
+    $$PWD/CommonStream/streamimagedataallin.cpp \
     $$PWD/CommonStream/abstractstreamdatahandler.cpp
 
 @INCLUDE += CommonStreamImageFormat

@@ -14,6 +14,7 @@
 #include "CommonStream/streamimagedataleader.h"
 #include "CommonStream/streamimagedatapayload.h"
 #include "CommonStream/streamimagedatatrailer.h"
+#include "CommonStream/streamimagedataallin.h"
 
 #include "CommonStreamImageFormat/PixelMap.h"
 
@@ -48,7 +49,9 @@ public:
 
     virtual bool isChannelOpen() final;
 
-    int writeIncomingData(PixelMap<Pixel>::Ptr datapacket);
+    int writeIncomingData(PixelMap<Pixel<2>>::Ptr datapacket);
+
+    int writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::Ptr datapacket);
 
 protected:
     QHostAddress destAddress;
