@@ -1,8 +1,8 @@
 #include "readregistercommandhandler.h"
 
-ReadRegisterCommandHandler::ReadRegisterCommandHandler(GVComponent *target, QByteArray datagram,
+ReadRegisterCommandHandler::ReadRegisterCommandHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                        QHostAddress senderAddress, quint16 senderPort)
-    : AbstractCommandHandler(target, READREG_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, READREG_ACK, receivedDatagram, senderAddress, senderPort)
 {
     numberOfRegisters = 0;
 }
@@ -13,7 +13,7 @@ int ReadRegisterCommandHandler::execute()
         resultStatus = GEV_STATUS_INVALID_HEADER;
     else {
 
-        QByteArray datagramWithoutHeader = datagram.mid(8);
+        QByteArray datagramWithoutHeader = receivedDatagram.mid(8);
 
         if(datagramWithoutHeader.size() % 4 != 0)
             resultStatus = GEV_STATUS_BAD_ALIGNMENT;
@@ -60,13 +60,13 @@ quint16 ReadRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-QByteArray ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
+void ReadRegisterCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
     if(resultStatus!=GEV_STATUS_SUCCESS ||
             (numberOfRegisters==0 && resultStatus==GEV_STATUS_ACCESS_DENIED))
-        return NULL;
+        return;
 
-    QByteArray datagramWithoutHeader = datagram.mid(8);
+    QByteArray datagramWithoutHeader = receivedDatagram .mid(8);
 
     char answerChar[numberOfRegisters*4];
 
@@ -79,7 +79,6 @@ QByteArray ReadRegisterCommandHandler::getAckDatagramWithoutHeader()
         ConversionUtils::setIntToCharArray(answerChar, value, i);
     }
 
-    QByteArray answer (answerChar, numberOfRegisters*4);
-    return answer;
+    datagram.append(answerChar, numberOfRegisters*4);
 }
 

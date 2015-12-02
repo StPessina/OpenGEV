@@ -30,7 +30,7 @@ public:
      */
     AbstractStreamDataHandler(GVComponent* target,
                            quint32 packetFormat,
-                           QByteArray datagram,
+                           const QByteArray &datagram,
                            QHostAddress senderAddress,
                            quint16 senderPort);
 
@@ -48,21 +48,21 @@ public:
      * @param datagram
      * @return command code
      */
-    static quint32 readRequestPacketFormat(QByteArray* datagram);
+    static quint32 readRequestPacketFormat(const QByteArray &datagram);
 
     /**
      * @brief readRequestPacketId extract packetid from a datagram
      * @param datagram
      * @return packetid
      */
-    static quint32 readRequestPacketId(QByteArray* datagram);
+    static quint32 readRequestPacketId(const QByteArray &datagram);
 
     /**
      * @brief readRequestBlockId extract block id from a datagram
      * @param datagram
      * @return block id
      */
-    static quint64 readRequestBlockId(QByteArray* datagram);
+    static quint64 readRequestBlockId(const QByteArray &datagram);
 
     /**
      * @brief getRequestPacketFormat
@@ -102,7 +102,7 @@ protected:
      * @brief getAckHeader
      * @return header for ack message
      */
-    virtual QByteArray getAckHeader() final;
+    virtual void appendAckHeader(QByteArray &datagram) final;
 
     /**
      * @brief checkHeader check received datagram

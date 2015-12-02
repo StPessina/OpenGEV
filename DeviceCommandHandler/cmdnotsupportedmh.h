@@ -18,7 +18,8 @@ public:
      * @param senderPort
      */
     CmdNotSupportedMH(GVComponent* target, quint16 msgCode,
-                      QByteArray datagram, QHostAddress senderAddress,quint16 senderPort);
+                      const QByteArray &receivedDatagram,
+                      QHostAddress senderAddress,quint16 senderPort);
 
     /**
      * @brief ~CmdNotSupportedMH deconstructor
@@ -28,7 +29,7 @@ public:
     int execute();
 
 protected:
-    QByteArray getAckDatagramWithoutHeader();
+    void appendAckDatagramWithoutHeader(QByteArray &datagram);
 
     quint16 getAckDatagramLengthWithoutHeader();
 };

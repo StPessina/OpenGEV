@@ -19,11 +19,13 @@ class StreamImageDataAllInHandler : public AbstractStreamDataHandler
 {
 public:
     StreamImageDataAllInHandler(GVComponent* target,
-                               QByteArray datagram,
+                               const QByteArray &receivedDatagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);
 
     int execute();
+
+protected:
 
     quint16 getAckDatagramLengthWithoutHeader();
 
@@ -31,7 +33,7 @@ public:
      * @brief getAckDatagramWithoutHeader
      * @return datagram (R-164c)
      */
-    QByteArray getAckDatagramWithoutHeader();
+    void appendAckDatagramWithoutHeader(QByteArray &datagram);
 
 };
 

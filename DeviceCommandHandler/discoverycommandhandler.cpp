@@ -1,8 +1,8 @@
 ﻿#include "discoverycommandhandler.h"
 
-DiscoveryCommandHandler::DiscoveryCommandHandler(GVComponent *target, QByteArray datagram,
+DiscoveryCommandHandler::DiscoveryCommandHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                  QHostAddress senderAddress, quint16 senderPort)
-    : AbstractCommandHandler(target, DISCOVERY_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, DISCOVERY_ACK, receivedDatagram, senderAddress, senderPort)
 {
 }
 
@@ -25,10 +25,10 @@ quint16 DiscoveryCommandHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-QByteArray DiscoveryCommandHandler::getAckDatagramWithoutHeader()
+void DiscoveryCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
     if(resultStatus!=GEV_STATUS_SUCCESS)
-        return NULL;
+        return;
 
     char answerChar[248];
 
@@ -119,8 +119,7 @@ QByteArray DiscoveryCommandHandler::getAckDatagramWithoutHeader()
     for (int var = userDefienedName.size(); var < 16; ++var)
         answerChar[var+232] = 0;
 
-    QByteArray answer (answerChar, getAckDatagramLengthWithoutHeader());
-    return answer;
+    datagram.append(answerChar, getAckDatagramLengthWithoutHeader());
 }
 
 

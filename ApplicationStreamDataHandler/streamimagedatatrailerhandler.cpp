@@ -1,8 +1,8 @@
 #include "streamimagedatatrailerhandler.h"
 
-StreamImageDataTrailerHandler::StreamImageDataTrailerHandler(GVComponent *target, QByteArray datagram,
+StreamImageDataTrailerHandler::StreamImageDataTrailerHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                        QHostAddress senderAddress, quint16 senderPort)
-    : AbstractStreamDataHandler(target, PacketFormat::DATA_LEADER_FORMAT, datagram, senderAddress, senderPort)
+    : AbstractStreamDataHandler(target, PacketFormat::DATA_LEADER_FORMAT, receivedDatagram, senderAddress, senderPort)
 {
 }
 
@@ -27,9 +27,8 @@ quint16 StreamImageDataTrailerHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-QByteArray StreamImageDataTrailerHandler::getAckDatagramWithoutHeader()
+void StreamImageDataTrailerHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
-    QByteArray answer;
-    return answer;
+    //Nothing to append
 }
 

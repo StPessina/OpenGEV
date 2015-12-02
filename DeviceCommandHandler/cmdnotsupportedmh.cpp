@@ -1,9 +1,11 @@
 #include "cmdnotsupportedmh.h"
 
-CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, quint16 cmdCode, QByteArray datagram, QHostAddress senderAddress,quint16 senderPort)
+CmdNotSupportedMH::CmdNotSupportedMH(GVComponent* target, quint16 cmdCode,
+                                     const QByteArray &receivedDatagram,
+                                     QHostAddress senderAddress,quint16 senderPort)
     : AbstractCommandHandler(target,
       cmdCode,
-      datagram,
+      receivedDatagram,
       senderAddress,
       senderPort)
 {
@@ -20,10 +22,9 @@ int CmdNotSupportedMH::execute()
     return -1;
 }
 
-QByteArray CmdNotSupportedMH::getAckDatagramWithoutHeader()
+void CmdNotSupportedMH::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
-    QByteArray body;
-    return body;
+    //Nothing to append
 }
 
 quint16 CmdNotSupportedMH::getAckDatagramLengthWithoutHeader()

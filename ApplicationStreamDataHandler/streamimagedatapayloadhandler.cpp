@@ -1,8 +1,8 @@
 #include "streamimagedatapayloadhandler.h"
 
-StreamImageDataPayloadHandler::StreamImageDataPayloadHandler(GVComponent *target, QByteArray datagram,
+StreamImageDataPayloadHandler::StreamImageDataPayloadHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                              QHostAddress senderAddress, quint16 senderPort)
-    : AbstractStreamDataHandler(target, PacketFormat::DATA_PAYLOAD_GENIRIC_FORMAT, datagram, senderAddress, senderPort)
+    : AbstractStreamDataHandler(target, PacketFormat::DATA_PAYLOAD_GENIRIC_FORMAT, receivedDatagram, senderAddress, senderPort)
 {
 }
 
@@ -17,7 +17,7 @@ int StreamImageDataPayloadHandler::execute()
 
         quint32 pixelFormat = receiver->getPixelFormat();
 
-        QByteArray datagramWithoutHeader = datagram.mid(20);
+        QByteArray datagramWithoutHeader = receivedDatagram.mid(20);
 
         if(!receiver->checkNewPayload(getRequestBlockId(), getRequestPacketId()))
             return GEV_STATUS_ERROR;
@@ -55,9 +55,8 @@ quint16 StreamImageDataPayloadHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-QByteArray StreamImageDataPayloadHandler::getAckDatagramWithoutHeader()
+void StreamImageDataPayloadHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
-    QByteArray answer;
-    return answer;
+    //Nothing to append
 }
 

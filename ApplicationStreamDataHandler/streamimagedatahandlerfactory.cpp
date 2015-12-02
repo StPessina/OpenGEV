@@ -12,7 +12,7 @@ StreamImageDataHandlerFactory::~StreamImageDataHandlerFactory()
 
 int StreamImageDataHandlerFactory::getPacketHandlerIdentifier(QByteArray datagram)
 {
-    return AbstractStreamDataHandler::readRequestPacketFormat(&datagram);
+    return AbstractStreamDataHandler::readRequestPacketFormat(datagram);
 }
 
 bool StreamImageDataHandlerFactory::isValidCode(quint16 handlerIdentifier)

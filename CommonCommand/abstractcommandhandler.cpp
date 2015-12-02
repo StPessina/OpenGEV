@@ -1,15 +1,14 @@
 #include "abstractcommandhandler.h"
 
-AbstractCommandHandler::AbstractCommandHandler(GVComponent* target, quint16 ackCode, QByteArray datagram,
+AbstractCommandHandler::AbstractCommandHandler(GVComponent* target, quint16 ackCode,
+                                               const QByteArray &receivedDatagram,
                                                QHostAddress senderAddress, quint16 senderPort)
-    : AbstractPacketHandler(target, datagram, senderAddress, senderPort)
+    : AbstractPacketHandler(target, receivedDatagram, senderAddress, senderPort)
 {
     this->ackCode = ackCode;
-    this->datagram = datagram;
-
-    this->requestCommandCode = readRequestCommandCode(&datagram);
-    this->requestLength = readRequestLength(&datagram);
-    this->reqId = readRequestRequestId(&datagram);
+    this->requestCommandCode = readRequestCommandCode(receivedDatagram);
+    this->requestLength = readRequestLength(receivedDatagram);
+    this->reqId = readRequestRequestId(receivedDatagram);
 }
 
 AbstractCommandHandler::~AbstractCommandHandler()
@@ -19,28 +18,28 @@ AbstractCommandHandler::~AbstractCommandHandler()
 
 bool AbstractCommandHandler::isAckRequired()
 {
-    return datagram.at(1) & 1;
+    return receivedDatagram.at(1) & 1;
 }
 
 
-quint16 AbstractCommandHandler::readRequestCommandCode(QByteArray *datagram)
+quint16 AbstractCommandHandler::readRequestCommandCode(const QByteArray &datagram)
 {
-    uint valueMSB = datagram->at(2);
-    uint valueLSB = datagram->at(3);
+    uint valueMSB = datagram.at(2);
+    uint valueLSB = datagram.at(3);
     return valueMSB*256+valueLSB;
 }
 
-quint16 AbstractCommandHandler::readRequestLength(QByteArray *datagram)
+quint16 AbstractCommandHandler::readRequestLength(const QByteArray &datagram)
 {
-    uint valueMSB = datagram->at(4);
-    uint valueLSB = datagram->at(5);
+    uint valueMSB = datagram.at(4);
+    uint valueLSB = datagram.at(5);
     return valueMSB*256+valueLSB;
 }
 
-quint16 AbstractCommandHandler::readRequestRequestId(QByteArray *datagram)
+quint16 AbstractCommandHandler::readRequestRequestId(const QByteArray &datagram)
 {
-    uint valueMSB = datagram->at(6);
-    uint valueLSB = datagram->at(7);
+    uint valueMSB = datagram.at(6);
+    uint valueLSB = datagram.at(7);
     return valueMSB*256+valueLSB;
 }
 
@@ -64,25 +63,12 @@ Status AbstractCommandHandler::getResultStatus()
     return resultStatus;
 }
 
-QByteArray AbstractCommandHandler::getAckHeader()
+void AbstractCommandHandler::appendAckHeader(QByteArray &datagram)
 {
-    char headerChar[getAckHeaderLength()];
-
-    headerChar[0]=resultStatus >> 8;
-    headerChar[1]=resultStatus;
-
-    headerChar[2]=ackCode >> 8;
-    headerChar[3]=ackCode;
-
-    int length = getAckDatagramLengthWithoutHeader();
-    headerChar[4]=length >> 8;
-    headerChar[5]=length;
-
-    headerChar[6]=reqId >> 8;
-    headerChar[7]=reqId;
-
-    QByteArray header (headerChar,getAckHeaderLength());
-    return header;
+    ConversionUtils::appendShortToQByteArray(datagram, resultStatus);
+    ConversionUtils::appendShortToQByteArray(datagram, ackCode);
+    ConversionUtils::appendShortToQByteArray(datagram, getAckDatagramLengthWithoutHeader());
+    ConversionUtils::appendShortToQByteArray(datagram, reqId);
 }
 
 bool AbstractCommandHandler::checkHeader()

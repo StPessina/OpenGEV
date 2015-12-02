@@ -1,8 +1,8 @@
 #include "writeregistercommandhandler.h"
 
-WriteRegisterCommandHandler::WriteRegisterCommandHandler(GVComponent *target, QByteArray datagram,
+WriteRegisterCommandHandler::WriteRegisterCommandHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                          QHostAddress senderAddress, quint16 senderPort)
-    : AbstractCommandHandler(target, WRITEREG_ACK, datagram, senderAddress, senderPort)
+    : AbstractCommandHandler(target, WRITEREG_ACK, receivedDatagram, senderAddress, senderPort)
 {
     numberOfRegisters = 0;
 }
@@ -17,7 +17,7 @@ int WriteRegisterCommandHandler::execute()
         if(dynamic_cast<GVDevice*>(target)->checkChannelPrivilege(sender,port)!=FULL)
             resultStatus = GEV_STATUS_ACCESS_DENIED;
         else {
-            QByteArray datagramWithoutHeader = datagram.mid(8);
+            QByteArray datagramWithoutHeader = receivedDatagram.mid(8);
 
             if(datagramWithoutHeader.size() % 8 != 0)
                 resultStatus = GEV_STATUS_BAD_ALIGNMENT;
@@ -54,16 +54,9 @@ quint16 WriteRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
     return 4;
 }
 
-QByteArray WriteRegisterCommandHandler::getAckDatagramWithoutHeader()
+void WriteRegisterCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
     //R-174c
-
-    char answerChar[4];
-
-    ConversionUtils::setIntToCharArray(answerChar,
-                                       numberOfRegisters,
-                                       0);
-    QByteArray answer (answerChar, 4);
-    return answer;
+    ConversionUtils::appendIntToQByteArray(datagram, numberOfRegisters);
 }
 

@@ -1,10 +1,10 @@
 #include "abstractpackethandler.h"
 
-AbstractPacketHandler::AbstractPacketHandler(GVComponent* target, QByteArray datagram,
+AbstractPacketHandler::AbstractPacketHandler(GVComponent* target, const QByteArray &receivedDatagram,
                                                QHostAddress senderAddress, quint16 senderPort)
+    : receivedDatagram(receivedDatagram)
 {
     this->target=target;
-    this->datagram = datagram;
     this->sender = senderAddress;
     this->port = senderPort;
 }
@@ -19,9 +19,9 @@ GVComponent* AbstractPacketHandler::getTarget()
     return target;
 }
 
-QByteArray AbstractPacketHandler::getDatagram()
+const QByteArray &AbstractPacketHandler::getReceivedDatagram()
 {
-    return datagram;
+    return receivedDatagram;
 }
 
 QHostAddress AbstractPacketHandler::getSenderAddress()
@@ -39,22 +39,15 @@ bool AbstractPacketHandler::isAckAllowed()
     return !ackNotAllowed;
 }
 
-QByteArray AbstractPacketHandler::getAckDatagram()
+const QByteArray &AbstractPacketHandler::getAckDatagram()
 {
-    int datagramSize = getAckHeaderLength() + getAckDatagramLengthWithoutHeader();
-    char datagramChar[datagramSize];
-    QByteArray header = getAckHeader();
-    for (int i = 0; i < getAckHeaderLength(); ++i)
-        datagramChar[i]=header.at(i);
+    ackDatagram.clear();
+    ackDatagram.reserve(getAckHeaderLength() + getAckDatagramLengthWithoutHeader());
 
-    if(datagramSize>getAckHeaderLength()) {
-        QByteArray body = getAckDatagramWithoutHeader();
-        for (int i = getAckHeaderLength(); i < datagramSize; ++i)
-            datagramChar[i]=body.at(i-getAckHeaderLength());
-    }
+    appendAckHeader(ackDatagram);
+    appendAckDatagramWithoutHeader(ackDatagram);
 
-    QByteArray datagram (datagramChar, datagramSize);
-    return datagram;
+    return ackDatagram;
 }
 
 std::string AbstractPacketHandler::toString()

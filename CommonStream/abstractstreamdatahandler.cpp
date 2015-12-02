@@ -1,14 +1,13 @@
 #include "abstractstreamdatahandler.h"
 
-AbstractStreamDataHandler::AbstractStreamDataHandler(GVComponent* target, quint32 packetFormat, QByteArray datagram,
+AbstractStreamDataHandler::AbstractStreamDataHandler(GVComponent* target, quint32 packetFormat,
+                                                     const QByteArray &receivedDatagram,
                                                QHostAddress senderAddress, quint16 senderPort)
-    : AbstractPacketHandler(target, datagram, senderAddress, senderPort)
+    : AbstractPacketHandler(target, receivedDatagram, senderAddress, senderPort)
 {
     this->requestPacketFormat = packetFormat;
-    this->datagram = datagram;
-
-    this->requestBlockId = readRequestBlockId(&datagram);
-    this->requestPacketId = readRequestPacketId(&datagram);
+    this->requestBlockId = readRequestBlockId(receivedDatagram);
+    this->requestPacketId = readRequestPacketId(receivedDatagram);
 }
 
 AbstractStreamDataHandler::~AbstractStreamDataHandler()
@@ -22,25 +21,25 @@ bool AbstractStreamDataHandler::isAckRequired()
 }
 
 
-quint32 AbstractStreamDataHandler::readRequestPacketFormat(QByteArray *datagram)
+quint32 AbstractStreamDataHandler::readRequestPacketFormat(const QByteArray &datagram)
 {
-    if(datagram->size()<21)
+    if(datagram.size()<21)
         return -1;
-    return (datagram->at(4) & 0x0F);
+    return (datagram.at(4) & 0x0F);
 }
 
-quint32 AbstractStreamDataHandler::readRequestPacketId(QByteArray *datagram)
+quint32 AbstractStreamDataHandler::readRequestPacketId(const QByteArray &datagram)
 {
-    if(datagram->size()<21)
+    if(datagram.size()<21)
         return -1;
-    return ConversionUtils::getIntFromQByteArray(*datagram, 16);
+    return ConversionUtils::getIntFromQByteArray(datagram, 16);
 }
 
-quint64 AbstractStreamDataHandler::readRequestBlockId(QByteArray *datagram)
+quint64 AbstractStreamDataHandler::readRequestBlockId(const QByteArray &datagram)
 {
-    if(datagram->size()<21)
+    if(datagram.size()<21)
         return -1;
-    return ConversionUtils::getLongFromQByteArray(*datagram, 8);
+    return ConversionUtils::getLongFromQByteArray(datagram, 8);
 }
 
 quint32 AbstractStreamDataHandler::getRequestPacketFormat()
@@ -58,15 +57,14 @@ quint64 AbstractStreamDataHandler::getRequestBlockId()
     return requestBlockId;
 }
 
-QByteArray AbstractStreamDataHandler::getAckHeader()
+void AbstractStreamDataHandler::appendAckHeader(QByteArray &datagram)
 {
-    QByteArray answer;
-    return answer;
+    //No ack required
 }
 
 bool AbstractStreamDataHandler::checkHeader()
 {
-    if(datagram.length()>20)
+    if(receivedDatagram.length()>20)
         return true;
     return false;
 }

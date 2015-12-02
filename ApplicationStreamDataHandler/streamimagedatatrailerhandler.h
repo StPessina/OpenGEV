@@ -19,7 +19,7 @@ class StreamImageDataTrailerHandler : public AbstractStreamDataHandler
 {
 public:
     StreamImageDataTrailerHandler(GVComponent* target,
-                               QByteArray datagram,
+                               const QByteArray &receivedDatagram,
                                QHostAddress senderAddress,
                                quint16 senderPort);
 
@@ -31,7 +31,7 @@ public:
      * @brief getAckDatagramWithoutHeader
      * @return datagram (R-164c)
      */
-    QByteArray getAckDatagramWithoutHeader();
+    void appendAckDatagramWithoutHeader(QByteArray &datagram);
 
 };
 

@@ -28,7 +28,7 @@ public:
      */
     AbstractCommandHandler(GVComponent* target,
                            quint16 ackCode,
-                           QByteArray datagram,
+                           const QByteArray &receivedDatagram,
                            QHostAddress senderAddress,
                            quint16 senderPort);
 
@@ -46,21 +46,21 @@ public:
      * @param datagram
      * @return command code
      */
-    static quint16 readRequestCommandCode(QByteArray* datagram);
+    static quint16 readRequestCommandCode(const QByteArray &datagram);
 
     /**
      * @brief readRequestRequestLength extract length from a datagram
      * @param datagram
      * @return length
      */
-    static quint16 readRequestLength(QByteArray* datagram);
+    static quint16 readRequestLength(const QByteArray &datagram);
 
     /**
      * @brief readRequestRequestId extract request id from a datagram
      * @param datagram
      * @return request id
      */
-    static quint16 readRequestRequestId(QByteArray* datagram);
+    static quint16 readRequestRequestId(const QByteArray &datagram);
 
     /**
      * @brief getRequestCommandCode
@@ -110,7 +110,7 @@ protected:
      * @brief getAckHeader
      * @return header for ack message
      */
-    virtual QByteArray getAckHeader() final;
+    virtual void appendAckHeader(QByteArray &datagram) final;
 
     /**
      * @brief checkHeader check received datagram

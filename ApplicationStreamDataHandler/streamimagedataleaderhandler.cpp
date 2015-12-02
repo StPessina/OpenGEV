@@ -1,8 +1,8 @@
 #include "streamimagedataleaderhandler.h"
 
-StreamImageDataLeaderHandler::StreamImageDataLeaderHandler(GVComponent *target, QByteArray datagram,
+StreamImageDataLeaderHandler::StreamImageDataLeaderHandler(GVComponent *target, const QByteArray &receivedDatagram,
                                                        QHostAddress senderAddress, quint16 senderPort)
-    : AbstractStreamDataHandler(target, PacketFormat::DATA_LEADER_FORMAT, datagram, senderAddress, senderPort)
+    : AbstractStreamDataHandler(target, PacketFormat::DATA_LEADER_FORMAT, receivedDatagram, senderAddress, senderPort)
 {
 }
 
@@ -12,10 +12,10 @@ int StreamImageDataLeaderHandler::execute()
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;
     else {
-        if(datagram.length()!=56) //20 Header + 36 Body for image leader package
+        if(receivedDatagram.length()!=56) //20 Header + 36 Body for image leader package
             resultStatus = GEV_STATUS_INVALID_PARAMETER;
 
-        QByteArray datagramWithoutHeader = datagram.mid(20);
+        QByteArray datagramWithoutHeader = receivedDatagram.mid(20);
 
         quint32 pixelFormat = ConversionUtils::getIntFromQByteArray(datagramWithoutHeader, 12);
 
@@ -44,9 +44,8 @@ quint16 StreamImageDataLeaderHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-QByteArray StreamImageDataLeaderHandler::getAckDatagramWithoutHeader()
+void StreamImageDataLeaderHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
 {
-    QByteArray answer;
-    return answer;
+    //Nothing to append
 }
 

@@ -24,7 +24,7 @@ public:
      * @param senderPort destination port of the datagram
      */
     AbstractPacketHandler(GVComponent* target,
-                           QByteArray datagram,
+                           const QByteArray &receivedDatagram,
                            QHostAddress senderAddress,
                            quint16 senderPort);
 
@@ -44,7 +44,7 @@ public:
      * @brief getDatagram
      * @return datagram received
      */
-    virtual QByteArray getDatagram() final;
+    virtual const QByteArray &getReceivedDatagram() final;
 
     /**
      * @brief getSenderAddress
@@ -78,7 +78,7 @@ public:
      * @brief getAck
      * @return message for acknowledgement
      */
-    virtual QByteArray getAckDatagram() final;
+    virtual const QByteArray &getAckDatagram() final;
 
     /**
      * @brief toString
@@ -92,13 +92,15 @@ protected:
      */
     GVComponent* target;
 
-    QByteArray datagram;
+    const QByteArray &receivedDatagram;
 
     QHostAddress sender;
 
     quint16 port;
 
     bool ackNotAllowed = false;
+
+    QByteArray ackDatagram;
 
     /**
      * @brief getLengthWithoutHeader
@@ -110,13 +112,13 @@ protected:
      * @brief getAckHeader
      * @return header for ack message
      */
-    virtual QByteArray getAckHeader() = 0;
+    virtual void appendAckHeader(QByteArray &datagram) = 0;
 
     /*!
      * \brief getAck
      * \return message for acknowledgement without header
      */
-    virtual QByteArray getAckDatagramWithoutHeader() = 0;
+    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram) = 0;
 
     /*!
      * \brief getAck message without length

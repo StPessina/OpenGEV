@@ -21,7 +21,7 @@ class DiscoveryCommandHandler : public AbstractCommandHandler
 {
 public:
     DiscoveryCommandHandler(GVComponent* target,
-                            QByteArray datagram,
+                            const QByteArray &receivedDatagram,
                             QHostAddress senderAddress,
                             quint16 senderPort);
 
@@ -29,7 +29,7 @@ public:
 
     virtual quint16 getAckDatagramLengthWithoutHeader();
 
-    virtual QByteArray getAckDatagramWithoutHeader();
+    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram);
 };
 
 #endif // DEVICEDISCOVERYMESSAGEHANDLER_H
