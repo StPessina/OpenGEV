@@ -30,7 +30,7 @@ public:
      * @param requireAck if this message require ack
      * @param broadcast if this message is a broadcast message
      */
-    AbstractCommand(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+    AbstractCommand(GVComponent* const target, QHostAddress destAddress, quint16 destPort,
                     quint16 commandCode, quint16 ackCommandCode, quint16 reqId, bool requireAck, bool broadcast);
 
     /**
@@ -49,14 +49,14 @@ public:
      * @param answer
      * @return true if the header of the message is a valid answer
      */
-    virtual bool checkAckHeader(QByteArray answer) final;
+    virtual bool checkAckHeader(const QByteArray &answer) final;
 
     /**
      * @brief getStatusCode
      * @param answer received
      * @return status code
      */
-    virtual short getStatusCodeFromAnswer(QByteArray answer) final;
+    virtual short getStatusCodeFromAnswer(const QByteArray &answer) final;
 
     /**
      * @brief getStatusCode
@@ -102,13 +102,7 @@ protected:
      * byte 7: req_id LSB
      * \return char* with header
      */
-    virtual QByteArray getHeader() final;
-
-protected:
-    /**
-     * @brief answer received for this command
-     */
-    QByteArray answer;
+    virtual void appendHeader(QByteArray &datagram) final;
 
 private:
 

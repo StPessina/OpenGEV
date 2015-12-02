@@ -16,13 +16,11 @@ public:
 
     virtual ~StreamRawDataTrailer();
 
-    virtual int executeAnswer(QByteArray answer);
-
 protected:
 
     virtual quint16 getLengthWithoutHeader();
 
-    virtual QByteArray getPacketDatagramWithoutHeader();
+    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 };
 
 #endif // STREAMRAWDATATRAILER_H

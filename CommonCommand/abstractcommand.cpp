@@ -1,6 +1,6 @@
 #include "abstractcommand.h"
 
-AbstractCommand::AbstractCommand(GVComponent *target, QHostAddress destAddress, quint16 destPort,
+AbstractCommand::AbstractCommand(GVComponent * const target, QHostAddress destAddress, quint16 destPort,
         quint16 commandCode, quint16 ackCommandCode, quint16 reqId, bool requireAck, bool broadcast)
     : AbstractPacket(target, destAddress, destPort, reqId, requireAck, broadcast)
 {
@@ -19,7 +19,7 @@ quint16 AbstractCommand::getCommandCode()
     return commandCode;
 }
 
-bool AbstractCommand::checkAckHeader(QByteArray answer)
+bool AbstractCommand::checkAckHeader(const QByteArray &answer)
 {
     if(answer.size()<getHeaderLength())
         return false;
@@ -30,7 +30,7 @@ bool AbstractCommand::checkAckHeader(QByteArray answer)
     return true;
 }
 
-short AbstractCommand::getStatusCodeFromAnswer(QByteArray answer)
+short AbstractCommand::getStatusCodeFromAnswer(const QByteArray &answer)
 {
     short statusCode = ConversionUtils::getShortFromQByteArray(answer,0);
 
@@ -39,7 +39,7 @@ short AbstractCommand::getStatusCodeFromAnswer(QByteArray answer)
 
 short AbstractCommand::getStatusCode()
 {
-    return getStatusCodeFromAnswer(answer);
+    return getStatusCodeFromAnswer(*answer);
 }
 
 quint16 AbstractCommand::getHeaderLength()
@@ -47,11 +47,8 @@ quint16 AbstractCommand::getHeaderLength()
     return 8;
 }
 
-QByteArray AbstractCommand::getHeader()
+void AbstractCommand::appendHeader(QByteArray &datagram)
 {
-    QByteArray datagram;
-    datagram.reserve(getHeaderLength());
-
     datagram.append(0x42);
     datagram.append(getHeaderFlag());
 
@@ -64,8 +61,6 @@ QByteArray AbstractCommand::getHeader()
 
     datagram.append(getRequestId() >> 8);
     datagram.append(getRequestId());
-
-    return datagram;
 }
 
 short AbstractCommand::getHeaderFlag()

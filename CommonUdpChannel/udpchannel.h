@@ -79,7 +79,7 @@ protected:
      * @param sender ip address of the datagram sender
      * @param senderPort port where the datagram was sended
      */
-    virtual void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort) = 0;
+    virtual void processTheDatagram(QByteArray &datagram, QHostAddress sender, quint16 senderPort) = 0;
 
     /**
      * @brief TIMEOUT_MS for a sent command
@@ -121,6 +121,10 @@ protected:
      * @brief timeoutTimer
      */
     QTimer *timeoutTimer;
+
+private:
+
+    QByteArray datagram;
 };
 
 #endif // CONTROLCHANNEL_H

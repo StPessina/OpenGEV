@@ -43,7 +43,7 @@ public:
     virtual ~UdpChannelReceiver();
 
     /* HIHERIT DOCS */
-    void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
+    void processTheDatagram(QByteArray &datagram, QHostAddress sender, quint16 senderPort);
 
 private:
     /**

@@ -29,20 +29,20 @@ public:
     virtual ~UDPChannelTransmitter();
 
     /* HIHERIT DOCS */
-    void processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort);
+    void processTheDatagram(QByteArray &datagram, QHostAddress sender, quint16 senderPort);
 
     /**
      * @brief sendCommand a command on the channel
      * @param cmd command to send
      * @return 0 if the command is successfully sent
      */
-    int sendCommand(AbstractPacket* packet);
+    int sendCommand(AbstractPacket &packet);
 
     /**
      * @brief send without check, session id and ack
      * @param cmd command to send
      */
-    void fastSendCommand(AbstractPacket* packet);
+    void fastSendCommand(AbstractPacket &packet);
 
 signals:
     /**

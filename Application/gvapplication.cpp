@@ -32,9 +32,8 @@ QList<PartnerDevice> GVApplication::getDiscoveredDevice()
 int GVApplication::discoverDevice()
 {
     QHostAddress address("255.255.255.255");
-    DiscoveryCommand* dis = new DiscoveryCommand(this, address, CONTROL_CHANNEL_DEF_PORT);
+    DiscoveryCommand dis (this, address, CONTROL_CHANNEL_DEF_PORT);
     int result = masterChannel->sendCommand(dis);
-    delete dis;
     return result;
 }
 

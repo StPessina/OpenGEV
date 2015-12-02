@@ -12,12 +12,6 @@ StreamRawDataLeader::~StreamRawDataLeader()
 
 }
 
-int StreamRawDataLeader::executeAnswer(QByteArray answer)
-{
-    return 0; //No answer required
-}
-
-
 quint64 StreamRawDataLeader::getPayloadSize()
 {
     return payloadSize;
@@ -28,19 +22,12 @@ quint16 StreamRawDataLeader::getLengthWithoutHeader()
     return 20;
 }
 
-QByteArray StreamRawDataLeader::getPacketDatagramWithoutHeader()
+void StreamRawDataLeader::appendPacketDatagramWithoutHeader(QByteArray &datagram)
 {
-    char datagram[getLengthWithoutHeader()];
+    ConversionUtils::appendShortToQByteArray(datagram, 0); //Reserved
 
-    datagram[0]=0; //Reserved
-    datagram[1]=0; //Reserved
+    ConversionUtils::appendLongToQByteArray(datagram, 0); //Should be timestamp
 
-    ConversionUtils::setShortToCharArray(datagram, PayloadType::RAW_DATA, 2);
+    ConversionUtils::appendLongToQByteArray(datagram, payloadSize);
 
-    ConversionUtils::setLongToCharArray(datagram, 0, 4); //Should be timestamp
-
-    ConversionUtils::setLongToCharArray(datagram, payloadSize, 12);
-
-    QByteArray body (datagram, getLengthWithoutHeader());
-    return body;
 }

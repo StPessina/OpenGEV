@@ -22,36 +22,25 @@ StreamImageDataLeader::~StreamImageDataLeader()
 
 }
 
-int StreamImageDataLeader::executeAnswer(QByteArray answer)
-{
-    return 0;
-}
-
 quint16 StreamImageDataLeader::getLengthWithoutHeader()
 {
     return 36;
 }
 
-QByteArray StreamImageDataLeader::getPacketDatagramWithoutHeader()
-{
-    char datagram[getLengthWithoutHeader()];
+void StreamImageDataLeader::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+{    
+    ConversionUtils::appendShortToQByteArray(datagram,0);
 
-    datagram[0] = 0; //Field id and field count
-    datagram[1] = 0; //Reserved
+    ConversionUtils::appendShortToQByteArray(datagram, PayloadType::IMAGE);
 
-    ConversionUtils::setShortToCharArray(datagram, PayloadType::IMAGE,2);
+    ConversionUtils::appendLongToQByteArray(datagram, 0); //should be timestamp..
 
-    ConversionUtils::setLongToCharArray(datagram, 0, 4); //should be timestamp..
+    ConversionUtils::appendIntToQByteArray(datagram, pixelFormat);
 
-    ConversionUtils::setIntToCharArray(datagram, pixelFormat, 12);
-
-    ConversionUtils::setIntToCharArray(datagram, sizex, 16);
-    ConversionUtils::setIntToCharArray(datagram, sizey, 20);
-    ConversionUtils::setIntToCharArray(datagram, offsetx, 24);
-    ConversionUtils::setIntToCharArray(datagram, offsety, 28);
-    ConversionUtils::setShortToCharArray(datagram, paddingy, 32);
-    ConversionUtils::setShortToCharArray(datagram, paddingy, 34);
-
-    QByteArray body (datagram, getLengthWithoutHeader());
-    return body;
+    ConversionUtils::appendIntToQByteArray(datagram, sizex);
+    ConversionUtils::appendIntToQByteArray(datagram, sizey);
+    ConversionUtils::appendIntToQByteArray(datagram, offsetx);
+    ConversionUtils::appendIntToQByteArray(datagram, offsety);
+    ConversionUtils::appendShortToQByteArray(datagram, paddingy);
+    ConversionUtils::appendShortToQByteArray(datagram, paddingy);
 }

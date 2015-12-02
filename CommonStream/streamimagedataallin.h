@@ -20,17 +20,15 @@ public:
                           quint32 pixelFormat, quint32 sizex, quint32 sizey,
                           quint32 offsetx, quint32 offsety,
                           quint16 paddingx, quint16 paddingy,
-                          QByteArray data);
+                          const QByteArray &data);
 
     virtual ~StreamImageDataAllIn();
-
-    virtual int executeAnswer(QByteArray answer);
 
 protected:
 
     virtual quint16 getLengthWithoutHeader();
 
-    virtual QByteArray getPacketDatagramWithoutHeader();
+    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
 private:
 
@@ -43,7 +41,7 @@ private:
     quint32 offsetx, offsety;
     quint16 paddingx, paddingy;
 
-    QByteArray data;
+    const QByteArray &data;
 };
 
 

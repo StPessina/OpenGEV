@@ -23,7 +23,7 @@ UdpChannelReceiver::~UdpChannelReceiver()
 
 }
 
-void UdpChannelReceiver::processTheDatagram(QByteArray datagram, QHostAddress sender, quint16 senderPort)
+void UdpChannelReceiver::processTheDatagram(QByteArray &datagram, QHostAddress sender, quint16 senderPort)
 {
     quint16 handlerIdentifier = packetHandlerFactory->getPacketHandlerIdentifier(datagram);
 

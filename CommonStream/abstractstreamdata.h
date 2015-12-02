@@ -40,6 +40,8 @@ public:
      */
     virtual ~AbstractStreamData();
 
+    virtual int executeAnswer(const QByteArray &answer);
+
     /**
      * @brief toString
      * @return string value of the value
@@ -79,12 +81,7 @@ protected:
      * \brief getHeader
      * \return char* with header
      */
-    virtual QByteArray getHeader() final;
-
-    /**
-     * @brief answer received for this command
-     */
-    QByteArray answer;
+    virtual void appendHeader(QByteArray &datagram) final;
 
     quint32 packetId32;
 

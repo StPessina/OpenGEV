@@ -216,7 +216,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
            datapacket->offsetx, datapacket->offsety,
            datapacket->paddingx, datapacket->paddingy);
 
-    streamChannelTransmitter->fastSendCommand(&leader);
+    streamChannelTransmitter->fastSendCommand(leader);
 
     //Delay before start payloads
     dataStreamDelay->start(1);
@@ -227,16 +227,13 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     quint32 lastPacketsDimension = datapacket->dataLength % packetSize;
 
     //send packets
-    QByteArray empty;
-    StreamImageDataPayload payload (destAddress, destPort,
-                                    blockId, 0,
-                                    empty);
     for (quint32 i = 0; i < packetsToSend; ++i) {
         packetId++;
-        payload.renew(packetId,
-                      data.mid((packetId-2)*packetSize,packetSize));
+        StreamImageDataPayload payload (destAddress, destPort,
+                                        blockId, packetId,
+                                        data.mid((packetId-2)*packetSize,packetSize));
 
-        streamChannelTransmitter->fastSendCommand(&payload);
+        streamChannelTransmitter->fastSendCommand(payload);
 
         //CR-491cd delay
         quint32 delay = registers[packetDelayRegCode]->getValue();
@@ -251,8 +248,8 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         packetId++;
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        data.mid((packetId-2)*packetSize,packetSize));
-        streamChannelTransmitter->fastSendCommand(&payload);
+                                        data.mid((packetId-2)*packetSize,lastPacketsDimension));
+        streamChannelTransmitter->fastSendCommand(payload);
     }
 
     //Delay before send data trailer after payloads
@@ -264,7 +261,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     StreamImageDataTrailer trailer(destAddress, destPort,
            blockId, packetId, datapacket->sizey);
 
-    streamChannelTransmitter->fastSendCommand(&trailer);
+    streamChannelTransmitter->fastSendCommand(trailer);
 
     //Increment block id for the next data block
     blockId++;
@@ -294,7 +291,7 @@ int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::P
            datapacket->offsetx, datapacket->offsety,
            datapacket->paddingx, datapacket->paddingy, data);
 
-    streamChannelTransmitter->fastSendCommand(&allInPacket);
+    streamChannelTransmitter->fastSendCommand(allInPacket);
 
     //Increment block id for the next data block
     blockId++;

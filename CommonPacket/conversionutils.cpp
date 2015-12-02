@@ -33,32 +33,32 @@ bool ConversionUtils::setLongToCharArray(char *array, long value, int start)
     return true;
 }
 
-bool ConversionUtils::appendShortToQByteArray(QByteArray *array, short value)
+bool ConversionUtils::appendShortToQByteArray(QByteArray &array, short value)
 {
-    array->append((value >> 8) & 0xFF);
-    array->append(value);
+    array.append((char) (value >> 8) & 0xFF);
+    array.append((char) value);
     return true;
 }
 
-bool ConversionUtils::appendIntToQByteArray(QByteArray *array, int value)
+bool ConversionUtils::appendIntToQByteArray(QByteArray &array, int value)
 {
-    array->append((value >> 24) & 0xFF);
-    array->append((value >> 16) & 0xFF);
-    array->append((value >> 8) & 0xFF);
-    array->append(value);
+    array.append((char) ((value >> 24) & 0xFF));
+    array.append((char) ((value >> 16) & 0xFF));
+    array.append((char) ((value >> 8) & 0xFF));
+    array.append((char) value);
     return true;
 }
 
-bool ConversionUtils::appendLongToQByteArray(QByteArray *array, long value)
+bool ConversionUtils::appendLongToQByteArray(QByteArray &array, long value)
 {
-    array->append((value >> 56) & 0xFF);
-    array->append((value >> 48) & 0xFF);
-    array->append((value >> 40) & 0xFF);
-    array->append((value >> 32) & 0xFF);
-    array->append((value >> 24) & 0xFF);
-    array->append((value >> 16) & 0xFF);
-    array->append((value >> 8) & 0xFF);
-    array->append(value);
+    array.append((char) ((value >> 56) & 0xFF));
+    array.append((char) ((value >> 48) & 0xFF));
+    array.append((char) ((value >> 40) & 0xFF));
+    array.append((char) ((value >> 32) & 0xFF));
+    array.append((char) ((value >> 24) & 0xFF));
+    array.append((char) ((value >> 16) & 0xFF));
+    array.append((char) ((value >> 8) & 0xFF));
+    array.append((char) value);
     return true;
 }
 
@@ -69,7 +69,7 @@ bool ConversionUtils::sanityCheck(int size, int requiredSize, int start)
     return true;
 }
 
-int ConversionUtils::getIntFromQByteArray(QByteArray array, int start)
+int ConversionUtils::getIntFromQByteArray(const QByteArray &array, int start)
 {
     if(!sanityCheck(array.size(), 4, start)) return 0;
 
@@ -81,7 +81,7 @@ int ConversionUtils::getIntFromQByteArray(QByteArray array, int start)
     return valueLSB | (valueC << 8) | (valueB << 16) | (valueMSB << 24);
 }
 
-long ConversionUtils::getLongFromQByteArray(QByteArray array, int start)
+long ConversionUtils::getLongFromQByteArray(const QByteArray &array, int start)
 {
     if(!sanityCheck(array.size(), 8, start)) return 0;
 
@@ -98,7 +98,7 @@ long ConversionUtils::getLongFromQByteArray(QByteArray array, int start)
             (valueD << 32) | (valueC << 40) | (valueB << 48) | (valueMSB << 56);
 }
 
-short ConversionUtils::getShortFromQByteArray(QByteArray array, int start)
+short ConversionUtils::getShortFromQByteArray(const QByteArray &array, int start)
 {
     if(!sanityCheck(array.size(),2,start)) return 0;
 
@@ -108,7 +108,7 @@ short ConversionUtils::getShortFromQByteArray(QByteArray array, int start)
     return valueLSB | (valueMSB << 8);
 }
 
-QString ConversionUtils::getStringFromQByteArray(QByteArray array, int size, int start)
+QString ConversionUtils::getStringFromQByteArray(const QByteArray &array, int size, int start)
 {
     if(!sanityCheck(array.size(), size, start)) return QString("");
 

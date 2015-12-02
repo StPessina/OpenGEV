@@ -21,15 +21,14 @@ quint16 DiscoveryCommand::getLengthWithoutHeader()
     return 0;
 }
 
-QByteArray DiscoveryCommand::getPacketDatagramWithoutHeader()
+void DiscoveryCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
 {
-    QByteArray datagram;
-    return datagram;
+    //Nothing to append
 }
 
-int DiscoveryCommand::executeAnswer(QByteArray answer)
+int DiscoveryCommand::executeAnswer(const QByteArray &answer)
 {
-    this->answer = answer;
+    this->answer = &answer;
     if(!checkAckHeader(answer))
         return getStatusCodeFromAnswer(answer);
 

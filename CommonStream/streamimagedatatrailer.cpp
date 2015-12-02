@@ -14,27 +14,16 @@ StreamImageDataTrailer::~StreamImageDataTrailer()
 
 }
 
-int StreamImageDataTrailer::executeAnswer(QByteArray answer)
-{
-    return 0; //No answer required
-}
-
 quint16 StreamImageDataTrailer::getLengthWithoutHeader()
 {
     return 8;
 }
 
-QByteArray StreamImageDataTrailer::getPacketDatagramWithoutHeader()
+void StreamImageDataTrailer::appendPacketDatagramWithoutHeader(QByteArray &datagram)
 {
-    char datagram[getLengthWithoutHeader()];
+    ConversionUtils::appendShortToQByteArray(datagram, 0); //Reserved
 
-    datagram[0] = 0; //reserved
-    datagram[1] = 0; //reserved
+    ConversionUtils::appendShortToQByteArray(datagram, PayloadType::IMAGE);
 
-    ConversionUtils::setShortToCharArray(datagram, PayloadType::IMAGE, 2);
-
-    ConversionUtils::setIntToCharArray(datagram, sizey, 4);
-
-    QByteArray body (datagram,getLengthWithoutHeader());
-    return body;
+    ConversionUtils::appendIntToQByteArray(datagram, sizey);
 }

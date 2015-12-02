@@ -29,7 +29,7 @@ public:
      * @param requireAck if this message require ack
      * @param broadcast if this message is a broadcast message
      */
-    AbstractPacket(GVComponent* target, QHostAddress destAddress, quint16 destPort,
+    AbstractPacket(GVComponent* const target, QHostAddress destAddress, quint16 destPort,
                    quint16 reqId, bool requireAck, bool broadcast);
 
     /**
@@ -41,7 +41,7 @@ public:
      * @brief getCommandDatagram method
      * @return the datagram of the command
      */
-    virtual QByteArray getPacketDatagram() final;
+    virtual const QByteArray& getPacketDatagram() final;
 
     /**
      * @brief getDestinationAddress method
@@ -83,14 +83,14 @@ public:
      * @brief setAnswer
      * @param answer
      */
-    virtual void setAnswer(QByteArray answer) final;
+    virtual void setAnswer(const QByteArray &answer) final;
 
     /**
      * @brief executeAnswer method
      * @param answer received for the command
      * @return 0 if the answer is processed and executed successfully
      */
-    virtual int executeAnswer(QByteArray answer) = 0;
+    virtual int executeAnswer(const QByteArray &answer) = 0;
 
     /**
      * @brief toString
@@ -106,10 +106,21 @@ protected:
     GVComponent* target;
 
     /**
+     * @brief fixed reference to datagram
+     */
+    QByteArray datagram;
+
+    /**
      * @brief getLengthWithoutHeader
      * @return length of the command request
      */
     virtual quint16 getHeaderLength() = 0;
+
+    /*!
+     * \brief getHeader
+     * \return QByteArray with header
+     */
+    virtual void appendHeader(QByteArray &datagram) = 0;
 
     /**
      * @brief getLengthWithoutHeader
@@ -121,7 +132,7 @@ protected:
      * @brief getCommandDatagramWithoutHeader
      * @return the command datagram
      */
-    virtual QByteArray getPacketDatagramWithoutHeader() = 0;
+    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram) = 0;
 
     /**
      * @brief haveAnswer method
@@ -133,19 +144,14 @@ protected:
      * @brief getAnswer method
      * @return the answer received for this command, null if no answer is received
      */
-    virtual QByteArray getAnswer() final;
+    virtual const QByteArray* getAnswer() final;
 
-protected:
     /**
      * @brief answer received for this command
      */
-    QByteArray answer;
+    const QByteArray *answer;
 
-    /*!
-     * \brief getHeader
-     * \return QByteArray with header
-     */
-    virtual QByteArray getHeader() = 0;
+
 
 private:
 

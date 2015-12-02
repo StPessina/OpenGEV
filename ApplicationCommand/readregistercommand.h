@@ -55,14 +55,14 @@ public:
      * @brief getCommandDatagramWithoutHeader method
      * @return datagram
      */
-    QByteArray getPacketDatagramWithoutHeader();
+    void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
     /**
      * @brief executeAnswer method will execute the command on the target
      * @param answer datagram received from a devices
      * @return 0 if the command is successfully executed
      */
-    int executeAnswer(QByteArray answer);
+    int executeAnswer(const QByteArray &answer);
 
     /**
      * @brief getRegisterValue

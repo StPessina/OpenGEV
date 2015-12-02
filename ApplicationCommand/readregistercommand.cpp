@@ -29,21 +29,16 @@ quint16 ReadRegisterCommand::getLengthWithoutHeader()
     return registersData.size()*4;
 }
 
-QByteArray ReadRegisterCommand::getPacketDatagramWithoutHeader()
+void ReadRegisterCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
 {
     //R-163c
-    QByteArray datagram;
-    datagram.reserve(getLengthWithoutHeader());
-
     foreach (auto reg, registersData)
-        ConversionUtils::appendIntToQByteArray(&datagram,reg.first);
-
-    return datagram;
+        ConversionUtils::appendIntToQByteArray(datagram,reg.first);
 }
 
-int ReadRegisterCommand::executeAnswer(QByteArray answer)
+int ReadRegisterCommand::executeAnswer(const QByteArray &answer)
 {
-    this->answer = answer;
+    this->answer = &answer;
     if(!checkAckHeader(answer))
         return 1;
 

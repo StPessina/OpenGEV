@@ -7,13 +7,13 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address, quint16 port)
                                             true);
     streamReceiver->initSocket();
 
-    streamData = new PixelMap<Pixel<2>>::Ptr[30];
+    streamData = new PixelMap<Pixel<2>>::Ptr[streamDataCacheSize];
 
-    blockId = new quint64[30];
+    blockId = new quint64[streamDataCacheSize];
     for (int i = 0; i < streamDataCacheSize; ++i)
         blockId[i]=-1;
 
-    packetId = new quint32[30];
+    packetId = new quint32[streamDataCacheSize];
     for (int i = 0; i < streamDataCacheSize; ++i)
         packetId[i]=0;
 }

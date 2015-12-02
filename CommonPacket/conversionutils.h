@@ -48,7 +48,7 @@ public:
      * @param start
      * @return true if the value is set
      */
-    static bool appendShortToQByteArray(QByteArray *array, short value);
+    static bool appendShortToQByteArray(QByteArray &array, short value);
 
     /**
      * @brief setIntToQByteArray write integer value from a char array
@@ -57,7 +57,7 @@ public:
      * @param start
      * @return true if no out of bound
      */
-    static bool appendIntToQByteArray(QByteArray *array, int value);
+    static bool appendIntToQByteArray(QByteArray &array, int value);
 
     /**
      * @brief setLongToQByteArray write long value from a char array
@@ -66,7 +66,7 @@ public:
      * @param start
      * @return true if no out of bound
      */
-    static bool appendLongToQByteArray(QByteArray *array, long value);
+    static bool appendLongToQByteArray(QByteArray &array, long value);
 
     /**
      * @brief getIntFromQByteArray read integer value from a QByteArray
@@ -74,7 +74,7 @@ public:
      * @param start
      * @return the unsigned short value if no out of bound
      */
-    static short getShortFromQByteArray(QByteArray array, int start=0);
+    static short getShortFromQByteArray(const QByteArray &array, int start=0);
 
     /**
      * @brief getIntFromQByteArray read integer value from a QByteArray
@@ -82,7 +82,7 @@ public:
      * @param start
      * @return the integer value if no out of bound
      */
-    static int getIntFromQByteArray(QByteArray array, int start=0);
+    static int getIntFromQByteArray(const QByteArray &array, int start=0);
 
     /**
      * @brief getLongFromQByteArray read long value from a QByteArray
@@ -90,7 +90,7 @@ public:
      * @param start
      * @return the long value if no out of bound
      */
-    static long getLongFromQByteArray(QByteArray array, int start=0);
+    static long getLongFromQByteArray(const QByteArray &array, int start=0);
 
     /**
      * @brief getStringFromQByteArray read string from QByteArray
@@ -99,7 +99,7 @@ public:
      * @param start
      * @return string value if no out of bound
      */
-    static QString getStringFromQByteArray(QByteArray array, int size, int start=0);
+    static QString getStringFromQByteArray(const QByteArray &array, int size, int start=0);
 
 
 private:

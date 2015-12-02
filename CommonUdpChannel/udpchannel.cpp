@@ -44,7 +44,6 @@ std::string UDPChannel::getLogMessageHeader()
 void UDPChannel::readPendingDatagrams()
 {
     while (socket->hasPendingDatagrams()) {
-        QByteArray datagram;
         datagram.resize(socket->pendingDatagramSize());
         QHostAddress sender;
         quint16 senderPort;

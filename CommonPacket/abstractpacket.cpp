@@ -1,6 +1,6 @@
 #include "abstractpacket.h"
 
-AbstractPacket::AbstractPacket(GVComponent *target, QHostAddress destAddress, quint16 destPort,
+AbstractPacket::AbstractPacket(GVComponent * const target, QHostAddress destAddress, quint16 destPort,
                                quint16 reqId, bool requireAck, bool broadcast)
 {
     this->target = target;
@@ -16,20 +16,13 @@ AbstractPacket::~AbstractPacket()
 
 }
 
-QByteArray AbstractPacket::getPacketDatagram()
+const QByteArray &AbstractPacket::getPacketDatagram()
 {
-    int datagramSize = getHeaderLength() + getLengthWithoutHeader(); //8 byte for header
-    char datagramChar[datagramSize];
-    QByteArray header = getHeader();
-    for (int i = 0; i < getHeaderLength(); ++i)
-        datagramChar[i]=header.at(i);
-    if(datagramSize>getHeaderLength()) {
-        QByteArray body = getPacketDatagramWithoutHeader();
-        for (int i = getHeaderLength(); i < datagramSize; ++i)
-            datagramChar[i]=body.at(i-getHeaderLength());
-    }
+    datagram.clear();
+    datagram.reserve(getHeaderLength()+getLengthWithoutHeader());
 
-    QByteArray datagram(datagramChar, datagramSize);
+    appendHeader(datagram);
+    appendPacketDatagramWithoutHeader(datagram);
     return datagram;
 }
 
@@ -63,9 +56,9 @@ bool AbstractPacket::isBroadcastMessage()
     return broadcast;
 }
 
-void AbstractPacket::setAnswer(QByteArray answer)
+void AbstractPacket::setAnswer(const QByteArray &answer)
 {
-    this->answer = answer;
+    this->answer = &answer;
 }
 
 bool AbstractPacket::haveAnswer()
@@ -73,7 +66,7 @@ bool AbstractPacket::haveAnswer()
     return answer!=NULL;
 }
 
-QByteArray AbstractPacket::getAnswer()
+const QByteArray *AbstractPacket::getAnswer()
 {
     return answer;
 }

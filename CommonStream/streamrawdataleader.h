@@ -17,15 +17,13 @@ public:
 
     virtual ~StreamRawDataLeader();
 
-    virtual int executeAnswer(QByteArray answer);
-
     virtual quint64 getPayloadSize() final;
 
 protected:
 
     virtual quint16 getLengthWithoutHeader();
 
-    virtual QByteArray getPacketDatagramWithoutHeader();
+    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
 private:
     quint64 payloadSize;

@@ -89,7 +89,9 @@ public:
      */
     bool setActionControlAccessKey(int key);
 
-    bool setStreamChannelDelay(int channel, int delay);
+    bool setStreamChannelDelay(int channel, quint32 delay);
+
+    bool setStreamChannelPacketLength(int channel, quint32 size);
 
 private:
 
