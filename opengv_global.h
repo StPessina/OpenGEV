@@ -14,4 +14,6 @@
 #define SPEC_VERSION_MINOR 2
 #define SPEC_VERSION_MAJOR 2
 
+//#define ENABLE_LOG4CPP 1
+
 #endif // OPENGV_GLOBAL_H

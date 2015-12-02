@@ -18,7 +18,7 @@ bool DeviceCommandHandlerFactory::isValidCode(quint16 handlerIdentifier)
     return false;
 }
 
-AbstractCommandHandler *DeviceCommandHandlerFactory::createPacketHandler(quint16 handlerIdentifier, QByteArray datagram,
+AbstractCommandHandler *DeviceCommandHandlerFactory::createPacketHandler(quint16 handlerIdentifier, const QByteArray &datagram,
                                                                    QHostAddress senderAddress, quint16 senderPort)
 {
     switch (handlerIdentifier) {

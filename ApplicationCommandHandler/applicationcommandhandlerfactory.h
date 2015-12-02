@@ -41,7 +41,7 @@ public:
      * @return a message handler if exist, or generic message non supported handler
      */
     AbstractCommandHandler *createPacketHandler(quint16 handlerIdentifier,
-                                                 QByteArray datagram,
+                                                 const QByteArray &datagram,
                                                  QHostAddress senderAddress,
                                                  quint16 senderPort);
 };

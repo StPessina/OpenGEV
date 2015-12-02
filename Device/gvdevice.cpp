@@ -274,9 +274,11 @@ void GVDevice::initNetworkRegisters()
         if(!(bool)(interface.flags() & QNetworkInterface::IsLoopBack)
                 && interface.hardwareAddress().compare("00:00:00:00:00:00")!=0) {
                 if(interface.addressEntries().size()!=0) { //Check if interface is connected
+#ifdef ENABLE_LOG4CPP
                     logger.debugStream()<<"GVDevice adding network connected interface #"<<to_string(interfaceNumber)
                                        <<"; Name:"<<interface.name().toStdString()
                                        <<"; MAC:"<<interface.hardwareAddress().toStdString();
+#endif
                     networkRegister[interfaceNumber] = new NetworkInterfaceRegisters(interface, interfaceNumber);
                     interfaceNumber++;
                 } else {
@@ -288,9 +290,11 @@ void GVDevice::initNetworkRegisters()
     commonRegisters[REG_NR_ACTIVE_LINKS]->setValue(interfaceNumber+1); //Number of active links R-455cd
 
     foreach (QNetworkInterface interface, validNotConnected) {
+#ifdef ENABLE_LOG4CPP
         logger.debugStream()<<"GVDevice adding network NOT connected interface #"<<to_string(interfaceNumber)
                            <<"; Name:"<<interface.name().toStdString()
                            <<"; MAC:"<<interface.hardwareAddress().toStdString();
+#endif
         networkRegister[interfaceNumber] = new NetworkInterfaceRegisters(interface, interfaceNumber);
         interfaceNumber++;
     }

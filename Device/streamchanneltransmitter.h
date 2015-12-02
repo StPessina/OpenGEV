@@ -6,6 +6,7 @@
 #include <map>
 #include <math.h>
 
+#include "opengv_global.h"
 
 #include "CommonBootstrapRegister/bootstrapregister.h"
 
@@ -85,7 +86,9 @@ private:
 
     UDPChannelTransmitter* streamChannelTransmitter;
 
+#ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
+#endif
 
     void setupStardardRegistersValue();
 

@@ -8,7 +8,9 @@
 
 #include <QTimer>
 
-#include <log4cpp/Category.hh>
+#ifdef ENABLE_LOG4CPP
+    #include <log4cpp/Category.hh>
+#endif
 
 #include "CommonCommand/abstractcommandhandlerfactory.h"
 #include "CommonUdpChannel/controlchannelprivilege.h"
@@ -106,6 +108,7 @@ protected:
      */
     QUdpSocket* socket;
 
+#ifdef ENABLE_LOG4CPP
     /**
      * @brief logger
      */
@@ -116,6 +119,7 @@ protected:
      * @return header for log message
      */
     std::string getLogMessageHeader();
+#endif
 
     /**
      * @brief timeoutTimer

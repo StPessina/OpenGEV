@@ -46,8 +46,12 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
                                            offsetx, offsety,
                                            paddingx, paddingy);
         this->packetId[i] = 1;
-    } else
+    }
+#ifdef ENABLE_LOG4CPP
+    else
         logger.warnStream()<<"Stream was already open "<<blockId;
+#endif
+
 }
 
 /*
@@ -109,8 +113,11 @@ void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
         //freeStreamData(i);
         lastClosedStream=i;
         emit newStreamDataAvailable();
-    } else
+    }
+#ifdef ENABLE_LOG4CPP
+    else
         logger.warnStream()<<"Stream was not open "<<blockId<<" "<<packetId;
+#endif
 }
 
 PixelMap<Pixel<2>>::Ptr StreamDataReceiver::getStreamData()

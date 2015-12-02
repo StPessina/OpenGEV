@@ -32,7 +32,7 @@ public:
      */
     virtual ~StreamImageDataHandlerFactory();
 
-    int getPacketHandlerIdentifier(QByteArray datagram) final;
+    int getPacketHandlerIdentifier(const QByteArray &datagram) final;
 
     /**
      * @brief isValidCode method check if a messageCode has a specific messageHandler
@@ -50,7 +50,7 @@ public:
      * @return a message handler if exist, or generic message non supported handler
      */
     AbstractStreamDataHandler *createPacketHandler(quint16 handlerIdentifier,
-                                                 QByteArray datagram,
+                                                 const QByteArray &datagram,
                                                  QHostAddress senderAddress,
                                                  quint16 senderPort);
 };

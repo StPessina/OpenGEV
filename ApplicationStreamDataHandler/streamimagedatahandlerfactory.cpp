@@ -10,7 +10,7 @@ StreamImageDataHandlerFactory::~StreamImageDataHandlerFactory()
 
 }
 
-int StreamImageDataHandlerFactory::getPacketHandlerIdentifier(QByteArray datagram)
+int StreamImageDataHandlerFactory::getPacketHandlerIdentifier(const QByteArray &datagram)
 {
     return AbstractStreamDataHandler::readRequestPacketFormat(datagram);
 }
@@ -31,7 +31,7 @@ bool StreamImageDataHandlerFactory::isValidCode(quint16 handlerIdentifier)
 }
 
 AbstractStreamDataHandler *StreamImageDataHandlerFactory::createPacketHandler(quint16 handlerIdentifier,
-                                                                               QByteArray datagram,
+                                                                               const QByteArray &datagram,
                                                                                QHostAddress senderAddress,
                                                                                quint16 senderPort)
 {

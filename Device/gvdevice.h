@@ -159,7 +159,9 @@ private:
      */
     unordered_map<int,StreamChannelTransmitter*> streamChannels;
 
+#ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");
+#endif
 
     /**
      * @brief initCommonRegisterMap

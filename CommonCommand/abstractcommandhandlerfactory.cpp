@@ -11,7 +11,7 @@ AbstractCommandHandlerFactory::~AbstractCommandHandlerFactory()
 
 }
 
-int AbstractCommandHandlerFactory::getPacketHandlerIdentifier(QByteArray datagram)
+int AbstractCommandHandlerFactory::getPacketHandlerIdentifier(const QByteArray &datagram)
 {
     if(datagram.size()<5)
         return -1;

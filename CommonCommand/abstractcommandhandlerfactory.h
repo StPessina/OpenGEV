@@ -25,7 +25,7 @@ public:
      */
     virtual ~AbstractCommandHandlerFactory();
 
-    int getPacketHandlerIdentifier(QByteArray datagram) final;
+    int getPacketHandlerIdentifier(const QByteArray &datagram) final;
 
     /**
      * @brief isValidCode check if a message code exist
@@ -43,7 +43,7 @@ public:
      * @return message handler for the requested message code
      */
     virtual AbstractCommandHandler *createPacketHandler(quint16 handlerIdentifier,
-                                                         QByteArray datagram,
+                                                         const QByteArray &datagram,
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;
 

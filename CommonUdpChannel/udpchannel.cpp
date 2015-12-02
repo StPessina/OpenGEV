@@ -8,7 +8,9 @@ UDPChannel::UDPChannel(QHostAddress sourceAddr,
 
     this->timeoutTimer=new QTimer(this);
 
+#ifdef ENABLE_LOG4CPP
     logger.infoStream()<<getLogMessageHeader()<<"New";
+#endif
 }
 
 UDPChannel::~UDPChannel()
@@ -25,21 +27,27 @@ bool UDPChannel::initSocket()
 
         connect(socket, SIGNAL(readyRead()),
                 this, SLOT(readPendingDatagrams()));
-
+#ifdef ENABLE_LOG4CPP
         logger.infoStream()<<getLogMessageHeader()<<"Socket bind successful";
+#endif
+
         return true;
     } else {
+#ifdef ENABLE_LOG4CPP
         logger.errorStream()<<getLogMessageHeader()<<"Can't init socket";
+#endif
         return false;
     }
 }
 
+#ifdef ENABLE_LOG4CPP
 std::string UDPChannel::getLogMessageHeader()
 {
     return "Control channel ("
             + sourceAddr.toString().toStdString()
             + ":" + std::to_string((int) sourcePort) + ") - ";
 }
+#endif
 
 void UDPChannel::readPendingDatagrams()
 {
@@ -50,12 +58,13 @@ void UDPChannel::readPendingDatagrams()
 
         socket->readDatagram(datagram.data(), datagram.size(),
                              &sender, &senderPort);
-
+#ifdef ENABLE_LOG4CPP
         logger.debugStream()<<getLogMessageHeader()<<"New datagram received from "
                            <<sender.toString().toStdString()
                           <<":"<<(int) senderPort<<"; "
                          //<<"datagram: "<<datagram.toHex().data()<<" "
                         <<"size: "<<datagram.size()<<" Byte";
+#endif
 
         processTheDatagram(datagram, sender, senderPort);
     }

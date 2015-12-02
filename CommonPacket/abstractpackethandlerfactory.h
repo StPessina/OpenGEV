@@ -28,7 +28,7 @@ public:
      * @param datagram
      * @return identifier of packet from datagram
      */
-    virtual int getPacketHandlerIdentifier(QByteArray datagram) = 0;
+    virtual int getPacketHandlerIdentifier(const QByteArray &datagram) = 0;
 
     /**
      * @brief isValidCode check if a message code exist
@@ -46,7 +46,7 @@ public:
      * @return message handler for the requested message code
      */
     virtual AbstractPacketHandler *createPacketHandler(quint16 handlerIdentifier,
-                                                         QByteArray datagram,
+                                                         const QByteArray &datagram,
                                                          QHostAddress senderAddress,
                                                          quint16 senderPort) = 0;
 

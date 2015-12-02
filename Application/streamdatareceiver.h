@@ -2,6 +2,7 @@
 #define STREAMDATARECEIVER_H
 
 #include <QObject>
+#include <iostream>
 
 #include "CommonComponent/gvcomponent.h"
 
@@ -74,7 +75,9 @@ private:
 
     bool blockOpen;
 
+#ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("StreamReceiverLog");
+#endif
 
     quint32 pixelFormat, sizex, sizey;
     quint32 offsetx, offsety;

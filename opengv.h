@@ -4,7 +4,9 @@
 #include "opengv_global.h"
 #include "iostream"
 
-#include <log4cpp/PropertyConfigurator.hh>
+#ifdef ENABLE_LOG4CPP
+    #include <log4cpp/PropertyConfigurator.hh>
+#endif
 
 class OPENGVSHARED_EXPORT OpenGV
 {
@@ -15,7 +17,9 @@ public:
     static void configure();
 
 private:
+#ifdef ENABLE_LOG4CPP
     static void initLog4cpp();
+#endif
 };
 
 #endif // OPENGV_H

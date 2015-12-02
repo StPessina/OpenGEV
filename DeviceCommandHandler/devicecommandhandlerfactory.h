@@ -21,7 +21,7 @@ public:
     bool isValidCode(quint16 messageCode);
 
     AbstractCommandHandler *createPacketHandler(quint16 messageCode,
-                                                 QByteArray datagram,
+                                                 const QByteArray &datagram,
                                                  QHostAddress senderAddress,
                                                  quint16 senderPort);
 };

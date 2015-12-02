@@ -16,7 +16,7 @@ bool ApplicationCommandHandlerFactory::isValidCode(quint16 handlerIdentifier)
 }
 
 AbstractCommandHandler *ApplicationCommandHandlerFactory::createPacketHandler(quint16 handlerIdentifier,
-                                                                               QByteArray datagram,
+                                                                               const QByteArray &datagram,
                                                                                QHostAddress senderAddress,
                                                                                quint16 senderPort)
 {

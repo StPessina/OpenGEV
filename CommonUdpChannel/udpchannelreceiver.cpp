@@ -29,10 +29,12 @@ void UdpChannelReceiver::processTheDatagram(QByteArray &datagram, QHostAddress s
 
 
     if(!packetHandlerFactory->isValidCode(handlerIdentifier)) {
+#ifdef ENABLE_LOG4CPP
         logger.warnStream()<<getLogMessageHeader()
                           <<"Unknow handler identifier "
                          <<"Datagram: "<<datagram.toHex().data()<<" "
                         <<"Datagram size: "<<datagram.size();
+#endif
         return;
     }
 
@@ -45,25 +47,34 @@ void UdpChannelReceiver::processTheDatagram(QByteArray &datagram, QHostAddress s
             if(packetHandler->isAckAllowed()) {
                 QByteArray ackDatagram = packetHandler->getAckDatagram();
                 socket->writeDatagram(ackDatagram, sender, senderPort);
+#ifdef ENABLE_LOG4CPP
                 logger.debugStream()<<getLogMessageHeader()
                                    <<"Ack sent "
                                   <<"("<<packetHandler->toString()<<") "
                                  <<"Ack datagram: "<<ackDatagram.toHex().data()<<" "
                                 <<"Ack datagram size: "<<ackDatagram.size();
+#endif
                 ackDatagram.clear();
-            } else
+            }
+#ifdef ENABLE_LOG4CPP
+            else
                 logger.debugStream()<<getLogMessageHeader()
                                    <<"Ack not allowed from msg handler "
                                   <<"("<<packetHandler->toString()<<") "
                                  <<"Datagram: "<<datagram.toHex().data()<<" "
                                 <<"Datagram size: "<<datagram.size();
-        } else {
+#endif
+        }
+
+#ifdef ENABLE_LOG4CPP
+        else {
             logger.debugStream()<<getLogMessageHeader()
                                <<"Ack not required "
                               <<"("<<packetHandler->toString()<<") "
                                 //<<"Datagram: "<<datagram.toHex().data()<<" "
                              <<"Datagram size: "<<datagram.size();
         }
+#endif
     }
 
     delete packetHandler;
