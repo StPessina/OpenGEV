@@ -13,7 +13,6 @@ AbstractPacket::AbstractPacket(GVComponent * const target, QHostAddress destAddr
 
 AbstractPacket::~AbstractPacket()
 {
-
 }
 
 const QByteArray &AbstractPacket::getPacketDatagram()

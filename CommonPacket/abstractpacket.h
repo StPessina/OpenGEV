@@ -106,11 +106,6 @@ protected:
     GVComponent* target;
 
     /**
-     * @brief fixed reference to datagram
-     */
-    QByteArray datagram;
-
-    /**
      * @brief getLengthWithoutHeader
      * @return length of the command request
      */
@@ -154,6 +149,11 @@ protected:
 
 
 private:
+
+    /**
+     * @brief fixed reference to datagram
+     */
+    QByteArray datagram;
 
     /**
      * @brief destAddress the destination address

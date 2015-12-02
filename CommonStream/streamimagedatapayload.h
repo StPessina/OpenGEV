@@ -14,7 +14,7 @@ public:
 
     StreamImageDataPayload(QHostAddress destAddress, quint16 destPort,
                          quint64 blockId64, quint32 packetId32,
-                         const QByteArray &data);
+                         const char *payload, quint32 dataLength);
 
     //virtual void renew(quint32 packetId32, QByteArray data);
 
@@ -26,10 +26,11 @@ protected:
 
     virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
-
 private:
 
-    const QByteArray &data;
+    const char *payload;
+
+    quint32 dataLength;
 };
 
 #endif // STREAMIMAGEDATAPAYLOAD_H

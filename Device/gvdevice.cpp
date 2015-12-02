@@ -55,7 +55,7 @@ BootstrapRegister *GVDevice::getRegister(int registerCode)
 
     //Stream registers
     if(registerCode>=0x0D00) {
-        int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
+        quint32 channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
         if(channelNumber<streamChannels.size())
             return NULL;
         return streamChannels.at(channelNumber)->getRegisterByAbsoluteRegCode(registerCode);
@@ -85,7 +85,7 @@ Status GVDevice::setRegister(int registerCode, int value, QHostAddress senderAdd
 
     //Stream registers
     if(registerCode>=0x0D00) {
-        int channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
+        quint32 channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
         if(channelNumber>=streamChannels.size())
             return GEV_STATUS_INVALID_ADDRESS;
         return streamChannels.at(channelNumber)->setRegister(registerCode, value, senderAddr, senderPort);

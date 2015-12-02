@@ -205,7 +205,8 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
-    QByteArray data = datapacket->getImagePixelData();
+    //QByteArray data = datapacket->getImagePixelData();
+    const char* data = datapacket->getImagePixelData();
 
     //Send data leader packet
     quint32 packetId=1;
@@ -231,7 +232,8 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         packetId++;
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        data.mid((packetId-2)*packetSize,packetSize));
+                                        //data.mid((packetId-2)*packetSize,packetSize));
+                                        &data[(packetId-2)*packetSize],packetSize);
 
         streamChannelTransmitter->fastSendCommand(payload);
 
@@ -248,7 +250,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         packetId++;
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        data.mid((packetId-2)*packetSize,lastPacketsDimension));
+                                        &data[(packetId-2)*packetSize],lastPacketsDimension);
         streamChannelTransmitter->fastSendCommand(payload);
     }
 
@@ -278,10 +280,12 @@ int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::P
         return 0;
 
     //CR-489cd
+    /*
     quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
             -20 //bytes IP header
             -8 //bytes UDP header
             -20; //bytes for GVSP header
+    */
 
     QByteArray data = datapacket->getImagePixelData();
 

@@ -71,7 +71,7 @@ struct PixelMap {
         lastId+=bytePerPixel;
     }
 
-    char* getImagePixelData() {
+    const char* getImagePixelData() {
         return (char*) data;
     } 
 };

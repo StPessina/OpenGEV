@@ -2,10 +2,10 @@
 
 StreamImageDataPayload::StreamImageDataPayload(QHostAddress destAddress, quint16 destPort,
                                            quint64 blockId64, quint32 packetId32,
-                                           const QByteArray &data)
+                                           const char *payload, quint32 dataLength)
     : AbstractStreamData(destAddress, destPort, PacketFormat::DATA_PAYLOAD_GENIRIC_FORMAT,
                          blockId64, packetId32),
-      data(data)
+      payload(payload), dataLength(dataLength)
 {
 }
 
@@ -25,10 +25,12 @@ StreamImageDataPayload::~StreamImageDataPayload()
 
 quint16 StreamImageDataPayload::getLengthWithoutHeader()
 {
-    return data.size();
+    return dataLength;
+    //return payload.size();
 }
 
 void StreamImageDataPayload::appendPacketDatagramWithoutHeader(QByteArray &datagram)
 {
-    datagram.append(data);
+
+    datagram.append(payload,getLengthWithoutHeader());
 }
