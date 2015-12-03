@@ -2,8 +2,18 @@
 
 GVApplication::GVApplication(int primaryChannelport)
 {
-    masterChannel = new UDPChannelTransmitter(QHostAddress::Any, primaryChannelport);
+#ifdef USE_QT_SOCKET
+    masterChannel = new QtUDPChannel(QHostAddress::Any, primaryChannelport);
+#endif
+#ifdef USE_BOOST_SOCKET
+    masterChannel = new BoostUDPChannel(QHostAddress::Any, primaryChannelport);
+#endif
+#ifdef USE_OSAPI_SOCKET
+    masterChannel = new OSAPIUDPChannel(QHostAddress::Any, primaryChannelport);
+#endif
     masterChannel->initSocket();
+    masterChannel->start();
+
 
 }
 
@@ -33,7 +43,7 @@ int GVApplication::discoverDevice()
 {
     QHostAddress address("255.255.255.255");
     DiscoveryCommand dis (this, address, CONTROL_CHANNEL_DEF_PORT);
-    int result = masterChannel->sendCommand(dis);
+    int result = masterChannel->sendPacket(dis);
     return result;
 }
 

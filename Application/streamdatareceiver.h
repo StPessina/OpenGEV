@@ -6,7 +6,15 @@
 
 #include "CommonComponent/gvcomponent.h"
 
-#include "CommonUdpChannel/udpchannelreceiver.h"
+#ifdef USE_QT_SOCKET
+    #include "CommonUdpChannel/qtudpchannel.h"
+#endif
+#ifdef USE_BOOST_SOCKET
+    #include "CommonUdpChannel/boostudpchannel.h"
+#endif
+#ifdef USE_OSAPI_SOCKET
+    #include "CommonUdpChannel/osapiudpchannel.h"
+#endif
 
 #include "CommonStreamImageFormat/PixelMap.h"
 
@@ -65,7 +73,8 @@ signals:
     void newStreamDataAvailable();
 
 private:
-    UdpChannelReceiver* streamReceiver;
+
+    UDPChannel* streamReceiver;
 
     PixelMap<Pixel<2>>::Ptr* streamData;
     quint64* blockId;

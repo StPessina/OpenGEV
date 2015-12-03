@@ -3,7 +3,7 @@
 
 #include "opengv_global.h"
 
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
     #include <log4cpp/Category.hh>
 #endif
 
@@ -25,7 +25,7 @@ public:
 
 protected:
 
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
     /**
      * @brief logger
      */

@@ -10,7 +10,15 @@
 
 #include "CommonBootstrapRegister/bootstrapregister.h"
 
-#include "CommonUdpChannel/udpchanneltransmitter.h"
+#ifdef USE_QT_SOCKET
+    #include "CommonUdpChannel/qtudpchannel.h"
+#endif
+#ifdef USE_BOOST_SOCKET
+    #include "CommonUdpChannel/boostudpchannel.h"
+#endif
+#ifdef USE_OSAPI_SOCKET
+    #include "CommonUdpChannel/osapiudpchannel.h"
+#endif
 
 #include "CommonStream/streamimagedataleader.h"
 #include "CommonStream/streamimagedatapayload.h"
@@ -84,7 +92,7 @@ private:
      */
     void initRegisterMap();
 
-    UDPChannelTransmitter* streamChannelTransmitter;
+    UDPChannel* streamChannelTransmitter;
 
 #ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("ComponentLog");

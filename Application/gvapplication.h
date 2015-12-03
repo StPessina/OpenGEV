@@ -5,7 +5,15 @@
 
 #include "CommonComponent/gvcomponent.h"
 
-#include "CommonUdpChannel/udpchanneltransmitter.h"
+#ifdef USE_QT_SOCKET
+    #include "CommonUdpChannel/qtudpchannel.h"
+#endif
+#ifdef USE_BOOST_SOCKET
+    #include "CommonUdpChannel/boostudpchannel.h"
+#endif
+#ifdef USE_OSAPI_SOCKET
+    #include "CommonUdpChannel/osapiudpchannel.h"
+#endif
 
 #include "Application/partnerdevice.h"
 
@@ -64,7 +72,7 @@ private:
     /**
      * @brief masterChannel is broadcast control channel
      */
-    UDPChannelTransmitter* masterChannel;
+    UDPChannel* masterChannel;
 
 };
 

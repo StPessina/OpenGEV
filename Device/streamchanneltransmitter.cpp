@@ -85,8 +85,19 @@ void StreamChannelTransmitter::openStreamChannel(QHostAddress destAddress, quint
 
     BootstrapRegister* gvspSCPD = registers[sourcePortRegCode];
 
-    streamChannelTransmitter = new UDPChannelTransmitter(QHostAddress::Any, gvspSCPD->getValue());
+#ifdef USE_QT_SOCKET
+    streamChannelTransmitter = new QtUDPChannel(QHostAddress::Any, gvspSCPD->getValue());
+#endif
+#ifdef USE_BOOST_SOCKET
+    streamChannelTransmitter = new BoostUDPChannel(QHostAddress::Any, gvspSCPD->getValue());
+#endif
+#ifdef USE_OSAPI_SOCKET
+    streamChannelTransmitter = new OSAPIUDPChannel(QHostAddress::Any, gvspSCPD->getValue());
+#endif
+
     streamChannelTransmitter->initSocket();
+    streamChannelTransmitter->start();
+
 
     BootstrapRegister* gvspSCP = registers[channelPortRegCode];
 
@@ -217,7 +228,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
            datapacket->offsetx, datapacket->offsety,
            datapacket->paddingx, datapacket->paddingy);
 
-    streamChannelTransmitter->fastSendCommand(leader);
+    streamChannelTransmitter->fastSendPacket(leader);
 
     //Delay before start payloads
     dataStreamDelay->start(1);
@@ -235,7 +246,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
                                         //data.mid((packetId-2)*packetSize,packetSize));
                                         &data[(packetId-2)*packetSize],packetSize);
 
-        streamChannelTransmitter->fastSendCommand(payload);
+        streamChannelTransmitter->fastSendPacket(payload);
 
         //CR-491cd delay
         quint32 delay = registers[packetDelayRegCode]->getValue();
@@ -251,7 +262,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
                                         &data[(packetId-2)*packetSize],lastPacketsDimension);
-        streamChannelTransmitter->fastSendCommand(payload);
+        streamChannelTransmitter->fastSendPacket(payload);
     }
 
     //Delay before send data trailer after payloads
@@ -263,7 +274,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     StreamImageDataTrailer trailer(destAddress, destPort,
            blockId, packetId, datapacket->sizey);
 
-    streamChannelTransmitter->fastSendCommand(trailer);
+    streamChannelTransmitter->fastSendPacket(trailer);
 
     //Increment block id for the next data block
     blockId++;
@@ -295,7 +306,7 @@ int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::P
            datapacket->offsetx, datapacket->offsety,
            datapacket->paddingx, datapacket->paddingy, data);
 
-    streamChannelTransmitter->fastSendCommand(allInPacket);
+    streamChannelTransmitter->fastSendPacket(allInPacket);
 
     //Increment block id for the next data block
     blockId++;

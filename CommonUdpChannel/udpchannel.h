@@ -1,24 +1,24 @@
-#ifndef CONTROLCHANNEL_H
-#define CONTROLCHANNEL_H
+#ifndef UDPSOCKET_H
+#define UDPSOCKET_H
 
-#include <QObject>
-
-#include <QUdpSocket>
-#include <QHostAddress>
+#include <QThread>
 
 #include <QTimer>
+#include <QEventLoop>
 
-#ifdef ENABLE_LOG4CPP
-    #include <log4cpp/Category.hh>
-#endif
+#include <QHostAddress>
+#include <QByteArray>
 
-#include "CommonCommand/abstractcommandhandlerfactory.h"
-#include "CommonUdpChannel/controlchannelprivilege.h"
+#include "CommonPacket/abstractpackethandlerfactory.h"
+#include "CommonPacket/conversionutils.h"
 
-/*!
- * \brief The upd channel class create a new udp socket for manage in/out datagram from the network
- */
-class UDPChannel :  public QObject
+#include <QEventLoop>
+#include <vector>
+#include <unordered_map>
+
+#include "CommonCommand/abstractcommand.h"
+
+class UDPChannel : public QThread
 {
     Q_OBJECT
 public:
@@ -37,17 +37,25 @@ public:
                    quint16 sourcePort);
 
     /**
+     * @brief ControlChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     */
+    UDPChannel(QHostAddress sourceAddr,
+                   quint16 sourcePort,
+               AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
      * @brief ~ControlChannel deconstructor
      */
     virtual ~UDPChannel();
 
     /**
-     * @brief initSocket method create a new socket and register readPendingDatagrams method
+     * @brief initSocket method create a new socket and start methods
      * for receive updates if new datagram is received
      *
-     * this method will init SIGNAL/SLOT on udpSocket
      */
-    bool initSocket();
+    virtual bool initSocket() = 0;
 
     /**
      * @brief getSourceAddress method
@@ -65,23 +73,57 @@ public:
      * @brief isSocketOpen method
      * @return true if the socket is open
      */
-    virtual bool isSocketOpen() final;
+    virtual bool isSocketOpen() = 0;
+
+    /**
+     * @brief sendCommand a command on the channel
+     * @param cmd command to send
+     * @return 0 if the command is successfully sent
+     */
+    int sendPacket(AbstractPacket &packet);
+
+    /**
+     * @brief send without check, session id and ack
+     * @param cmd command to send
+     */
+    void fastSendPacket(AbstractPacket &packet);
+
+signals:
+    /**
+     * @brief stopWaitingAck signal used for manage stop wait for ack
+     */
+    void stopWaitingAck();
 
 public slots:
     /**
-     * @brief readPendingDatagrams method will be called when
-     * pending datagram are available on the socket
+     * @brief timeoutAck this slot will fire stop waiting ack
      */
-    void readPendingDatagrams();
+    void timeoutAck();
 
 protected:
+
     /**
      * @brief processTheDatagram method
      * @param datagram received
      * @param sender ip address of the datagram sender
      * @param senderPort port where the datagram was sended
      */
-    virtual void processTheDatagram(QByteArray &datagram, QHostAddress sender, quint16 senderPort) = 0;
+    virtual void processTheDatagram(const QByteArray &datagram, QHostAddress sender, quint16 senderPort);
+
+    /**
+     * @brief writeDatagram method
+     * @param datagram to send
+     * @param destAddr destination address
+     * @param destPort destination port
+     * @return byte writed
+     */
+    virtual int writeDatagram(const QByteArray &datagram, QHostAddress destAddr, quint16 destPort) = 0;
+
+    /**
+     * @brief hasPendingDatagram
+     * @return
+     */
+    virtual bool hasPendingDatagrams() = 0;
 
     /**
      * @brief TIMEOUT_MS for a sent command
@@ -103,12 +145,7 @@ protected:
      */
     quint16 sourcePort;
 
-    /**
-     * @brief socket
-     */
-    QUdpSocket* socket;
-
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
     /**
      * @brief logger
      */
@@ -126,9 +163,52 @@ protected:
      */
     QTimer *timeoutTimer;
 
+    QEventLoop *timeoutLoop;
+
 private:
 
-    QByteArray datagram;
+    //FOR RECEIVED MESSAGE (NOT ACK)
+
+    virtual void manageAsynchMessage(const QByteArray &datagram, QHostAddress sender, quint16 senderPort);
+
+    bool asynchMessageEnabled;
+
+    /**
+     * @brief messageHandlerFactory store factory reference used to generate a new message handler
+     */
+    AbstractPacketHandlerFactory *packetHandlerFactory;
+
+    //FOR ACK MESSAGE
+
+    virtual void manageAckMessage(const QByteArray &datagram, QHostAddress sender, quint16 senderPort);
+
+    /**
+     * @brief commandCache store command waiting for ack,
+     * the key of this map if the request id of a command
+     */
+    std::unordered_map<int, AbstractPacket*> packetCache;
+
+    /**
+     * @brief lastReqId will incremented at new command send request
+     * store last used request id
+     */
+    quint16 lastReqId = 0;
+
+    /**
+     * @brief retryCounter
+     */
+    int retryCounter;
+
+    /**
+     * @brief waitForAck
+     */
+    bool waitForAck;
+
+    /**
+     * @brief timeoutExpired
+     */
+    bool timeoutExpired;
+
 };
 
-#endif // CONTROLCHANNEL_H
+#endif // UDPSOCKET_H

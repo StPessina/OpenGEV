@@ -17,9 +17,19 @@ PartnerDevice::~PartnerDevice()
 
 bool PartnerDevice::openControlChannel(quint16 port)
 {
-    controlChannel = new UDPChannelTransmitter(QHostAddress::Any, port);
+#ifdef USE_QT_SOCKET
+    controlChannel = new QtUDPChannel(QHostAddress::Any, port);
+#endif
+#ifdef USE_BOOST_SOCKET
+    controlChannel = new BoostUDPChannel(QHostAddress::Any, port);
+#endif
+#ifdef USE_OSAPI_SOCKET
+    controlChannel = new OSAPIUDPChannel(QHostAddress::Any, port);
+#endif
 
     controlChannel->initSocket();
+    controlChannel->start();
+
 
     //send open channel message
     controlChannelKey = rand()*32000;
@@ -32,7 +42,7 @@ bool PartnerDevice::openControlChannel(quint16 port)
                                    CCP,
                                    ipAddress,
                                    CONTROL_CHANNEL_DEF_PORT);
-    controlChannel->sendCommand(writeReg);
+    controlChannel->sendPacket(writeReg);
     short statusCode = writeReg.getStatusCode();
 
     if(statusCode==GEV_STATUS_SUCCESS)
@@ -55,7 +65,7 @@ void PartnerDevice::closeControlChannel()
                                        0,
                                        ipAddress,
                                        CONTROL_CHANNEL_DEF_PORT);
-        controlChannel->sendCommand(writeReg);
+        controlChannel->sendPacket(writeReg);
 
         if(writeReg.getStatusCode()==GEV_STATUS_SUCCESS) {
             controlChannelKey = 0;
@@ -80,7 +90,7 @@ bool PartnerDevice::setActionControlAccessKey(int key)
                                   key,
                                   ipAddress,
                                   CONTROL_CHANNEL_DEF_PORT);
-    controlChannel->sendCommand(writeReg);
+    controlChannel->sendPacket(writeReg);
     return writeReg.getStatusCode() == GEV_STATUS_SUCCESS;
 }
 
@@ -95,7 +105,7 @@ bool PartnerDevice::setStreamChannelDelay(int channel, quint32 delay)
                                   ipAddress,
                                   CONTROL_CHANNEL_DEF_PORT);
 
-    controlChannel->sendCommand(writeReg);
+    controlChannel->sendPacket(writeReg);
 
     return writeReg.getStatusCode() == GEV_STATUS_SUCCESS;
 }
@@ -111,7 +121,7 @@ bool PartnerDevice::setStreamChannelPacketLength(int channel, quint32 size)
                                   ipAddress,
                                   CONTROL_CHANNEL_DEF_PORT);
 
-    controlChannel->sendCommand(writeReg);
+    controlChannel->sendPacket(writeReg);
 
     return writeReg.getStatusCode() == GEV_STATUS_SUCCESS;
 }
@@ -125,7 +135,7 @@ int PartnerDevice::getStreamingChannelNumber()
                                  REG_NR_STREAM_CHANNELS,
                                  ipAddress,
                                  CONTROL_CHANNEL_DEF_PORT);
-    controlChannel->sendCommand(readReg);
+    controlChannel->sendPacket(readReg);
     int value = readReg.getRegisterValue();
     return value;
 }
@@ -146,7 +156,7 @@ int PartnerDevice::openStreamChannel(int channel)
                                    40000 + channel,
                                    ipAddress,
                                    CONTROL_CHANNEL_DEF_PORT);
-    controlChannel->sendCommand(writeReg);
+    controlChannel->sendPacket(writeReg);
     short result = writeReg.getStatusCode();
 
     if(result != GEV_STATUS_SUCCESS) {

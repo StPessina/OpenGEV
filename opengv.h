@@ -4,7 +4,7 @@
 #include "opengv_global.h"
 #include "iostream"
 
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
     #include <log4cpp/PropertyConfigurator.hh>
 #endif
 
@@ -17,7 +17,7 @@ public:
     static void configure();
 
 private:
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
     static void initLog4cpp();
 #endif
 };

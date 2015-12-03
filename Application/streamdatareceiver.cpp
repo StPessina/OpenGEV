@@ -2,10 +2,21 @@
 
 StreamDataReceiver::StreamDataReceiver(QHostAddress address, quint16 port)
 {
-    streamReceiver = new UdpChannelReceiver(QHostAddress::Any, port,
-                                            new StreamImageDataHandlerFactory(this),
-                                            true);
+#ifdef USE_QT_SOCKET
+    streamReceiver = new QtUDPChannel(QHostAddress::Any, port,
+                                            new StreamImageDataHandlerFactory(this));
+#endif
+#ifdef USE_BOOST_SOCKET
+    streamReceiver = new BoostUDPChannel(QHostAddress::Any, port,
+                                         new StreamImageDataHandlerFactory(this));
+#endif
+#ifdef USE_OSAPI_SOCKET
+    streamReceiver = new OSAPIUDPChannel(QHostAddress::Any, port,
+                                         new StreamImageDataHandlerFactory(this));
+#endif
     streamReceiver->initSocket();
+    streamReceiver->start();
+
 
     streamData = new PixelMap<Pixel<2>>::Ptr[streamDataCacheSize];
 
@@ -82,8 +93,6 @@ bool StreamDataReceiver::checkNewPayload(quint64 blockId, quint32 packetId)
 
     this->packetId[i] = packetId;
 
-    if(!sequentiallyCheckResult)
-        std::cout<<"E"<<endl;
     return sequentiallyCheckResult;
 }
 

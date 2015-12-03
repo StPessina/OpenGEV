@@ -21,10 +21,23 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
 
     commonRegisters[REG_GVSP_CAPABILITY]->setBit(1); //concatenation enabled O-473cd
 
-    controlChannel = new UdpChannelReceiver(QHostAddress::Any,
+#ifdef USE_QT_SOCKET
+    controlChannel = new QtUDPChannel(QHostAddress::Any,
                                             CONTROL_CHANNEL_DEF_PORT,
                                             new DeviceCommandHandlerFactory(this));
+#endif
+#ifdef USE_BOOST_SOCKET
+    controlChannel = new BoostUDPChannel(QHostAddress::Any,
+                                         CONTROL_CHANNEL_DEF_PORT,
+                                         new DeviceCommandHandlerFactory(this));
+#endif
+#ifdef USE_OSAPI_SOCKET
+    controlChannel = new OSAPIUDPChannel(QHostAddress::Any,
+                                         CONTROL_CHANNEL_DEF_PORT,
+                                         new DeviceCommandHandlerFactory(this));
+#endif
     controlChannel->initSocket();
+    controlChannel->start();
 }
 
 GVDevice::~GVDevice()
@@ -274,7 +287,7 @@ void GVDevice::initNetworkRegisters()
         if(!(bool)(interface.flags() & QNetworkInterface::IsLoopBack)
                 && interface.hardwareAddress().compare("00:00:00:00:00:00")!=0) {
                 if(interface.addressEntries().size()!=0) { //Check if interface is connected
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
                     logger.debugStream()<<"GVDevice adding network connected interface #"<<to_string(interfaceNumber)
                                        <<"; Name:"<<interface.name().toStdString()
                                        <<"; MAC:"<<interface.hardwareAddress().toStdString();
@@ -290,7 +303,7 @@ void GVDevice::initNetworkRegisters()
     commonRegisters[REG_NR_ACTIVE_LINKS]->setValue(interfaceNumber+1); //Number of active links R-455cd
 
     foreach (QNetworkInterface interface, validNotConnected) {
-#ifdef ENABLE_LOG4CPP
+#ifdef USE_LOG4CPP
         logger.debugStream()<<"GVDevice adding network NOT connected interface #"<<to_string(interfaceNumber)
                            <<"; Name:"<<interface.name().toStdString()
                            <<"; MAC:"<<interface.hardwareAddress().toStdString();

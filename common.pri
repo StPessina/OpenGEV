@@ -6,10 +6,16 @@ HEADERS += \
     $$PWD/CommonBootstrapRegister/bootstrapregister.h \
     $$PWD/CommonBootstrapRegister/registeraccess.h \
     $$PWD/CommonBootstrapRegister/bootstrapregistertype.h \
-    $$PWD/CommonStream/streamimagedataallin.h
+    $$PWD/CommonStream/streamimagedataallin.h \
+    $$PWD/CommonUdpChannel/udpchannel.h \
+    $$PWD/CommonUdpChannel/boostudpchannel.h \
+    $$PWD/CommonUdpChannel/osapiudpchannel.h
 
 SOURCES += \
-    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp
+    $$PWD/CommonBootstrapRegister/bootstrapregister.cpp \
+    $$PWD/CommonUdpChannel/udpchannel.cpp \
+    $$PWD/CommonUdpChannel/boostudpchannel.cpp \
+    $$PWD/CommonUdpChannel/osapiudpchannel.cpp
 
 @INCLUDE += CommonComponent
 
@@ -29,15 +35,11 @@ DEPENDPATH += CommonUpdChannel
 
 HEADERS += \
     $$PWD/CommonUdpChannel/controlchannelprivilege.h \
-    $$PWD/CommonUdpChannel/privilege.h \
-    $$PWD/CommonUdpChannel/udpchannel.h \
-    $$PWD/CommonUdpChannel/udpchanneltransmitter.h \
-    $$PWD/CommonUdpChannel/udpchannelreceiver.h
+    $$PWD/CommonUdpChannel/privilege.h  \
+    $$PWD/CommonUdpChannel/qtudpchannel.h
 
-SOURCES += \
-    $$PWD/CommonUdpChannel/udpchannel.cpp \
-    $$PWD/CommonUdpChannel/udpchanneltransmitter.cpp \
-    $$PWD/CommonUdpChannel/udpchannelreceiver.cpp
+SOURCES +=  \
+    $$PWD/CommonUdpChannel/qtudpchannel.cpp
 
 @INCLUDE += CommonPacket
 
