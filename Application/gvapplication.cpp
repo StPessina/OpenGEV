@@ -43,8 +43,8 @@ int GVApplication::discoverDevice()
 {
     QHostAddress address("255.255.255.255");
     DiscoveryCommand dis (this, address, CONTROL_CHANNEL_DEF_PORT);
-    int result = masterChannel->sendPacket(dis);
-    return result;
+    masterChannel->sendPacket(dis);
+    return devices.size();
 }
 
 

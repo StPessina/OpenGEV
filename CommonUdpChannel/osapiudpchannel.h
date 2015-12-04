@@ -71,22 +71,14 @@ private:
     int listenerSocket;
     struct addrinfo *pListener, *servinfoListener;
 
-    int sendSocket;
-    struct addrinfo *pSend, *servinfoSend;
-    QHostAddress lastSendAddress;
-    quint16 lastSendPort = 0;
-
-
     struct sockaddr_storage their_addr;
     socklen_t addr_len;
     char buf[MAXBUFLEN];
     char s[INET6_ADDRSTRLEN];
 
-    int receive();
+    struct sockaddr_in destination;
 
-    int initSocket(const char* address, const char* port,
-                   addrinfo *p, addrinfo *servinfo,
-                   bool listen);
+    int receive();
 
     void* getInAddr(struct sockaddr *sa);
 
