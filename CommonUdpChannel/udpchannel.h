@@ -29,7 +29,7 @@ public:
     explicit UDPChannel(QObject* parent = 0);
 
     /**
-     * @brief ControlChannel constructor
+     * @brief UDPChannel constructor
      * @param sourceAddr addresses that can send message on this channel
      * @param sourcePort port where this channel will be listen
      */
@@ -37,12 +37,35 @@ public:
                    quint16 sourcePort);
 
     /**
-     * @brief ControlChannel constructor
+     * @brief UDPChannel constructor
      * @param sourceAddr addresses that can send message on this channel
      * @param sourcePort port where this channel will be listen
+     * @param packetHandlerFactory factory for message handlers generation
      */
     UDPChannel(QHostAddress sourceAddr,
                    quint16 sourcePort,
+               AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
+     * @brief UDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     */
+    UDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort);
+
+    /**
+     * @brief UDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     * @param packetHandlerFactory factory for message handlers generation
+     */
+    UDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
                AbstractPacketHandlerFactory *packetHandlerFactory);
 
     /**
@@ -68,6 +91,18 @@ public:
      * @return port where the channel is listen for new datagram
      */
     virtual quint16 getSourcePort() final;
+
+    /**
+     * @brief getStandardDestinationAddress method
+     * @return addresses where this channel writes messages as defaul
+     */
+    virtual QHostAddress getStandardDestinationAddress() final;
+
+    /**
+     * @brief getStandardDestinationPort method
+     * @return port where this channel writes messages as default
+     */
+    virtual quint16 getStandardDestinationPort() final;
 
     /**
      * @brief isSocketOpen method
@@ -145,6 +180,16 @@ protected:
      */
     quint16 sourcePort;
 
+    /**
+     * @brief standardDestinationAddr address where this channel writes messages as default
+     */
+    QHostAddress standardDestinationAddr;
+
+    /**
+     * @brief standardDestinationPort port where this channel writes messages as default
+     */
+    quint16 standardDestinationPort;
+
 #ifdef USE_LOG4CPP
     /**
      * @brief logger
@@ -166,6 +211,8 @@ protected:
     QEventLoop *timeoutLoop;
 
 private:
+
+    void initTimeoutTimerAndLoop();
 
     //FOR RECEIVED MESSAGE (NOT ACK)
 

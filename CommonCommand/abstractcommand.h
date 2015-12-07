@@ -87,7 +87,7 @@ protected:
      * bit 7: ack required
      * \return flag bits
      */
-    virtual short getHeaderFlag() final;
+    virtual short getHeaderFlag();
 
     /*!
      * \brief getHeader

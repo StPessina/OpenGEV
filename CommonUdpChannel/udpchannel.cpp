@@ -2,15 +2,10 @@
 
 UDPChannel::UDPChannel(QHostAddress sourceAddr,
                        quint16 sourcePort)
+    : sourceAddr(sourceAddr),
+      sourcePort(sourcePort)
 {
-    this->sourceAddr = sourceAddr;
-    this->sourcePort = sourcePort;
-
-    timeoutTimer = new QTimer(this);
-    timeoutLoop = new QEventLoop(this);
-
-    connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
-    connect(this, SIGNAL(stopWaitingAck()), timeoutLoop, SLOT(quit()));
+    initTimeoutTimerAndLoop();
 
     asynchMessageEnabled = false;
 
@@ -21,22 +16,43 @@ UDPChannel::UDPChannel(QHostAddress sourceAddr,
 
 UDPChannel::UDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
                        AbstractPacketHandlerFactory *packetHandlerFactory)
-    : packetHandlerFactory(packetHandlerFactory)
+    : sourceAddr(sourceAddr),
+      sourcePort(sourcePort),
+      packetHandlerFactory(packetHandlerFactory)
 {
-    this->sourceAddr = sourceAddr;
-    this->sourcePort = sourcePort;
-
-    timeoutTimer = new QTimer(this);
-    timeoutLoop = new QEventLoop(this);
-
-    connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
-    connect(this, SIGNAL(stopWaitingAck()), timeoutLoop, SLOT(quit()));
+    initTimeoutTimerAndLoop();
 
     asynchMessageEnabled = true;
 
 #ifdef USE_LOG4CPP
     logger.infoStream()<<getLogMessageHeader()<<"New";
 #endif
+}
+
+UDPChannel::UDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                       QHostAddress standardDestinationAddr, quint16 standardDestinationPort)
+    : sourceAddr(sourceAddr),
+      sourcePort(sourcePort),
+      standardDestinationAddr(standardDestinationAddr),
+      standardDestinationPort(standardDestinationPort)
+{
+    initTimeoutTimerAndLoop();
+
+    asynchMessageEnabled = false;
+}
+
+UDPChannel::UDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                       QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+                       AbstractPacketHandlerFactory *packetHandlerFactory)
+    : sourceAddr(sourceAddr),
+      sourcePort(sourcePort),
+      standardDestinationAddr(standardDestinationAddr),
+      standardDestinationPort(standardDestinationPort),
+      packetHandlerFactory(packetHandlerFactory)
+{
+    initTimeoutTimerAndLoop();
+
+    asynchMessageEnabled = true;
 }
 
 UDPChannel::~UDPChannel()
@@ -56,6 +72,16 @@ quint16 UDPChannel::getSourcePort()
     return sourcePort;
 }
 
+QHostAddress UDPChannel::getStandardDestinationAddress()
+{
+    return standardDestinationAddr;
+}
+
+quint16 UDPChannel::getStandardDestinationPort()
+{
+    return standardDestinationPort;
+}
+
 
 void UDPChannel::processTheDatagram(const QByteArray &datagram, QHostAddress sender, quint16 senderPort)
 {
@@ -64,6 +90,15 @@ void UDPChannel::processTheDatagram(const QByteArray &datagram, QHostAddress sen
 
     if(asynchMessageEnabled)
         manageAsynchMessage(datagram, sender, senderPort);
+}
+
+void UDPChannel::initTimeoutTimerAndLoop()
+{
+    timeoutTimer = new QTimer(this);
+    timeoutLoop = new QEventLoop(this);
+
+    connect(timeoutTimer, SIGNAL(timeout()),this,SLOT(timeoutAck()));
+    connect(this, SIGNAL(stopWaitingAck()), timeoutLoop, SLOT(quit()));
 }
 
 void UDPChannel::manageAckMessage(const QByteArray &datagram, QHostAddress sender, quint16 senderPort)

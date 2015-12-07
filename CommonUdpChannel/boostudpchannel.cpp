@@ -16,6 +16,25 @@ BoostUDPChannel::BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
 {
 }
 
+BoostUDPChannel::BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                                 QHostAddress standardDestinationAddr, quint16 standardDestinationPort)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort),
+      socket(io_service, udp::endpoint(udp::v4(), sourcePort)),
+      listenerEndpoint(udp::v4(), sourcePort)
+{
+
+}
+
+BoostUDPChannel::BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                           QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+                           AbstractPacketHandlerFactory *packetHandlerFactory)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort, packetHandlerFactory),
+      socket(io_service, udp::endpoint(udp::v4(), sourcePort)),
+      listenerEndpoint(udp::v4(), sourcePort)
+{
+
+}
+
 BoostUDPChannel::~BoostUDPChannel()
 {
 
@@ -24,7 +43,8 @@ BoostUDPChannel::~BoostUDPChannel()
 bool BoostUDPChannel::initSocket()
 {
     socket.set_option(boost::asio::socket_base::broadcast(true));
-    startReceive();
+    if(ENABLE_BOOST_ASYNCH_SOCKET==1)
+        startAsynchReceive();
     return true;
 }
 
@@ -35,7 +55,11 @@ bool BoostUDPChannel::isSocketOpen()
 
 void BoostUDPChannel::run()
 {
-    io_service.run();
+    if(ENABLE_BOOST_ASYNCH_SOCKET==1)
+        io_service.run();
+    else
+        while(true)
+            startSynchReceive();
 }
 
 int BoostUDPChannel::writeDatagram(const QByteArray &datagram, QHostAddress destAddr, quint16 destPort)
@@ -53,13 +77,21 @@ bool BoostUDPChannel::hasPendingDatagrams()
     return false;
 }
 
-void BoostUDPChannel::startReceive()
+void BoostUDPChannel::startAsynchReceive()
 {
     socket.async_receive_from(
                 boost::asio::buffer(recvBuffer), senderEndpoint,
                 boost::bind(&BoostUDPChannel::handleReceive, this,
                             boost::asio::placeholders::error,
                             boost::asio::placeholders::bytes_transferred));
+}
+
+void BoostUDPChannel::startSynchReceive()
+{
+    receivedBytes = socket.receive_from(boost::asio::buffer(recvBuffer),
+              senderEndpoint, 0, error);
+    if(receivedBytes>0)
+        handleReceive(error, receivedBytes);
 }
 
 void BoostUDPChannel::handleReceive(const boost::system::error_code &error, std::size_t bytes_transferred)
@@ -74,6 +106,6 @@ void BoostUDPChannel::handleReceive(const boost::system::error_code &error, std:
 
         processTheDatagram(datagram, senderAddress, senderPort);
 
-        startReceive();
+        startAsynchReceive();
     }
 }

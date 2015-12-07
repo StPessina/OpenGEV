@@ -11,6 +11,7 @@ bool DeviceCommandHandlerFactory::isValidCode(quint16 handlerIdentifier)
     case DISCOVERY_CMD:
     case READREG_CMD:
     case WRITEREG_CMD:
+    case PACKETRESEND_CMD:
         return true;
     default:
         break;
@@ -28,6 +29,8 @@ AbstractCommandHandler *DeviceCommandHandlerFactory::createPacketHandler(quint16
         return new ReadRegisterCommandHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     case WRITEREG_CMD:
         return new WriteRegisterCommandHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
+    case PACKETRESEND_CMD:
+        return new PacketResendCommandHandler(dynamic_cast<GVDevice*>(target), datagram, senderAddress, senderPort);
     default:
         return new CmdNotSupportedMH(target, handlerIdentifier, datagram, senderAddress, senderPort);
     }

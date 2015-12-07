@@ -39,6 +39,28 @@ public:
                  AbstractPacketHandlerFactory *packetHandlerFactory);
 
     /**
+     * @brief BoostUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     */
+    BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort);
+
+    /**
+     * @brief BoostUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     * @param packetHandlerFactory factory for message handlers generation
+     */
+    BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+               AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
      * @brief ~BoostUdpChannel deconstructor
      */
     virtual ~BoostUDPChannel();
@@ -82,20 +104,26 @@ private:
 
   QByteArray datagram;
 
-  void startReceive();
+  void startAsynchReceive();
+
+  void startSynchReceive();
 
   void handleReceive(const boost::system::error_code& error,
       std::size_t bytes_transferred);
 
   boost::asio::io_service io_service;
 
+  boost::system::error_code error;
+
   udp::socket socket;
+
+  int receivedBytes;
 
   udp::endpoint listenerEndpoint;
 
   udp::endpoint senderEndpoint;
 
-  boost::array<char, 65536> recvBuffer;
+  boost::array<char, 2000000> recvBuffer;
 };
 
 #endif // BOOSTUDPCHANNEL_H

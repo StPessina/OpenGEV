@@ -82,6 +82,8 @@ public:
      */
     virtual quint64 getRequestBlockId() final;
 
+    virtual bool isPacketResend() final;
+
     /**
      * @brief toString
      * @return handler major info as string

@@ -20,12 +20,14 @@ HEADERS += \
     $$PWD/ApplicationCommand/discoverycommand.h \
     $$PWD/ApplicationCommand/applicationcommandcode.h \
     $$PWD/ApplicationCommand/readregistercommand.h \
-    $$PWD/ApplicationCommand/writeregistercommand.h
+    $$PWD/ApplicationCommand/writeregistercommand.h \
+    $$PWD/ApplicationCommand/packetresendcommand.h
 
 SOURCES += \
     $$PWD/ApplicationCommand/discoverycommand.cpp \
     $$PWD/ApplicationCommand/readregistercommand.cpp \
-    $$PWD/ApplicationCommand/writeregistercommand.cpp
+    $$PWD/ApplicationCommand/writeregistercommand.cpp \
+    $$PWD/ApplicationCommand/packetresendcommand.cpp
 
 INCLUDEPATH += ApplicationCommandHandler
 DEPENDPATH += ApplicationCommandHandler

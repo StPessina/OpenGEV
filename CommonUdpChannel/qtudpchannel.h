@@ -40,6 +40,28 @@ public:
                  AbstractPacketHandlerFactory *packetHandlerFactory);
 
     /**
+     * @brief QtUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     */
+    QtUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort);
+
+    /**
+     * @brief QtUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     * @param packetHandlerFactory factory for message handlers generation
+     */
+    QtUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+               AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
      * @brief ~ControlChannel deconstructor
      */
     virtual ~QtUDPChannel();

@@ -9,6 +9,7 @@
 #include "DeviceCommandHandler/discoverycommandhandler.h"
 #include "DeviceCommandHandler/readregistercommandhandler.h"
 #include "DeviceCommandHandler/writeregistercommandhandler.h"
+#include "DeviceCommandHandler/packetresendcommandhandler.h"
 
 /**
  * @brief The DeviceMessageHandlerFactory class is handler for device message

@@ -26,11 +26,13 @@ HEADERS += \
     $$PWD/DeviceCommandHandler/devicecommandhandlerfactory.h \
     $$PWD/DeviceCommandHandler/discoverycommandhandler.h \
     $$PWD/DeviceCommandHandler/readregistercommandhandler.h \
-    $$PWD/DeviceCommandHandler/writeregistercommandhandler.h
+    $$PWD/DeviceCommandHandler/writeregistercommandhandler.h \
+    $$PWD/DeviceCommandHandler/packetresendcommandhandler.h
 
 SOURCES += \
     $$PWD/DeviceCommandHandler/cmdnotsupportedmh.cpp \
     $$PWD/DeviceCommandHandler/devicecommandhandlerfactory.cpp \
     $$PWD/DeviceCommandHandler/discoverycommandhandler.cpp \
     $$PWD/DeviceCommandHandler/readregistercommandhandler.cpp \
-    $$PWD/DeviceCommandHandler/writeregistercommandhandler.cpp
+    $$PWD/DeviceCommandHandler/writeregistercommandhandler.cpp \
+    $$PWD/DeviceCommandHandler/packetresendcommandhandler.cpp

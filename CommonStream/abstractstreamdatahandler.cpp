@@ -57,6 +57,12 @@ quint64 AbstractStreamDataHandler::getRequestBlockId()
     return requestBlockId;
 }
 
+bool AbstractStreamDataHandler::isPacketResend()
+{
+    short flag = ConversionUtils::getShortFromQByteArray(receivedDatagram, 0) & 0x00FF;
+    return flag == 1;
+}
+
 void AbstractStreamDataHandler::appendAckHeader(QByteArray &datagram)
 {
     //No ack required

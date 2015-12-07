@@ -211,13 +211,13 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         return 0;
 
     //CR-489cd
-    quint32 packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
+    packetSize = (registers[packetSizeRegCode]->getValue() & 0x0000FFFF)
             -20 //bytes IP header
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
     //QByteArray data = datapacket->getImagePixelData();
-    const char* data = datapacket->getImagePixelData();
+    dataToSend = datapacket->getImagePixelData();
 
     //Send data leader packet
     quint32 packetId=1;
@@ -244,7 +244,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
                                         //data.mid((packetId-2)*packetSize,packetSize));
-                                        &data[(packetId-2)*packetSize],packetSize);
+                                        &dataToSend[(packetId-2)*packetSize],packetSize);
 
         streamChannelTransmitter->fastSendPacket(payload);
 
@@ -261,7 +261,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
         packetId++;
         StreamImageDataPayload payload (destAddress, destPort,
                                         blockId, packetId,
-                                        &data[(packetId-2)*packetSize],lastPacketsDimension);
+                                        &dataToSend[(packetId-2)*packetSize],lastPacketsDimension);
         streamChannelTransmitter->fastSendPacket(payload);
     }
 
@@ -312,4 +312,18 @@ int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::P
     blockId++;
 
     return 1;
+}
+
+int StreamChannelTransmitter::insertPacketResendInIncomingData(quint64 blockId, quint32 packetId)
+{
+    if(blockId==this->blockId) {
+        //O-196cd packet resend
+        StreamImageDataPayload payload (destAddress, destPort,
+                                        blockId, packetId,
+                                        &dataToSend[(packetId-2)*packetSize],packetSize);
+
+        payload.setFlagPacketResend();
+        streamChannelTransmitter->fastSendPacket(payload);
+
+    }
 }

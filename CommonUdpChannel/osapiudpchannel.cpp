@@ -10,9 +10,28 @@ OSAPIUDPChannel::OSAPIUDPChannel(QHostAddress sourceAddr, quint16 sourcePort, Ab
 {
 }
 
+OSAPIUDPChannel::OSAPIUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                                 QHostAddress standardDestinationAddr, quint16 standardDestinationPort)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort)
+{
+
+}
+
+OSAPIUDPChannel::OSAPIUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                           QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+                           AbstractPacketHandlerFactory *packetHandlerFactory)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort, packetHandlerFactory)
+{
+
+}
+
 OSAPIUDPChannel::~OSAPIUDPChannel()
 {
-    closeSocket(listenerSocket, pListener, servinfoListener);
+    if(listenerSocket!=-1) {
+        close(listenerSocket);
+        listenerSocket = -1;
+        freeaddrinfo(servinfoListener);
+    }
 }
 
 bool OSAPIUDPChannel::initSocket()
@@ -63,7 +82,7 @@ bool OSAPIUDPChannel::initSocket()
 
 bool OSAPIUDPChannel::isSocketOpen()
 {
-    return true;
+    return listenerSocket!=-1;
 }
 
 void OSAPIUDPChannel::run()
@@ -128,20 +147,6 @@ quint16 OSAPIUDPChannel::getInPort(struct sockaddr *sa)
     }
 
     return ntohs((((struct sockaddr_in6*)sa)->sin6_port));
-}
-
-void OSAPIUDPChannel::closeSocket(int socket,
-                                  struct addrinfo *p,
-                                  struct addrinfo *servinfo)
-{
-    if(socket!=-1)
-        close(socket);
-
-    freeaddrinfo(servinfo);
-
-    if(p != NULL) {
-        p = NULL;
-    }
 }
 
 

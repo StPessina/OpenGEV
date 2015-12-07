@@ -19,6 +19,7 @@
 #include "CommonStreamImageFormat/PixelMap.h"
 
 #include "ApplicationStreamDataHandler/streamimagedatahandlerfactory.h"
+#include "ApplicationCommand/packetresendcommand.h"
 
 class StreamDataReceiver : public QObject, GVComponent
 {
@@ -31,7 +32,7 @@ public:
      */
     explicit StreamDataReceiver(QObject* parent = 0);
 
-    StreamDataReceiver(QHostAddress address, quint16 port);
+    StreamDataReceiver(QHostAddress address, quint16 port, quint16 channelId, UDPChannel &requestRetrasmissionChannel);
 
     virtual ~StreamDataReceiver();
 
@@ -40,21 +41,9 @@ public:
                         quint32 offsetx, quint32 offsety,
                         quint16 paddingx, quint16 paddingy);
 
-    /*
-    virtual void checkNewAllocation(quint32 pixelFormat, quint32 sizex, quint32 sizey,
-                               quint32 offsetx, quint32 offsety,
-                               quint16 paddingx, quint16 paddingy);*/
+    virtual bool blockIdExist(quint64 blockId);
 
-
-    virtual bool checkNewPayload(quint64 blockId, quint32 packetId);
-
-    /*
-    virtual void addStreamData(quint64 blockId, quint32 packetId,
-                               Pixel<2> pixel);*/
-
-    /*
-    virtual void addStreamData(quint64 blockId, quint32 packetId,
-                               int position, Pixel *pixel);*/
+    virtual bool checkPacketIdSequence(quint64 blockId, quint32 packetId);
 
     virtual void closeStreamData(quint64 blockId, quint32 packetId);
 
@@ -74,13 +63,17 @@ signals:
 
 private:
 
-    UDPChannel* streamReceiver;
+    quint16 channelId;
+
+    UDPChannel *streamReceiver;
+
+    UDPChannel &requestRetrasmissionChannel;
 
     PixelMap<Pixel<2>>::Ptr* streamData;
     quint64* blockId;
     quint32* packetId;
 
-    int streamDataCacheSize = 2;
+    int streamDataCacheSize = 15;
 
     bool blockOpen;
 

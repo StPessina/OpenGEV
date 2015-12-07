@@ -13,6 +13,20 @@ QtUDPChannel::QtUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
 
 }
 
+QtUDPChannel::QtUDPChannel(QHostAddress sourceAddr, quint16 sourcePort, QHostAddress standardDestinationAddr, quint16 standardDestinationPort)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort)
+{
+
+}
+
+QtUDPChannel::QtUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+                           QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+                           AbstractPacketHandlerFactory *packetHandlerFactory)
+    : UDPChannel(sourceAddr, sourcePort, standardDestinationAddr, standardDestinationPort, packetHandlerFactory)
+{
+
+}
+
 QtUDPChannel::~QtUDPChannel()
 {
     delete socket;

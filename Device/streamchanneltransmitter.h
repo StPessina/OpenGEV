@@ -62,6 +62,8 @@ public:
 
     int writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::Ptr datapacket);
 
+    int insertPacketResendInIncomingData(quint64 blockId, quint32 packetId);
+
 protected:
     QHostAddress destAddress;
 
@@ -81,6 +83,10 @@ private:
     int channelZoneDirectionRegCode;
 
     int blockId=1;
+
+    //Backup for resend
+    int packetSize = 0;
+    const char* dataToSend;
 
     /**
      * @brief map of network register

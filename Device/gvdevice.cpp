@@ -21,6 +21,8 @@ GVDevice::GVDevice(string manufacture_name, string model_name, string device_nam
 
     commonRegisters[REG_GVSP_CAPABILITY]->setBit(1); //concatenation enabled O-473cd
 
+    commonRegisters[REG_GVCP_CAPABILITY]->setBit(29); //packet resend enabled R-197ca
+
 #ifdef USE_QT_SOCKET
     controlChannel = new QtUDPChannel(QHostAddress::Any,
                                             CONTROL_CHANNEL_DEF_PORT,

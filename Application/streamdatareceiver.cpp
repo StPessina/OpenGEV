@@ -1,6 +1,11 @@
 #include "streamdatareceiver.h"
 
-StreamDataReceiver::StreamDataReceiver(QHostAddress address, quint16 port)
+StreamDataReceiver::StreamDataReceiver(QHostAddress address,
+                                       quint16 port,
+                                       quint16 channelId,
+                                       UDPChannel &requestRetrasmissionChannel)
+    : requestRetrasmissionChannel(requestRetrasmissionChannel),
+      channelId(channelId)
 {
 #ifdef USE_QT_SOCKET
     streamReceiver = new QtUDPChannel(QHostAddress::Any, port,
@@ -65,22 +70,7 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
 
 }
 
-/*
-void StreamDataReceiver::checkNewAllocation(quint32 pixelFormat, quint32 sizex, quint32 sizey, quint32 offsetx, quint32 offsety, quint16 paddingx, quint16 paddingy)
-{
-    if(this->pixelFormat!=pixelFormat ||
-            this->sizex != sizex ||
-            this->sizey != sizey) {
-        streamData->destroyPixelMap();
-        delete streamData;
-        streamData = new PixelMap<Pixel>(pixelFormat, sizex, sizey,
-                                   offsetx, offsety,
-                                   paddingx, paddingy);
-    }
-}
-*/
-
-bool StreamDataReceiver::checkNewPayload(quint64 blockId, quint32 packetId)
+bool StreamDataReceiver::blockIdExist(quint64 blockId)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
 
@@ -88,38 +78,40 @@ bool StreamDataReceiver::checkNewPayload(quint64 blockId, quint32 packetId)
 
     sequentiallyCheckResult = (i!=-1);
 
-    if(sequentiallyCheckResult)
-        sequentiallyCheckResult = (packetId==this->packetId[i]+1);
+    return sequentiallyCheckResult;
+}
+
+bool StreamDataReceiver::checkPacketIdSequence(quint64 blockId, quint32 packetId)
+{
+    int i = getStreamDataIndexFromBlockId(blockId);
+
+    if(i==-1)
+        return false;
+
+    if(this->packetId[i]>packetId) //Accept previous as resend packets
+        return true;
+
+    bool sequentiallyCheckResult = (packetId==this->packetId[i]+1);
+
+    if(!sequentiallyCheckResult) {
+        PacketResendCommand resend (this,
+                                    requestRetrasmissionChannel.getStandardDestinationAddress(),
+                                    requestRetrasmissionChannel.getStandardDestinationPort(),
+                                    channelId,
+                                    blockId,
+                                    this->packetId[i]+1, packetId-1);
+        requestRetrasmissionChannel.sendPacket(resend);
+    }
 
     this->packetId[i] = packetId;
 
     return sequentiallyCheckResult;
 }
 
-/*
-void StreamDataReceiver::addStreamData(quint64 blockId, quint32 packetId,
-                                       Pixel<2> pixel)
-{
-    int i = getStreamDataIndexFromBlockId(blockId);
-    if(i!=-1)
-        streamData[i]->setNextPixel(pixel);
-    else
-        logger.warnStream()<<"Stream was not open "<<blockId<<" "<<packetId;
-}
-*/
-/*
-void StreamDataReceiver::addStreamData(quint64 blockId, quint32 packetId,
-                                       int position, Pixel pixel)
-{
-    streamData->setNextPixel(position, pixel);
-}
-*/
-
 void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
     if(i!=-1) {
-        //freeStreamData(i);
         lastClosedStream=i;
         emit newStreamDataAvailable();
     }
@@ -182,7 +174,7 @@ int StreamDataReceiver::freeStreamData(int index)
 }
 
 int StreamDataReceiver::clearOldCache(quint64 lastBlockId)
-{
+{    
     for (int i = 0; i < streamDataCacheSize; ++i)
         if(this->blockId[i]<=lastBlockId-(streamDataCacheSize-1)
                 && this->blockId[i]!=-1)

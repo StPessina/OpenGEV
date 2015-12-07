@@ -18,13 +18,16 @@ PartnerDevice::~PartnerDevice()
 bool PartnerDevice::openControlChannel(quint16 port)
 {
 #ifdef USE_QT_SOCKET
-    controlChannel = new QtUDPChannel(QHostAddress::Any, port);
+    controlChannel = new QtUDPChannel(QHostAddress::Any, port,
+                                      ipAddress, CONTROL_CHANNEL_DEF_PORT);
 #endif
 #ifdef USE_BOOST_SOCKET
-    controlChannel = new BoostUDPChannel(QHostAddress::Any, port);
+    controlChannel = new BoostUDPChannel(QHostAddress::Any, port,
+                                         ipAddress, CONTROL_CHANNEL_DEF_PORT);
 #endif
 #ifdef USE_OSAPI_SOCKET
-    controlChannel = new OSAPIUDPChannel(QHostAddress::Any, port);
+    controlChannel = new OSAPIUDPChannel(QHostAddress::Any, port,
+                                         ipAddress, CONTROL_CHANNEL_DEF_PORT);
 #endif
 
     controlChannel->initSocket();
@@ -126,6 +129,23 @@ bool PartnerDevice::setStreamChannelPacketLength(int channel, quint32 size)
     return writeReg.getStatusCode() == GEV_STATUS_SUCCESS;
 }
 
+quint32 PartnerDevice::getStreamChannelPacketLength(int channel)
+{
+    if(!isChannelOpen())
+        return -1;
+
+    ReadRegisterCommand readReg (this,
+                                 DeviceRegisterConverter::getStreamChannelRegister(channel,REG_STREAM_CHANNEL_PACKET_SIZE),
+                                 ipAddress,
+                                 CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendPacket(readReg);
+
+    if(readReg.getStatusCode() == GEV_STATUS_SUCCESS)
+        return readReg.getRegisterValue();
+    else
+        return 0;
+}
+
 int PartnerDevice::getStreamingChannelNumber()
 {
     if(!isChannelOpen())
@@ -148,7 +168,8 @@ int PartnerDevice::openStreamChannel(int channel)
     if(getStreamingChannelNumber()<=channel)
         return GEV_STATUS_INVALID_ADDRESS;
 
-    StreamDataReceiver* streamChannel = new StreamDataReceiver(ipAddress, 40000 + channel);
+    StreamDataReceiver* streamChannel = new StreamDataReceiver(ipAddress, 40000 + channel,
+                                                               channel, *controlChannel);
     streamChannelsOpenMap[channel]=streamChannel;
 
     WriteRegisterCommand writeReg (this,

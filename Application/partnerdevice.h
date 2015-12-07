@@ -101,6 +101,8 @@ public:
 
     bool setStreamChannelPacketLength(int channel, quint32 size);
 
+    quint32 getStreamChannelPacketLength(int channel);
+
 private:
 
     UDPChannel* controlChannel;

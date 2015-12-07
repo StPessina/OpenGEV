@@ -25,6 +25,28 @@ public:
                             AbstractPacketHandlerFactory *packetHandlerFactory);
 
     /**
+     * @brief OSAPIUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     */
+    OSAPIUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort);
+
+    /**
+     * @brief OSAPIUDPChannel constructor
+     * @param sourceAddr addresses that can send message on this channel
+     * @param sourcePort port where this channel will be listen
+     * @param standardDestinationAddr where this channel send as default address
+     * @param standardDestinationPort where this channel send as default port
+     * @param packetHandlerFactory factory for message handlers generation
+     */
+    OSAPIUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
+               QHostAddress standardDestinationAddr, quint16 standardDestinationPort,
+               AbstractPacketHandlerFactory *packetHandlerFactory);
+
+    /**
      * @brief ~OSAPIUDPSocket deconstructor
      */
     virtual ~OSAPIUDPChannel();
@@ -84,8 +106,6 @@ private:
 
     quint16 getInPort(struct sockaddr *sa);
 
-    void closeSocket(int socket, struct addrinfo *p,
-                     addrinfo *servinfo);
 };
 
 #endif // OSAPIUDPSOCKET_H

@@ -19,21 +19,28 @@
 #include "CommonStream/packetformat.h"
 
 /**
- * @brief The AbstractCommand class provide generic rapresentation for a command
+ * @brief The AbstractStreamData class provide generic rapresentation for stream data packet
  */
 class AbstractStreamData : public AbstractPacket
 {
 public:
     /**
-     * @brief AbstractCommand constructor
+     * @brief AbstractStreamData constructor
      * @param target is the component where the command will be executed
      * @param destAddress
      * @param destPort
-     * @param commandCode
-     * @param ackCommandCode aspected ack command code
+     * @param packetFormat
+     * @param blockId64
+     * @param packetId32
      */
     AbstractStreamData(QHostAddress destAddress, quint16 destPort,
                        PacketFormat packetFormat, quint64 blockId64, quint32 packetId32);
+
+
+    /**
+     * @brief setFlagPacketResend method marks this packet as resend
+     */
+    virtual void setFlagPacketResend() final;
 
     /**
      * @brief ~AbstractCommand decostructor

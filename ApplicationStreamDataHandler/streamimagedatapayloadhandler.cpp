@@ -15,34 +15,19 @@ int StreamImageDataPayloadHandler::execute()
 
         StreamDataReceiver* receiver = (StreamDataReceiver*) target;
 
-        quint32 pixelFormat = receiver->getPixelFormat();
+        //quint32 pixelFormat = receiver->getPixelFormat();
 
         QByteArray datagramWithoutHeader = receivedDatagram.mid(20);
 
-        if(!receiver->checkNewPayload(getRequestBlockId(), getRequestPacketId()))
+        if(!receiver->blockIdExist(getRequestBlockId()))
             return GEV_STATUS_ERROR;
 
-        switch (pixelFormat) {
-        case GVSP_PIX_MONO16: {
-            /*
-            int size = datagramWithoutHeader.size() / 2;
-            quint16 data;
-            Pixel<2> p;
-            for (int i = 0; i < size; ++i) {
-                data = ConversionUtils::getShortFromQByteArray(datagramWithoutHeader,i*2);
-                p.pixelFormat=pixelFormat;
-                p.value = data;
-                receiver->addStreamData(getRequestBlockId(), getRequestPacketId(), p);
-            }
-            */
-            char* origin = datagramWithoutHeader.data();
-            memcpy(&(receiver->getStreamData(getRequestBlockId())->data)[528*(getRequestPacketId()-2)],
-                   origin, datagramWithoutHeader.size()*sizeof(char));
-            break;
-        }
-        default:
-            break;
-        }
+        if(!isPacketResend())
+            receiver->checkPacketIdSequence(getRequestBlockId(), getRequestPacketId());
+
+        char* origin = datagramWithoutHeader.data();
+        memcpy(&((receiver->getStreamData(getRequestBlockId())->data)[datagramWithoutHeader.size()*(getRequestPacketId()-2)]),
+               origin, datagramWithoutHeader.size()*sizeof(char));
 
         resultStatus = GEV_STATUS_SUCCESS;
     }

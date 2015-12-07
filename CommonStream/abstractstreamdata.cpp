@@ -48,9 +48,17 @@ void AbstractStreamData::appendHeader(QByteArray &datagram)
     datagram.append(header, getHeaderLength());
 }
 
+void AbstractStreamData::setFlagPacketResend()
+{
+    flagPacketResend = true;
+}
+
 short AbstractStreamData::getHeaderFlag()
 {
-    return 0;
+    if(!flagPacketResend)
+        return 0;
+    else
+        return 0x0001;
 }
 
 std::string AbstractStreamData::toString()
