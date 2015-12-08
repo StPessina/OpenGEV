@@ -248,11 +248,20 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
 
         streamChannelTransmitter->fastSendPacket(payload);
 
-        //CR-491cd delay
-        quint32 delay = registers[packetDelayRegCode]->getValue();
-        if(delay>0) {
-            dataStreamDelay->start(delay);
+        //CR-491cd delay (based on system tick 1GHz form default CR-123cd => nano seconds)
+        quint32 delayns = registers[packetDelayRegCode]->getValue();
+        if(delayns>0) {
+            actualns = 0;
+            start = std::chrono::steady_clock::now();
+            while(actualns<delayns) {
+                end = std::chrono::steady_clock::now();
+                actualns=std::chrono::duration_cast<std::chrono::nanoseconds>(end- start).count();
+            }
+
+            /* only ms version..
+            dataStreamDelay->start(delayus);
             dataStreamDelayLoop->exec();
+            */
         }
     }
 

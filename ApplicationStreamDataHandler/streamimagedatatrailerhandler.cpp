@@ -14,6 +14,12 @@ int StreamImageDataTrailerHandler::execute()
     else {
         StreamDataReceiver* receiver = (StreamDataReceiver*) target;
 
+        if(!receiver->blockIdExist(getRequestBlockId()))
+            return GEV_STATUS_ERROR;
+
+        if(!isPacketResend())
+            receiver->checkPacketIdSequence(getRequestBlockId(), getRequestPacketId());
+
         receiver->closeStreamData(getRequestBlockId(), getRequestPacketId());
 
         resultStatus=GEV_STATUS_SUCCESS;

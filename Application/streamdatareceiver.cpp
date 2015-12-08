@@ -32,6 +32,10 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address,
     packetId = new quint32[streamDataCacheSize];
     for (int i = 0; i < streamDataCacheSize; ++i)
         packetId[i]=0;
+
+    lastDataWriteIndex = new quint32[streamDataCacheSize];
+    for (int i = 0; i < streamDataCacheSize; ++i)
+        lastDataWriteIndex[i]=0;
 }
 
 StreamDataReceiver::~StreamDataReceiver()
@@ -83,15 +87,37 @@ bool StreamDataReceiver::blockIdExist(quint64 blockId)
 
 bool StreamDataReceiver::checkPacketIdSequence(quint64 blockId, quint32 packetId)
 {
-    int i = getStreamDataIndexFromBlockId(blockId);
+    int cacheIndex = getStreamDataIndexFromBlockId(blockId);
 
-    if(i==-1)
+    if(cacheIndex==-1)
         return false;
 
-    if(this->packetId[i]>packetId) //Accept previous as resend packets
+    return checkPacketIdSequence(cacheIndex, blockId, packetId);
+}
+
+bool StreamDataReceiver::addData(quint64 blockId, quint32 packetId, const char *data, quint32 dataLenght)
+{
+    int cacheIndex = getStreamDataIndexFromBlockId(blockId);
+
+    if(cacheIndex==-1)
+        return false;
+
+    checkPacketIdSequence(cacheIndex, blockId, packetId);
+
+    memcpy(&(streamData[cacheIndex]->data[lastDataWriteIndex[cacheIndex]]),
+           data, dataLenght*sizeof(char));
+
+    lastDataWriteIndex[cacheIndex]+=dataLenght;
+
+    return true;
+}
+
+bool StreamDataReceiver::checkPacketIdSequence(int cacheIndex, quint64 blockId, quint32 packetId)
+{
+    if(this->packetId[cacheIndex]>packetId) //Accept previous as resend packets
         return true;
 
-    bool sequentiallyCheckResult = (packetId==this->packetId[i]+1);
+    bool sequentiallyCheckResult = (packetId==this->packetId[cacheIndex]+1);
 
     if(!sequentiallyCheckResult) {
         PacketResendCommand resend (this,
@@ -99,11 +125,11 @@ bool StreamDataReceiver::checkPacketIdSequence(quint64 blockId, quint32 packetId
                                     requestRetrasmissionChannel.getStandardDestinationPort(),
                                     channelId,
                                     blockId,
-                                    this->packetId[i]+1, packetId-1);
+                                    this->packetId[cacheIndex]+1, packetId-1);
         requestRetrasmissionChannel.sendPacket(resend);
     }
 
-    this->packetId[i] = packetId;
+    this->packetId[cacheIndex] = packetId;
 
     return sequentiallyCheckResult;
 }
@@ -170,6 +196,8 @@ int StreamDataReceiver::freeStreamData(int index)
     streamData[index]->destroyPixelMap();
     delete streamData[index];
     blockId[index]=-1;
+    lastDataWriteIndex[index]=0;
+    packetId[index]=0;
     return 0;
 }
 

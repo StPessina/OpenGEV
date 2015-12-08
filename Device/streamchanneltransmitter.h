@@ -6,6 +6,8 @@
 #include <map>
 #include <math.h>
 
+#include <chrono>
+
 #include "opengv_global.h"
 
 #include "CommonBootstrapRegister/bootstrapregister.h"
@@ -108,8 +110,14 @@ private:
 
     void initStreamDataDelayTimer();
 
+    //Packet send delay
+        //ms version
     QTimer* dataStreamDelay;
     QEventLoop* dataStreamDelayLoop;
+        //ns version
+    long actualns;
+    std::chrono::steady_clock::time_point start;
+    std::chrono::steady_clock::time_point end;
 };
 
 #endif // DEVICESTREAMCHANNEL_H

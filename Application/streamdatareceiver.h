@@ -45,6 +45,8 @@ public:
 
     virtual bool checkPacketIdSequence(quint64 blockId, quint32 packetId);
 
+    virtual bool addData(quint64 blockId, quint32 packetId, const char* data, quint32 dataLenght);
+
     virtual void closeStreamData(quint64 blockId, quint32 packetId);
 
     virtual PixelMap<Pixel<2>>::Ptr getStreamData();
@@ -61,6 +63,10 @@ signals:
     void startGetStreamData();
     void newStreamDataAvailable();
 
+protected:
+
+    virtual bool checkPacketIdSequence(int cacheIndex, quint64 blockId, quint32 packetId);
+
 private:
 
     quint16 channelId;
@@ -72,6 +78,7 @@ private:
     PixelMap<Pixel<2>>::Ptr* streamData;
     quint64* blockId;
     quint32* packetId;
+    quint32* lastDataWriteIndex;
 
     int streamDataCacheSize = 15;
 

@@ -9,6 +9,7 @@ StreamImageDataPayloadHandler::StreamImageDataPayloadHandler(GVComponent *target
 int StreamImageDataPayloadHandler::execute()
 {
     int resultStatus;
+
     if(!checkHeader())
         resultStatus = GEV_STATUS_INVALID_HEADER;
     else {
@@ -19,6 +20,11 @@ int StreamImageDataPayloadHandler::execute()
 
         QByteArray datagramWithoutHeader = receivedDatagram.mid(20);
 
+        const char* origin = datagramWithoutHeader.data();
+        if(!receiver->addData(getRequestBlockId(), getRequestPacketId(), origin, datagramWithoutHeader.size()))
+            return GEV_STATUS_ERROR;
+
+        /*
         if(!receiver->blockIdExist(getRequestBlockId()))
             return GEV_STATUS_ERROR;
 
@@ -28,6 +34,7 @@ int StreamImageDataPayloadHandler::execute()
         char* origin = datagramWithoutHeader.data();
         memcpy(&((receiver->getStreamData(getRequestBlockId())->data)[datagramWithoutHeader.size()*(getRequestPacketId()-2)]),
                origin, datagramWithoutHeader.size()*sizeof(char));
+        */
 
         resultStatus = GEV_STATUS_SUCCESS;
     }
