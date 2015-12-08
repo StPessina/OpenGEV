@@ -110,11 +110,12 @@ private:
 
     void initStreamDataDelayTimer();
 
-    //Packet send delay
-        //ms version
+    //Delay ms between leader->payloads and payloads->trailer
     QTimer* dataStreamDelay;
     QEventLoop* dataStreamDelayLoop;
-        //ns version
+
+
+    //Delay ns between payload packets
     long actualns;
     std::chrono::steady_clock::time_point start;
     std::chrono::steady_clock::time_point end;

@@ -16,6 +16,7 @@ StreamChannelTransmitter::StreamChannelTransmitter(int id)
 StreamChannelTransmitter::StreamChannelTransmitter(int id, int sourcePort)
 {
     this->id = id;
+    initStreamDataDelayTimer();
     initRegisterMap();
 
     registers[sourcePortRegCode]
@@ -195,7 +196,7 @@ void StreamChannelTransmitter::initStreamDataDelayTimer()
     this->dataStreamDelay = new QTimer(this);
     this->dataStreamDelay->setSingleShot(true);
 
-    this->dataStreamDelay->setTimerType(Qt::PreciseTimer);
+    //this->dataStreamDelay->setTimerType(Qt::PreciseTimer);
 
     this->dataStreamDelayLoop = new QEventLoop(this);
 
@@ -257,11 +258,6 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
                 end = std::chrono::steady_clock::now();
                 actualns=std::chrono::duration_cast<std::chrono::nanoseconds>(end- start).count();
             }
-
-            /* only ms version..
-            dataStreamDelay->start(delayus);
-            dataStreamDelayLoop->exec();
-            */
         }
     }
 
