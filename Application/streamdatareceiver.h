@@ -49,9 +49,9 @@ public:
 
     virtual void closeStreamData(quint64 blockId, quint32 packetId);
 
-    virtual PixelMap<Pixel<2>>::Ptr getStreamData();
+    virtual PixelMap::Ptr getStreamData();
 
-    virtual PixelMap<Pixel<2>>::Ptr getStreamData(quint64 blockId);
+    virtual PixelMap::Ptr getStreamData(quint64 blockId);
 
     virtual quint32 getPixelFormat();
 
@@ -75,7 +75,7 @@ private:
 
     UDPChannel &requestRetrasmissionChannel;
 
-    PixelMap<Pixel<2>>::Ptr* streamData;
+    PixelMap::Ptr* streamData;
     quint64* blockId;
     quint32* packetId;
     quint32* lastDataWriteIndex;

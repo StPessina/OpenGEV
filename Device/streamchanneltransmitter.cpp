@@ -6,7 +6,9 @@ StreamChannelTransmitter::StreamChannelTransmitter(int id)
     initStreamDataDelayTimer();
     initRegisterMap();
 
-    int sourcePort = rand()*10000+40000; //select random port between rangeport 40000-50000
+    //select random port between rangeport 40000-50000 (OLD)
+    //int sourcePort = random()*10000+40000;
+    int sourcePort = 0; //Leave OS pick a port for me
 
     registers[sourcePortRegCode]->setValue(sourcePort);
 
@@ -203,12 +205,12 @@ void StreamChannelTransmitter::initStreamDataDelayTimer()
     connect(dataStreamDelay, SIGNAL(timeout()), dataStreamDelayLoop, SLOT(quit()));
 }
 
-int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapacket)
+int StreamChannelTransmitter::writeIncomingData(PixelMap &datapacket)
 {
     if(!isChannelOpen())
         return 0;
 
-    if(datapacket->dataLength<=0)
+    if(datapacket.dataLength<=0)
         return 0;
 
     //CR-489cd
@@ -217,17 +219,17 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
             -8 //bytes UDP header
             -20; //bytes for GVSP header
 
-    //QByteArray data = datapacket->getImagePixelData();
-    dataToSend = datapacket->getImagePixelData();
+    //QByteArray data = datapacket.getImagePixelData();
+    dataToSend = (const char*) datapacket.getImagePixelData();
 
     //Send data leader packet
     quint32 packetId=1;
 
     StreamImageDataLeader leader (destAddress, destPort,
-           blockId, packetId, datapacket->pixelFormat,
-           datapacket->sizex, datapacket->sizey,
-           datapacket->offsetx, datapacket->offsety,
-           datapacket->paddingx, datapacket->paddingy);
+           blockId, packetId, datapacket.pixelFormat,
+           datapacket.sizex, datapacket.sizey,
+           datapacket.offsetx, datapacket.offsety,
+           datapacket.paddingx, datapacket.paddingy);
 
     streamChannelTransmitter->fastSendPacket(leader);
 
@@ -236,8 +238,8 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     dataStreamDelayLoop->exec();
 
     //Compute how many packets need to be send
-    quint32 packetsToSend = floor(datapacket->dataLength / packetSize);
-    quint32 lastPacketsDimension = datapacket->dataLength % packetSize;
+    quint32 packetsToSend = floor(datapacket.dataLength / packetSize);
+    quint32 lastPacketsDimension = datapacket.dataLength % packetSize;
 
     //send packets
     for (quint32 i = 0; i < packetsToSend; ++i) {
@@ -277,7 +279,7 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     //send trailer packet
     packetId++;
     StreamImageDataTrailer trailer(destAddress, destPort,
-           blockId, packetId, datapacket->sizey);
+           blockId, packetId, datapacket.sizey);
 
     streamChannelTransmitter->fastSendPacket(trailer);
 
@@ -287,12 +289,12 @@ int StreamChannelTransmitter::writeIncomingData(PixelMap<Pixel<2>>::Ptr datapack
     return packetsToSend+1;
 }
 
-int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::Ptr datapacket)
+int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap &datapacket)
 {
     if(!isChannelOpen())
         return 0;
 
-    if(datapacket->dataLength<=0)
+    if(datapacket.dataLength<=0)
         return 0;
 
     //CR-489cd
@@ -303,13 +305,13 @@ int StreamChannelTransmitter::writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::P
             -20; //bytes for GVSP header
     */
 
-    QByteArray data = datapacket->getImagePixelData();
+    QByteArray data = (const char*) datapacket.getImagePixelData();
 
     StreamImageDataAllIn allInPacket (destAddress, destPort,
-           blockId, datapacket->pixelFormat,
-           datapacket->sizex, datapacket->sizey,
-           datapacket->offsetx, datapacket->offsety,
-           datapacket->paddingx, datapacket->paddingy, data);
+           blockId, datapacket.pixelFormat,
+           datapacket.sizex, datapacket.sizey,
+           datapacket.offsetx, datapacket.offsety,
+           datapacket.paddingx, datapacket.paddingy, data);
 
     streamChannelTransmitter->fastSendPacket(allInPacket);
 

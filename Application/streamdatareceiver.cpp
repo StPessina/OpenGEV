@@ -23,7 +23,10 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address,
     streamReceiver->start();
 
 
-    streamData = new PixelMap<Pixel<2>>::Ptr[streamDataCacheSize];
+    streamData = new PixelMap::Ptr[streamDataCacheSize];
+
+    for (int i = 0; i < streamDataCacheSize; ++i)
+        streamData[i]=NULL;
 
     blockId = new quint64[streamDataCacheSize];
     for (int i = 0; i < streamDataCacheSize; ++i)
@@ -42,12 +45,18 @@ StreamDataReceiver::~StreamDataReceiver()
 {
     delete streamReceiver;
     for (int i = 0; i < streamDataCacheSize; ++i) {
-        if(blockId[i]!=-1)
+        if(blockId[i]!=-1) {
             freeStreamData(i);
+            if(streamData[i]!=NULL) {
+                streamData[i]->destroyPixelMap();
+                delete streamData[i];
+            }
+        }
     }
     delete streamData;
     delete blockId;
     delete packetId;
+    delete lastDataWriteIndex;
 }
 
 void StreamDataReceiver::openStreamData(quint64 blockId,
@@ -62,9 +71,15 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
     if(getStreamDataIndexFromBlockId(blockId)==-1) {
         int i = getFreeStreamData();
         this->blockId[i] = blockId;
-        streamData[i] = new PixelMap<Pixel<2>>(pixelFormat, sizex, sizey,
+
+        if(streamData[i]==NULL)
+            streamData[i] = new PixelMap(pixelFormat, sizex, sizey,
                                            offsetx, offsety,
                                            paddingx, paddingy);
+        else
+            streamData[i]->renew(pixelFormat, sizex, sizey,
+                                 offsetx, offsety,
+                                 paddingx, paddingy);
         this->packetId[i] = 1;
     }
 #ifdef ENABLE_LOG4CPP
@@ -147,12 +162,12 @@ void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
 #endif
 }
 
-PixelMap<Pixel<2>>::Ptr StreamDataReceiver::getStreamData()
+PixelMap::Ptr StreamDataReceiver::getStreamData()
 {
     return streamData[lastClosedStream];
 }
 
-PixelMap<Pixel<2>>::Ptr StreamDataReceiver::getStreamData(quint64 blockId)
+PixelMap::Ptr StreamDataReceiver::getStreamData(quint64 blockId)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
     if(i!=-1)
@@ -193,8 +208,6 @@ int StreamDataReceiver::getFreeStreamData()
 
 int StreamDataReceiver::freeStreamData(int index)
 {
-    streamData[index]->destroyPixelMap();
-    delete streamData[index];
     blockId[index]=-1;
     lastDataWriteIndex[index]=0;
     packetId[index]=0;

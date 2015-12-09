@@ -60,9 +60,9 @@ public:
 
     virtual bool isChannelOpen() final;
 
-    int writeIncomingData(PixelMap<Pixel<2>>::Ptr datapacket);
+    int writeIncomingData(PixelMap &datapacket);
 
-    int writeIncomingDataAllInFormat(PixelMap<Pixel<2>>::Ptr datapacket);
+    int writeIncomingDataAllInFormat(PixelMap &datapacket);
 
     int insertPacketResendInIncomingData(quint64 blockId, quint32 packetId);
 

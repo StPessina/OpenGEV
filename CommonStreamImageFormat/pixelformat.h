@@ -29,6 +29,9 @@
 #define GVSP_PIX_COUNT 0x46
 // next Pixel ID available
 
+//Custom pixel number
+#define GVSP_PIX_OCCUPY40BIT 0x00280000
+
 //===================================================
 // MONO FORMAT
 //===================================================
@@ -43,6 +46,8 @@
 // RGB FORMAT
 //===================================================
 
+#define GVSP_PIX_RGB8 (GVSP_PIX_COLOR | GVSP_PIX_OCCUPY24BIT | 0x0014)
+
 #define GVSP_PIX_RGB16 (GVSP_PIX_COLOR | GVSP_PIX_OCCUPY48BIT | 0x0033)
 
 //===================================================
@@ -52,5 +57,11 @@
 //===================================================
 // RGB PLANAR FORMAT
 //===================================================
+
+//===================================================
+// CUSTOM DEPTH + RGB FORMAT
+//===================================================
+
+#define GVSP_PIX_MONO16_RGB8 (GVSP_PIX_CUSTOM | GVSP_PIX_OCCUPY40BIT | 0x0001)
 
 #endif // PIXELFORMAT_H
