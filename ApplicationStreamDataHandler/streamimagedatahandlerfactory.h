@@ -15,39 +15,44 @@
 #include "DeviceCommandHandler/cmdnotsupportedmh.h"
 
 /**
- * @brief The ApplicationMessageHandlerFactory class provide factory pattern for devices, based on the command
- * request id
+ * @brief The StreamImageDataHandlerFactory class provide factory pattern for stream channel receiver. Each stream
+ * packet is handled by specific stream image data handler.
  */
 class StreamImageDataHandlerFactory : public AbstractPacketHandlerFactory
 {
 public:
     /**
-     * @brief ApplicationMessageHandlerFactory constructor
-     * @param target is the application where the commands handled will be executed
+     * @brief StreamImageDataHandlerFactory constructor
+     * @param target is the stream channel receiver where the stream data is stored
      */
     StreamImageDataHandlerFactory(GVComponent* const target);
 
     /**
-     * @brief ~ApplicationMessageHandlerFactory deconstructor
+     * @brief ~StreamImageDataHandlerFactory deconstructor
      */
     virtual ~StreamImageDataHandlerFactory();
 
+    /**
+     * @brief getPacketHandlerIdentifier
+     * @param datagram
+     * @return packet handler identifier if exist (handlerIdentifier)
+     */
     int getPacketHandlerIdentifier(const QByteArray &datagram) final;
 
     /**
-     * @brief isValidCode method check if a messageCode has a specific messageHandler
-     * @param messageCode
-     * @return true if a message handler exists with the requested messageCode
+     * @brief isValidCode method check if a messageCode has a specific streamPacketHandler
+     * @param handlerIdentifier
+     * @return true if a packet handler exists with the requested handlerIdentifier
      */
     bool isValidCode(quint16 handlerIdentifier);
 
     /**
      * @brief createMessageHandler method create a message handler for a message
-     * @param messageCode the code of the message to manage
-     * @param datagram the datagram of the command
+     * @param handlerIdentifier the code of the packet to manage
+     * @param datagram the datagram of the packet
      * @param senderAddress
      * @param senderPort
-     * @return a message handler if exist, or generic message non supported handler
+     * @return a packet handler if exist
      */
     AbstractStreamDataHandler *createPacketHandler(quint16 handlerIdentifier,
                                                  const QByteArray &datagram,

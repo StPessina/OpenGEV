@@ -7,18 +7,23 @@
 
 #include "DeviceCommandHandler/deviceackcode.h"
 /**
- * @brief The ReadRegisterCommand class provide cmd for register read
+ * @brief The PacketResendCommand class provide cmd to request packet
+ * resend on a stream channel. Normally no ack will be received from the device
+ * for this command.
  */
 class PacketResendCommand : public AbstractCommand
 {
 public:
 
     /**
-     * @brief ReadRegisterCommand constructor (for single read)
-     * @param target is the application where discovered devices will be inserted
-     * @param registerAddress to read
+     * @brief PacketResendCommand constructor
+     * @param target stream channel that request stream data resend
      * @param destinationAddress
      * @param destinationPort
+     * @param streamChannelNr stream channel number
+     * @param blockId
+     * @param firstPacketId first packet id to resend
+     * @param lastPacketId last packet id to resend
      */
     PacketResendCommand(GVComponent* target,
                         QHostAddress destinationAddress,
@@ -29,7 +34,7 @@ public:
                         quint32 lastPacketId);
 
     /**
-     * @brief ~ReadRegisterCommand deconstructor
+     * @brief ~PacketResendCommand deconstructor
      */
     virtual ~PacketResendCommand();
 
@@ -40,8 +45,8 @@ public:
     quint16 getLengthWithoutHeader();
 
     /**
-     * @brief getCommandDatagramWithoutHeader method
-     * @return datagram
+     * @brief appendPacketDatagramWithoutHeader method
+     * @param datagram where append data
      */
     void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
@@ -55,9 +60,24 @@ public:
     virtual short getHeaderFlag();
 
 private:
+    /**
+     * @brief streamChannelNr stream channel that request retrasmission
+     */
     quint32 streamChannelNr;
+
+    /**
+     * @brief blockId requested
+     */
     quint64 blockId;
+
+    /**
+     * @brief firstPacketId requested
+     */
     quint32 firstPacketId;
+
+    /**
+     * @brief lastPacketId requested
+     */
     quint32 lastPacketId;
 };
 

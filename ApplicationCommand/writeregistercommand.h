@@ -11,15 +11,15 @@
 #include "DeviceCommandHandler/deviceackcode.h"
 
 /**
- * @brief The WriteRegisterCommand class implements read register command
+ * @brief The WriteRegisterCommand class implements write register command
  * R-166cd
  */
 class WriteRegisterCommand : public AbstractCommand
 {
 public:
     /**
-     * @brief WriteRegisterCommand constructor (for single read)
-     * @param target is the application where discovered devices will be inserted
+     * @brief WriteRegisterCommand constructor (for single write)
+     * @param target
      * @param registerAddress to write
      * @param value to write
      * @param destinationAddress
@@ -32,8 +32,8 @@ public:
                         quint16 destinationPort);
 
     /**
-     * @brief WriteRegisterCommand constructor (for multiple read register)
-     * @param target is the application where discovered devices will be inserted
+     * @brief WriteRegisterCommand constructor (for multiple write register)
+     * @param target
      * @param registerAddresses to write
      * @param registerValues to write
      * @param destinationAddress
@@ -57,8 +57,8 @@ public:
     quint16 getLengthWithoutHeader();
 
     /**
-     * @brief getCommandDatagramWithoutHeader method
-     * @return datagram
+     * @brief appendPacketDatagramWithoutHeader method
+     * @return datagram where append data
      */
     void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
@@ -70,6 +70,9 @@ public:
     int executeAnswer(const QByteArray &answer);
 
 private:
+    /**
+     * @brief registersData store registers addresses and values to write
+     */
     std::unordered_map<int, int> registersData;
 };
 

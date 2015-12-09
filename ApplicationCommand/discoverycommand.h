@@ -45,8 +45,8 @@ public:
     quint16 getLengthWithoutHeader();
 
     /**
-     * @brief getCommandDatagramWithoutHeader method
-     * @return datagram
+     * @brief appendPacketDatagramWithoutHeader method
+     * @param datagram where append data
      */
     void appendPacketDatagramWithoutHeader(QByteArray &datagram);
 
