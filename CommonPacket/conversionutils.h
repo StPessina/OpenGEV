@@ -4,7 +4,8 @@
 #include <QString>
 
 /**
- * @brief The ConversionUtils class
+ * @brief The ConversionUtils class implements methods for BigEndian conversion of data,
+ * to/from QByteArray/char array.
  */
 class ConversionUtils
 {

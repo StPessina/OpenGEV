@@ -38,14 +38,3 @@ int StreamImageDataLeaderHandler::execute()
 
     return resultStatus;
 }
-
-quint16 StreamImageDataLeaderHandler::getAckDatagramLengthWithoutHeader()
-{
-    return 0;
-}
-
-void StreamImageDataLeaderHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
-{
-    //Nothing to append
-}
-

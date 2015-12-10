@@ -14,7 +14,8 @@
 #include "CommonPacket//conversionutils.h"
 
 /**
- * @brief The AbstractCommand class provide generic rapresentation for a command
+ * @brief The AbstractCommand class provide generic rapresentation for a command. A command
+ * is exchanged between application and device over Control Channels.
  */
 class AbstractCommand : public AbstractPacket
 {
@@ -90,7 +91,7 @@ protected:
     virtual short getHeaderFlag();
 
     /*!
-     * \brief getHeader
+     * \brief appendHeader
      * standard GV command header
      * byte 0: 0x42
      * byte 1: control flag (bit 7 = requireACK

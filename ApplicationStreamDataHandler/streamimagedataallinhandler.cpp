@@ -30,13 +30,3 @@ int StreamImageDataAllInHandler::execute()
     return resultStatus;
 }
 
-quint16 StreamImageDataAllInHandler::getAckDatagramLengthWithoutHeader()
-{
-    return 0;
-}
-
-void StreamImageDataAllInHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
-{
-    //Nothing to append
-}
-

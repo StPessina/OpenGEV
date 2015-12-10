@@ -9,13 +9,14 @@
 #include "CommonPacket/conversionutils.h"
 
 /**
- * @brief The AbstractMessageHandlerFactory class create new message handlers
+ * @brief The AbstractCommandHandlerFactory class create new message handlers for commands
+ * messages.
  */
 class AbstractCommandHandlerFactory : public AbstractPacketHandlerFactory
 {
 public:
     /**
-     * @brief AbstractMessageHandlerFactory constructor
+     * @brief AbstractCommandHandlerFactory constructor
      * @param target the component where the handler created will be executed
      */
     AbstractCommandHandlerFactory(GVComponent* const target);
@@ -25,6 +26,11 @@ public:
      */
     virtual ~AbstractCommandHandlerFactory();
 
+    /**
+     * @brief getPacketHandlerIdentifier search handler identifier inside datagrams
+     * @param datagram
+     * @return handler identief if found, 0 if not found, -1 if problems with header
+     */
     int getPacketHandlerIdentifier(const QByteArray &datagram) final;
 
     /**

@@ -28,13 +28,3 @@ int StreamImageDataTrailerHandler::execute()
     return resultStatus;
 }
 
-quint16 StreamImageDataTrailerHandler::getAckDatagramLengthWithoutHeader()
-{
-    return 0;
-}
-
-void StreamImageDataTrailerHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
-{
-    //Nothing to append
-}
-

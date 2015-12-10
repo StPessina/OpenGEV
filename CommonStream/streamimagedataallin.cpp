@@ -26,7 +26,9 @@ StreamImageDataAllIn::~StreamImageDataAllIn()
 
 quint16 StreamImageDataAllIn::getLengthWithoutHeader()
 {
-    return 36 + 20 + data.size();
+    return 36 //Leader body
+            + 20 //Trailer body
+            + data.size(); //stream data
 }
 
 void StreamImageDataAllIn::appendPacketDatagramWithoutHeader(QByteArray &datagram)

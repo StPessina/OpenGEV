@@ -38,20 +38,6 @@ public:
      */
     int execute();
 
-protected:
-
-    /**
-     * @brief getAckDatagramLengthWithoutHeader
-     * @return 0 (R-164c no ack required for stream message)
-     */
-    quint16 getAckDatagramLengthWithoutHeader();
-
-    /**
-     * @brief appendAckDatagramWithoutHeader
-     * @param datagram (R-164c no ack required for stream message)
-     */
-    void appendAckDatagramWithoutHeader(QByteArray &datagram);
-
 };
 
 #endif // STREAMIMAGEDATALEADERHANDLER_H

@@ -10,8 +10,10 @@
 #include "CommonPacket/conversionutils.h"
 
 /**
- * \brief The AbstractMessageHandler class is generic handler
- * for incoming message on slave channel
+ * \brief The AbstractPacketHandler class is generic handler
+ * for incoming message on slave channel. An AbstractPacketHandlerFactory create AstractPacketHandler
+ * and they will be used by UDPChannel for messages handling. This class can be inherited to
+ * create message handlers for GigE vision commands and stream data packets.
  */
 class AbstractPacketHandler
 {

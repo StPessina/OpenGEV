@@ -1,6 +1,9 @@
 #ifndef PAYLOADTYPE_H
 #define PAYLOADTYPE_H
 
+/**
+ * @brief The PayloadType enum lists possible type for stream packets format
+ */
 enum PayloadType {
     IMAGE = 0x0001,
     IMAGE_EXTENDED = 0x4001,

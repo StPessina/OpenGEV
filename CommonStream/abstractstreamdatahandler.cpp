@@ -63,11 +63,6 @@ bool AbstractStreamDataHandler::isPacketResend()
     return flag == 1;
 }
 
-void AbstractStreamDataHandler::appendAckHeader(QByteArray &datagram)
-{
-    //No ack required
-}
-
 bool AbstractStreamDataHandler::checkHeader()
 {
     if(receivedDatagram.length()>20)
@@ -87,4 +82,19 @@ std::string AbstractStreamDataHandler::toString()
 quint16 AbstractStreamDataHandler::getAckHeaderLength()
 {
     return 0;
+}
+
+void AbstractStreamDataHandler::appendAckHeader(QByteArray &datagram)
+{
+    //No ack required
+}
+
+quint16 AbstractStreamDataHandler::getAckDatagramLengthWithoutHeader()
+{
+    return 0;
+}
+
+void AbstractStreamDataHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+{
+    //Nothing to append
 }

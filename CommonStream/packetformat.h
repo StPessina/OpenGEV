@@ -1,6 +1,9 @@
 #ifndef PACKETFORMAT_H
 #define PACKETFORMAT_H
 
+/**
+ * @brief The PacketFormat enum lists possible types for stream packets.
+ */
 enum PacketFormat {
     DATA_LEADER_FORMAT = 1,
     DATA_TRAILER_FORMAT = 2,

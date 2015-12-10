@@ -13,14 +13,16 @@
 #include "CommonPacket/conversionutils.h"
 
 /**
- * @brief The AbstractCommand class provide generic rapresentation for a command
+ * @brief The AbstractPacket class provide generic rapresentation for a packet. It can be
+ * inherited to create packets for GigE commands or stream packets and so on. UDPChannel can accept this
+ * kind children of this abstract class for messages sending.
  */
 class AbstractPacket
 {
 public:
     /**
-     * @brief AbstractCommand constructor
-     * @param target is the component where the command will be executed
+     * @brief AbstractPacket constructor
+     * @param target is the component where the command will be executed when ack is received
      * @param destAddress
      * @param destPort
      * @param commandCode
@@ -38,8 +40,8 @@ public:
     virtual ~AbstractPacket();
 
     /**
-     * @brief getCommandDatagram method
-     * @return the datagram of the command
+     * @brief getPacketDatagram method
+     * @return the datagram of the packet
      */
     virtual const QByteArray& getPacketDatagram() final;
 
@@ -101,7 +103,7 @@ public:
 protected:
 
     /**
-     * @brief target where the command will be executed
+     * @brief target where the packet will be executed
      */
     GVComponent* target;
 
@@ -124,8 +126,8 @@ protected:
     virtual quint16 getLengthWithoutHeader() = 0;
 
     /**
-     * @brief getCommandDatagramWithoutHeader
-     * @return the command datagram
+     * @brief appendPacketDatagramWithoutHeader
+     * @param datagram where specific datagram should be appended
      */
     virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram) = 0;
 

@@ -7,19 +7,20 @@
 #include "CommonPacket/conversionutils.h"
 
 /**
- * @brief The AbstractPacketHandlerFactory class create new message handlers
+ * @brief The AbstractPacketHandlerFactory class create new message handlers. This class can be inherited
+ * to create specific message factory. An UDPChannel need a factory to manage incoming messages on the channel.
  */
 class AbstractPacketHandlerFactory
 {
 public:
     /**
-     * @brief AbstractMessageHandlerFactory constructor
+     * @brief AbstractPacketHandlerFactory constructor
      * @param target the component where the handler created will be executed
      */
     AbstractPacketHandlerFactory(GVComponent* target);
 
     /**
-     * @brief ~AbstractMessageHandlerFactory deconstructor
+     * @brief ~AbstractPacketHandlerFactory deconstructor
      */
     virtual ~AbstractPacketHandlerFactory();
 

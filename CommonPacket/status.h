@@ -1,6 +1,9 @@
 #ifndef DEVICEACKSTATUS_H
 #define DEVICEACKSTATUS_H
 
+/**
+ * @brief The Status enum lists possible GEV_STATUS in a GigE vision datagram.
+ */
 enum Status {
     GEV_STATUS_SUCCESS  = 0x0000,
     GEV_STATUS_PACKET_RESEND  = 0x0100,

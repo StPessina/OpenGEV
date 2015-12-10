@@ -14,15 +14,16 @@
 #include "CommonStream/packetformat.h"
 
 /**
- * \brief The AbstractCommandHandler class is generic handler
- * for incoming command
+ * \brief The AbstractStreamDataHandler class is generic handler
+ * for incoming stream packet handler. No ack message is required for
+ * this kind of message (R-164c).
  */
 class AbstractStreamDataHandler : public AbstractPacketHandler
 {
 public:
     /**
      * @brief AbstractStreamDataHandler
-     * @param target component where the new message should be applied
+     * @param target is the stream channel receiver where the stream data will be stored
      * @param packetFormat packet format
      * @param datagram datagram received
      * @param senderAddress who send the datagram
@@ -92,17 +93,30 @@ public:
 
 protected:
 
+    /**
+     * @brief requestPacketFormat
+     */
     quint32 requestPacketFormat;
 
+    /**
+     * @brief requestBlockId
+     */
     quint64 requestBlockId;
 
+    /**
+     * @brief requestPacketId
+     */
     quint32 requestPacketId;
 
+    /**
+     * @brief getAckHeaderLength
+     * @return 0 always (R-164c no ack required for stream message)
+     */
     quint16 getAckHeaderLength() final;
 
     /**
      * @brief getAckHeader
-     * @return header for ack message
+     * @return datagram (R-164c no ack required for stream message)
      */
     virtual void appendAckHeader(QByteArray &datagram) final;
 
@@ -111,6 +125,18 @@ protected:
      * @return true if header is good
      */
     virtual bool checkHeader() final;
+
+    /**
+     * @brief getAckDatagramLengthWithoutHeader
+     * @return 0 always (R-164c no ack required for stream message)
+     */
+    virtual quint16 getAckDatagramLengthWithoutHeader() final;
+
+    /**
+     * @brief appendAckDatagramWithoutHeader
+     * @param datagram (R-164c no ack required for stream message)
+     */
+    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram) final;
 };
 
 #endif // ABSTRACTSTREAMDATAHANDLER_H

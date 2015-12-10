@@ -19,14 +19,17 @@
 #include "CommonStream/packetformat.h"
 
 /**
- * @brief The AbstractStreamData class provide generic rapresentation for stream data packet
+ * @brief The AbstractStreamData class provide generic rapresentation for stream data packet.
+ * For each AbstractStreamData no ack message is required. So no target class will be specified
+ * and execution is empty for each class that inherit AbstractStreamData.
+ * In this implementation GigE vision extendDI is always enabled (GigE vision V2.0) so blockId is 64 bit
+ * and packet id is 32 bit.
  */
 class AbstractStreamData : public AbstractPacket
 {
 public:
     /**
      * @brief AbstractStreamData constructor
-     * @param target is the component where the command will be executed
      * @param destAddress
      * @param destPort
      * @param packetFormat
@@ -47,6 +50,11 @@ public:
      */
     virtual ~AbstractStreamData();
 
+    /**
+     * @brief executeAnswer no execution is required for this kind of messages
+     * @param answer
+     * @return 0 always
+     */
     virtual int executeAnswer(const QByteArray &answer);
 
     /**
@@ -56,8 +64,8 @@ public:
     virtual std::string toString();
 
     /**
-     * @brief getBlockId64
-     * @return
+     * @brief getBlockId64 blockId of the stream data
+     * @return blockId
      */
     virtual quint64 getBlockId64() final;
 
@@ -85,27 +93,51 @@ protected:
     virtual short getHeaderFlag() final;
 
     /*!
-     * \brief getHeader
+     * \brief appendHeader
      * \return char* with header
      */
     virtual void appendHeader(QByteArray &datagram) final;
 
+    /**
+     * @brief packetId32 message packetId
+     */
     quint32 packetId32;
 
 private:
 
+    /**
+     * @brief status execution status (always SUCCESS)
+     */
     Status status = GEV_STATUS_SUCCESS;
 
+    /**
+     * @brief flagResendError identify resend packet error
+     */
     bool flagResendError = false; //CR-203st
 
+    /**
+     * @brief flagPreviousBlockDropped true if previous block is dropped
+     */
     bool flagPreviousBlockDropped = false;
 
+    /**
+     * @brief flagPacketResend identify this packet as resent
+     */
     bool flagPacketResend = false;
 
+    /**
+     * @brief extendDI always true
+     */
     bool extendDI = true;
 
+    /**
+     * @brief packetFormat message type
+     */
     PacketFormat packetFormat;
 
+    /**
+     * @brief blockId64 message block id
+     */
     quint64 blockId64;
 };
 

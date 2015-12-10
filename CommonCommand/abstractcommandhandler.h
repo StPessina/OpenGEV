@@ -94,26 +94,45 @@ public:
 
 protected:
 
+    /**
+     * @brief ackCode the ack code to set in the ack message
+     */
     quint16 ackCode;
 
+    /**
+     * @brief resultStatus execution result that will be included in ack message
+     */
     Status resultStatus;
 
+    /**
+     * @brief requestCommandCode the request command code in request message
+     */
     quint16 requestCommandCode;
 
+    /**
+     * @brief requestLength the request message length
+     */
     quint16 requestLength;
 
+    /**
+     * @brief reqId the request id in the request message. It will be included in ack message
+     */
     quint16 reqId;
 
+    /**
+     * @brief getAckHeaderLength
+     * @return length of ack header
+     */
     quint16 getAckHeaderLength() final;
 
     /**
-     * @brief getAckHeader
-     * @return header for ack message
+     * @brief appendAckHeader
+     * @return append header for ack message
      */
     virtual void appendAckHeader(QByteArray &datagram) final;
 
     /**
-     * @brief checkHeader check received datagram
+     * @brief checkHeader check received  request message
      * @return true if header is good
      */
     virtual bool checkHeader() final;
