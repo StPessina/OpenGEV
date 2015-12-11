@@ -30,7 +30,8 @@ unix {
     QMAKE_CXXFLAGS+= -std=c++11
 
     INCLUDEPATH += /usr/local/include/log4cpp \
-                   /usr/include/boost
+                   /usr/include/boost \
+                   /usr/include/openni2
 
     LIBS += "-L/usr/lib" \
              -lboost_system
@@ -38,6 +39,8 @@ unix {
     LIBS += -L/usr/local/lib
 
     LIBS += -llog4cpp
+
+    LIBS += -lOpenNI2
 }
 
 OTHER_FILES += \

@@ -36,3 +36,12 @@ SOURCES += \
     $$PWD/DeviceCommandHandler/readregistercommandhandler.cpp \
     $$PWD/DeviceCommandHandler/writeregistercommandhandler.cpp \
     $$PWD/DeviceCommandHandler/packetresendcommandhandler.cpp
+
+INCLUDEPATH += OpenNICamera
+DEPENDPATH += OpenNICamera
+
+HEADERS += \
+    $$PWD/OpenNICamera/opennicamera.h
+
+SOURCES += \
+    $$PWD/OpenNICamera/opennicamera.cpp
