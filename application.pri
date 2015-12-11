@@ -54,3 +54,12 @@ SOURCES += \
     $$PWD/ApplicationStreamDataHandler/streamimagedatapayloadhandler.cpp \
     $$PWD/ApplicationStreamDataHandler/streamimagedatatrailerhandler.cpp \
     $$PWD/ApplicationStreamDataHandler/streamimagedataallinhandler.cpp
+
+INCLUDEPATH += ApplicationStreamDataObserver
+DEPENDPATH += ApplicationStreamDataObserver
+
+HEADERS +=  \
+    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.h
+
+SOURCES += \
+    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.cpp

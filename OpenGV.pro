@@ -31,6 +31,8 @@ unix {
 
     INCLUDEPATH += /usr/local/include/log4cpp \
                    /usr/include/boost \
+                   /usr/include/pcl-1.7 \
+                   /usr/include/eigen3 \
                    /usr/include/openni2
 
     LIBS += "-L/usr/lib" \
@@ -39,6 +41,8 @@ unix {
     LIBS += -L/usr/local/lib
 
     LIBS += -llog4cpp
+
+    LIBS += -lpcl_common
 
     LIBS += -lOpenNI2
 }
