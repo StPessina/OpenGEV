@@ -7,7 +7,7 @@
 
 #include "CommonStream/packetformat.h"
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 #include "Application/streamdatareceiver.h"
 

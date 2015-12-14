@@ -8,7 +8,7 @@
 #include <QThread>
 #include <unordered_map>
 
-#include "opengv.h"
+#include "opengev.h"
 
 #include "CommonComponent/gvcomponent.h"
 

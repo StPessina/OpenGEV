@@ -1,7 +1,7 @@
 #ifndef DISCOVERYCOMMAND_H
 #define DISCOVERYCOMMAND_H
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 #include "CommonCommand/abstractcommand.h"
 

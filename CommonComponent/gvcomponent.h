@@ -1,7 +1,7 @@
 #ifndef GVCOMPONENT_H
 #define GVCOMPONENT_H
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 #ifdef USE_LOG4CPP
     #include <log4cpp/Category.hh>

@@ -12,7 +12,7 @@
 
 #include "DeviceCommandHandler/deviceackcode.h"
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 /**
  * @brief The DiscoveryMessageHandler class answer to discovery command from application

@@ -13,6 +13,7 @@
 
 class AbstractStreamDataObserver : public QObject
 {
+    Q_OBJECT
 public:
     AbstractStreamDataObserver(StreamDataReceiver &channel);
 

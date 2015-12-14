@@ -11,7 +11,7 @@
 
 #include "DeviceCommandHandler/deviceackcode.h"
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 /**
  * @brief The ReadRegisterMessageHandler class implements read register handler

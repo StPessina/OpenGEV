@@ -1,12 +1,12 @@
-#ifndef OPENGV_GLOBAL_H
-#define OPENGV_GLOBAL_H
+#ifndef OPENGEV_GLOBAL_H
+#define OPENGEV_GLOBAL_H
 
 #include <QtCore/qglobal.h>
 
-#if defined(OPENGV_LIBRARY)
-#  define OPENGVSHARED_EXPORT Q_DECL_EXPORT
+#if defined(OPENGEV_LIBRARY)
+#  define OPENGEVSHARED_EXPORT Q_DECL_EXPORT
 #else
-#  define OPENGVSHARED_EXPORT Q_DECL_IMPORT
+#  define OPENGEVSHARED_EXPORT Q_DECL_IMPORT
 #endif
 
 #define CONTROL_CHANNEL_DEF_PORT 3956
@@ -29,4 +29,4 @@
     #error SOCKET_ERROR
 #endif
 
-#endif // OPENGV_GLOBAL_H
+#endif // OPENGEV_GLOBAL_H

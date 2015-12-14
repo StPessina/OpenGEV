@@ -13,7 +13,7 @@
 
 #include "Device/gvdevice.h"
 
-#include "opengv_global.h"
+#include "opengev_global.h"
 
 /**
  * @brief The PacketResendCommandHandler class implements read register handler
