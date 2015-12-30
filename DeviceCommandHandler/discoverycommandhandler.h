@@ -27,6 +27,7 @@ public:
 
     virtual int execute();
 
+protected:
     virtual quint16 getAckDatagramLengthWithoutHeader();
 
     virtual void appendAckDatagramWithoutHeader(QByteArray &datagram);
