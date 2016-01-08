@@ -127,16 +127,16 @@ protected:
     virtual bool checkHeader() final;
 
     /**
-     * @brief getAckDatagramLengthWithoutHeader
+     * @brief getAckBodyLength
      * @return 0 always (R-164c no ack required for stream message)
      */
-    virtual quint16 getAckDatagramLengthWithoutHeader() final;
+    virtual quint16 getAckBodyLength() final;
 
     /**
-     * @brief appendAckDatagramWithoutHeader
+     * @brief appendAckBody
      * @param datagram (R-164c no ack required for stream message)
      */
-    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram) final;
+    virtual void appendAckBody(QByteArray &datagram) final;
 };
 
 #endif // ABSTRACTSTREAMDATAHANDLER_H

@@ -12,12 +12,12 @@ StreamRawDataTrailer::~StreamRawDataTrailer()
 
 }
 
-quint16 StreamRawDataTrailer::getLengthWithoutHeader()
+quint16 StreamRawDataTrailer::getPacketBodyLength()
 {
     return 4;
 }
 
-void StreamRawDataTrailer::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamRawDataTrailer::appendPacketBody(QByteArray &datagram)
 {    
     ConversionUtils::appendShortToQByteArray(datagram, 0);
 

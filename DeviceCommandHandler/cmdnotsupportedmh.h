@@ -29,9 +29,9 @@ public:
     int execute();
 
 protected:
-    void appendAckDatagramWithoutHeader(QByteArray &datagram);
+    void appendAckBody(QByteArray &datagram);
 
-    quint16 getAckDatagramLengthWithoutHeader();
+    quint16 getAckBodyLength();
 };
 
 #endif // CMDNOTSUPPORTEDMH_H

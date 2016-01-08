@@ -83,7 +83,7 @@ public:
 
 protected:
 
-    virtual quint16 getHeaderLength() final;
+    virtual quint16 getPacketHeaderLength() final;
 
     /*!
      * \brief getHeaderFlagFirstBits for custom bit flag redefine
@@ -93,10 +93,10 @@ protected:
     virtual short getHeaderFlag() final;
 
     /*!
-     * \brief appendHeader
+     * \brief appendPacketHeader
      * \return char* with header
      */
-    virtual void appendHeader(QByteArray &datagram) final;
+    virtual void appendPacketHeader(QByteArray &datagram) final;
 
     /**
      * @brief packetId32 message packetId

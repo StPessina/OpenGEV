@@ -67,7 +67,7 @@ void AbstractCommandHandler::appendAckHeader(QByteArray &datagram)
 {
     ConversionUtils::appendShortToQByteArray(datagram, resultStatus);
     ConversionUtils::appendShortToQByteArray(datagram, ackCode);
-    ConversionUtils::appendShortToQByteArray(datagram, getAckDatagramLengthWithoutHeader());
+    ConversionUtils::appendShortToQByteArray(datagram, getAckBodyLength());
     ConversionUtils::appendShortToQByteArray(datagram, reqId);
 }
 
@@ -81,7 +81,7 @@ std::string AbstractCommandHandler::toString()
     return sender.toString().toStdString() + ":" + std::to_string((int) port) + "/"
             + std::to_string(resultStatus) + "/"
             + std::to_string(ackCode) + "/"
-            + std::to_string(getAckDatagramLengthWithoutHeader()) + "/"
+            + std::to_string(getAckBodyLength()) + "/"
             + std::to_string(reqId);
 }
 

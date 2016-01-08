@@ -50,7 +50,7 @@ int ReadRegisterCommandHandler::execute()
     return resultStatus;
 }
 
-quint16 ReadRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
+quint16 ReadRegisterCommandHandler::getAckBodyLength()
 {
     if(resultStatus==GEV_STATUS_SUCCESS)
         return numberOfRegisters*4;
@@ -60,7 +60,7 @@ quint16 ReadRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
     return 0;
 }
 
-void ReadRegisterCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void ReadRegisterCommandHandler::appendAckBody(QByteArray &datagram)
 {
     if(resultStatus!=GEV_STATUS_SUCCESS ||
             (numberOfRegisters==0 && resultStatus==GEV_STATUS_ACCESS_DENIED))

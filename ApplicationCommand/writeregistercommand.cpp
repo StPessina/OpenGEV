@@ -29,12 +29,12 @@ WriteRegisterCommand::~WriteRegisterCommand()
 
 }
 
-quint16 WriteRegisterCommand::getLengthWithoutHeader()
+quint16 WriteRegisterCommand::getPacketBodyLength()
 {
     return registersData.size()*8;
 }
 
-void WriteRegisterCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void WriteRegisterCommand::appendPacketBody(QByteArray &datagram)
 {
     //R-173c
     foreach (auto reg, registersData) {

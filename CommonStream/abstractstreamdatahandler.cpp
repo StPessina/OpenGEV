@@ -75,7 +75,7 @@ std::string AbstractStreamDataHandler::toString()
     return sender.toString().toStdString() + ":" + std::to_string((int) port) + "/"
             + std::to_string(requestPacketFormat) + "/"
             + std::to_string(requestBlockId) + "/"
-            + std::to_string(getAckDatagramLengthWithoutHeader()) + "/"
+            + std::to_string(getAckBodyLength()) + "/"
             + std::to_string(requestPacketId);
 }
 
@@ -89,12 +89,12 @@ void AbstractStreamDataHandler::appendAckHeader(QByteArray &datagram)
     //No ack required
 }
 
-quint16 AbstractStreamDataHandler::getAckDatagramLengthWithoutHeader()
+quint16 AbstractStreamDataHandler::getAckBodyLength()
 {
     return 0;
 }
 
-void AbstractStreamDataHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void AbstractStreamDataHandler::appendAckBody(QByteArray &datagram)
 {
     //Nothing to append
 }

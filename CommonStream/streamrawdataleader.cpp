@@ -17,12 +17,12 @@ quint64 StreamRawDataLeader::getPayloadSize()
     return payloadSize;
 }
 
-quint16 StreamRawDataLeader::getLengthWithoutHeader()
+quint16 StreamRawDataLeader::getPacketBodyLength()
 {
     return 20;
 }
 
-void StreamRawDataLeader::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamRawDataLeader::appendPacketBody(QByteArray &datagram)
 {
     ConversionUtils::appendShortToQByteArray(datagram, 0); //Reserved
 

@@ -31,13 +31,13 @@ public:
 
 protected:
 
-    quint16 getAckDatagramLengthWithoutHeader();
+    quint16 getAckBodyLength();
 
     /**
      * @brief getAckDatagramWithoutHeader
      * @return datagram (R-164c)
      */
-    void appendAckDatagramWithoutHeader(QByteArray &datagram);
+    void appendAckBody(QByteArray &datagram);
 
 };
 

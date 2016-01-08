@@ -35,7 +35,7 @@ StreamImageDataPayload::~StreamImageDataPayload()
 
 }
 
-quint16 StreamImageDataPayload::getLengthWithoutHeader()
+quint16 StreamImageDataPayload::getPacketBodyLength()
 {
     if(charMode)
         return payloadCharLength;
@@ -43,7 +43,7 @@ quint16 StreamImageDataPayload::getLengthWithoutHeader()
         return payloadArray.size();
 }
 
-void StreamImageDataPayload::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamImageDataPayload::appendPacketBody(QByteArray &datagram)
 {
     if(charMode)
         datagram.append(payloadChar, payloadCharLength);

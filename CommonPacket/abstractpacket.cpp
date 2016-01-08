@@ -18,10 +18,10 @@ AbstractPacket::~AbstractPacket()
 const QByteArray &AbstractPacket::getPacketDatagram()
 {
     datagram.clear();
-    datagram.reserve(getHeaderLength()+getLengthWithoutHeader());
+    datagram.reserve(getPacketHeaderLength()+getPacketBodyLength());
 
-    appendHeader(datagram);
-    appendPacketDatagramWithoutHeader(datagram);
+    appendPacketHeader(datagram);
+    appendPacketBody(datagram);
     return datagram;
 }
 

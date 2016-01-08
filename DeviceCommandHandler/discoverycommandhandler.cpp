@@ -18,14 +18,14 @@ int DiscoveryCommandHandler::execute()
     return 0;
 }
 
-quint16 DiscoveryCommandHandler::getAckDatagramLengthWithoutHeader()
+quint16 DiscoveryCommandHandler::getAckBodyLength()
 {
     if(resultStatus==GEV_STATUS_SUCCESS)
         return 248;
     return 0;
 }
 
-void DiscoveryCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void DiscoveryCommandHandler::appendAckBody(QByteArray &datagram)
 {
     if(resultStatus!=GEV_STATUS_SUCCESS)
         return;
@@ -119,7 +119,7 @@ void DiscoveryCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagra
     for (int var = userDefienedName.size(); var < 16; ++var)
         answerChar[var+232] = 0;
 
-    datagram.append(answerChar, getAckDatagramLengthWithoutHeader());
+    datagram.append(answerChar, getAckBodyLength());
 }
 
 

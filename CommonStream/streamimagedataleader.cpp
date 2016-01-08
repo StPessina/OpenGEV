@@ -22,12 +22,12 @@ StreamImageDataLeader::~StreamImageDataLeader()
 
 }
 
-quint16 StreamImageDataLeader::getLengthWithoutHeader()
+quint16 StreamImageDataLeader::getPacketBodyLength()
 {
     return 36;
 }
 
-void StreamImageDataLeader::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamImageDataLeader::appendPacketBody(QByteArray &datagram)
 {    
     ConversionUtils::appendShortToQByteArray(datagram,0);
 

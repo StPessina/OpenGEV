@@ -14,12 +14,12 @@ StreamImageDataTrailer::~StreamImageDataTrailer()
 
 }
 
-quint16 StreamImageDataTrailer::getLengthWithoutHeader()
+quint16 StreamImageDataTrailer::getPacketBodyLength()
 {
     return 8;
 }
 
-void StreamImageDataTrailer::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamImageDataTrailer::appendPacketBody(QByteArray &datagram)
 {
     ConversionUtils::appendShortToQByteArray(datagram, 0); //Reserved
 

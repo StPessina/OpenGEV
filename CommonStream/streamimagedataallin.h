@@ -46,16 +46,16 @@ public:
 protected:
 
     /**
-     * @brief getLengthWithoutHeader
+     * @brief getPacketBodyLength
      * @return datagram length
      */
-    virtual quint16 getLengthWithoutHeader();
+    virtual quint16 getPacketBodyLength();
 
     /**
-     * @brief appendPacketDatagramWithoutHeader
+     * @brief appendPacketBody
      * @param datagram where data must be appended
      */
-    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
+    virtual void appendPacketBody(QByteArray &datagram);
 
 private:
 

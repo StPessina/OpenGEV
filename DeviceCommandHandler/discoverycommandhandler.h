@@ -28,9 +28,9 @@ public:
     virtual int execute();
 
 protected:
-    virtual quint16 getAckDatagramLengthWithoutHeader();
+    virtual quint16 getAckBodyLength();
 
-    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram);
+    virtual void appendAckBody(QByteArray &datagram);
 };
 
 #endif // DEVICEDISCOVERYMESSAGEHANDLER_H

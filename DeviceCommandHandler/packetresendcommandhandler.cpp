@@ -35,12 +35,12 @@ int PacketResendCommandHandler::execute()
     return resultStatus;
 }
 
-quint16 PacketResendCommandHandler::getAckDatagramLengthWithoutHeader()
+quint16 PacketResendCommandHandler::getAckBodyLength()
 {
     return 0; //Ack is directly on stream channel
 }
 
-void PacketResendCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void PacketResendCommandHandler::appendAckBody(QByteArray &datagram)
 {
     //Nothing to append
 }

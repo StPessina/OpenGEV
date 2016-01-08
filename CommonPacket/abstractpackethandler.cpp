@@ -42,10 +42,10 @@ bool AbstractPacketHandler::isAckAllowed()
 const QByteArray &AbstractPacketHandler::getAckDatagram()
 {
     ackDatagram.clear();
-    ackDatagram.reserve(getAckHeaderLength() + getAckDatagramLengthWithoutHeader());
+    ackDatagram.reserve(getAckHeaderLength() + getAckBodyLength());
 
     appendAckHeader(ackDatagram);
-    appendAckDatagramWithoutHeader(ackDatagram);
+    appendAckBody(ackDatagram);
 
     return ackDatagram;
 }
@@ -53,5 +53,5 @@ const QByteArray &AbstractPacketHandler::getAckDatagram()
 std::string AbstractPacketHandler::toString()
 {
     return sender.toString().toStdString() + ":" + std::to_string((int) port) + "/"
-            + std::to_string(getAckDatagramLengthWithoutHeader()) + "/";
+            + std::to_string(getAckBodyLength()) + "/";
 }

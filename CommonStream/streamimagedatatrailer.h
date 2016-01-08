@@ -20,9 +20,9 @@ public:
 
 protected:
 
-    virtual quint16 getLengthWithoutHeader();
+    virtual quint16 getPacketBodyLength();
 
-    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram);
+    virtual void appendPacketBody(QByteArray &datagram);
 
 private:
 

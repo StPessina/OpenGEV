@@ -49,12 +49,12 @@ int WriteRegisterCommandHandler::execute()
     return resultStatus;
 }
 
-quint16 WriteRegisterCommandHandler::getAckDatagramLengthWithoutHeader()
+quint16 WriteRegisterCommandHandler::getAckBodyLength()
 {
     return 4;
 }
 
-void WriteRegisterCommandHandler::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void WriteRegisterCommandHandler::appendAckBody(QByteArray &datagram)
 {
     //R-174c
     ConversionUtils::appendIntToQByteArray(datagram, numberOfRegisters);

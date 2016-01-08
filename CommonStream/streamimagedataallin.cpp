@@ -24,14 +24,14 @@ StreamImageDataAllIn::~StreamImageDataAllIn()
 
 }
 
-quint16 StreamImageDataAllIn::getLengthWithoutHeader()
+quint16 StreamImageDataAllIn::getPacketBodyLength()
 {
     return 36 //Leader body
             + 20 //Trailer body
             + data.size(); //stream data
 }
 
-void StreamImageDataAllIn::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamImageDataAllIn::appendPacketBody(QByteArray &datagram)
 {
 
     StreamImageDataLeader leaderBody(getDestinationAddress(),
@@ -39,14 +39,14 @@ void StreamImageDataAllIn::appendPacketDatagramWithoutHeader(QByteArray &datagra
                                      getBlockId64(),
                                      getPacketId32(),
                                      pixelFormat,sizex,sizey,offsetx,offsety,paddingx,paddingy);
-    leaderBody.appendPacketDatagramWithoutHeader(datagram);
+    leaderBody.appendPacketBody(datagram);
 
     StreamImageDataTrailer trailerBody(getDestinationAddress(),
                                        getDestionationPort(),
                                        getBlockId64(),
                                        getPacketId32(),
                                        sizey);
-    trailerBody.appendPacketDatagramWithoutHeader(datagram);
+    trailerBody.appendPacketBody(datagram);
 
     datagram.append(data);
 }

@@ -105,7 +105,7 @@ protected:
     QByteArray ackDatagram;
 
     /**
-     * @brief getLengthWithoutHeader
+     * @brief getPacketBodyLength
      * @return length of the command request
      */
     virtual quint16 getAckHeaderLength() = 0;
@@ -120,13 +120,13 @@ protected:
      * \brief getAck
      * \return message for acknowledgement without header
      */
-    virtual void appendAckDatagramWithoutHeader(QByteArray &datagram) = 0;
+    virtual void appendAckBody(QByteArray &datagram) = 0;
 
     /*!
      * \brief getAck message without length
      * \return message for acknowledgement
      */
-    virtual quint16 getAckDatagramLengthWithoutHeader() = 0;
+    virtual quint16 getAckBodyLength() = 0;
 
 };
 

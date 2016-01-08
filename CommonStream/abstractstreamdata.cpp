@@ -19,14 +19,14 @@ int AbstractStreamData::executeAnswer(const QByteArray &answer)
     return 0; //No answer required
 }
 
-quint16 AbstractStreamData::getHeaderLength()
+quint16 AbstractStreamData::getPacketHeaderLength()
 {
     return 20;
 }
 
-void AbstractStreamData::appendHeader(QByteArray &datagram)
+void AbstractStreamData::appendPacketHeader(QByteArray &datagram)
 {
-    char header[getHeaderLength()];
+    char header[getPacketHeaderLength()];
     ConversionUtils::setShortToCharArray(header, status, 0);
 
     short flags = getHeaderFlag();
@@ -45,7 +45,7 @@ void AbstractStreamData::appendHeader(QByteArray &datagram)
 
     ConversionUtils::setIntToCharArray(header, packetId32, 16);
 
-    datagram.append(header, getHeaderLength());
+    datagram.append(header, getPacketHeaderLength());
 }
 
 void AbstractStreamData::setFlagPacketResend()

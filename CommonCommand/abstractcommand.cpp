@@ -21,7 +21,7 @@ quint16 AbstractCommand::getCommandCode()
 
 bool AbstractCommand::checkAckHeader(const QByteArray &answer)
 {
-    if(answer.size()<getHeaderLength())
+    if(answer.size()<getPacketHeaderLength())
         return false;
     if(ackCommandCode!=ConversionUtils::getShortFromQByteArray(answer,2))
         return false;
@@ -42,12 +42,12 @@ short AbstractCommand::getStatusCode()
     return getStatusCodeFromAnswer(*answer);
 }
 
-quint16 AbstractCommand::getHeaderLength()
+quint16 AbstractCommand::getPacketHeaderLength()
 {
     return 8;
 }
 
-void AbstractCommand::appendHeader(QByteArray &datagram)
+void AbstractCommand::appendPacketHeader(QByteArray &datagram)
 {
     datagram.append(0x42);
     datagram.append(getHeaderFlag());
@@ -55,7 +55,7 @@ void AbstractCommand::appendHeader(QByteArray &datagram)
     datagram.append(commandCode >> 8);
     datagram.append(commandCode);
 
-    int length = getLengthWithoutHeader();
+    int length = getPacketBodyLength();
     datagram.append(length >> 8);
     datagram.append(length);
 

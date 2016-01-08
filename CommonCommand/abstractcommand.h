@@ -73,7 +73,7 @@ public:
 
 protected:
 
-    virtual quint16 getHeaderLength() final;
+    virtual quint16 getPacketHeaderLength() final;
 
     /*!
      * \brief getHeaderFlagFirstBits for custom bit flag redefine
@@ -91,7 +91,7 @@ protected:
     virtual short getHeaderFlag();
 
     /*!
-     * \brief appendHeader
+     * \brief appendPacketHeader
      * standard GV command header
      * byte 0: 0x42
      * byte 1: control flag (bit 7 = requireACK
@@ -103,7 +103,7 @@ protected:
      * byte 7: req_id LSB
      * \return char* with header
      */
-    virtual void appendHeader(QByteArray &datagram) final;
+    virtual void appendPacketHeader(QByteArray &datagram) final;
 
 private:
 

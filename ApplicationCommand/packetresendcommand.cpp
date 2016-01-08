@@ -20,12 +20,12 @@ PacketResendCommand::~PacketResendCommand()
 
 }
 
-quint16 PacketResendCommand::getLengthWithoutHeader()
+quint16 PacketResendCommand::getPacketBodyLength()
 {
     return 20;
 }
 
-void PacketResendCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void PacketResendCommand::appendPacketBody(QByteArray &datagram)
 {
     //O-166cd
     ConversionUtils::appendShortToQByteArray(datagram, streamChannelNr);

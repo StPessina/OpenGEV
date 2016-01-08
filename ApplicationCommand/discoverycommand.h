@@ -39,16 +39,16 @@ public:
     DiscoveryCommand(GVComponent* target, QHostAddress destinationAddress, quint16 destinationPort);
 
     /**
-     * @brief getLengthWithoutHeader method
+     * @brief getPacketBodyLength method
      * @return the length of discorery command
      */
-    quint16 getLengthWithoutHeader();
+    quint16 getPacketBodyLength();
 
     /**
-     * @brief appendPacketDatagramWithoutHeader method
+     * @brief appendPacketBody method
      * @param datagram where append data
      */
-    void appendPacketDatagramWithoutHeader(QByteArray &datagram);
+    void appendPacketBody(QByteArray &datagram);
 
     /**
      * @brief executeAnswer method will execute the command on the target

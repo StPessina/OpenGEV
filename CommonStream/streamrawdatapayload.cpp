@@ -13,12 +13,12 @@ StreamRawDataPayload::~StreamRawDataPayload()
 {
 }
 
-quint16 StreamRawDataPayload::getLengthWithoutHeader()
+quint16 StreamRawDataPayload::getPacketBodyLength()
 {
     return data.size();
 }
 
-void StreamRawDataPayload::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void StreamRawDataPayload::appendPacketBody(QByteArray &datagram)
 {
     datagram.append(data);
 }

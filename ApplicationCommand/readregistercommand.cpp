@@ -24,12 +24,12 @@ ReadRegisterCommand::~ReadRegisterCommand()
 
 }
 
-quint16 ReadRegisterCommand::getLengthWithoutHeader()
+quint16 ReadRegisterCommand::getPacketBodyLength()
 {
     return registersData.size()*4;
 }
 
-void ReadRegisterCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void ReadRegisterCommand::appendPacketBody(QByteArray &datagram)
 {
     //R-163c
     foreach (auto reg, registersData)
@@ -42,7 +42,7 @@ int ReadRegisterCommand::executeAnswer(const QByteArray &answer)
     if(!checkAckHeader(answer))
         return 1;
 
-    if(answer.length()-getHeaderLength()!=getLengthWithoutHeader())
+    if(answer.length()-getPacketHeaderLength()!=getPacketBodyLength())
         return 2;
 
     QByteArray answerWithoutHeader = answer.mid(8);

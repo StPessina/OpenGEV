@@ -108,28 +108,28 @@ protected:
     GVComponent* target;
 
     /**
-     * @brief getLengthWithoutHeader
+     * @brief getPacketBodyLength
      * @return length of the command request
      */
-    virtual quint16 getHeaderLength() = 0;
+    virtual quint16 getPacketHeaderLength() = 0;
 
     /*!
      * \brief getHeader
      * \return QByteArray with header
      */
-    virtual void appendHeader(QByteArray &datagram) = 0;
+    virtual void appendPacketHeader(QByteArray &datagram) = 0;
 
     /**
-     * @brief getLengthWithoutHeader
+     * @brief getPacketBodyLength
      * @return length of the command request
      */
-    virtual quint16 getLengthWithoutHeader() = 0;
+    virtual quint16 getPacketBodyLength() = 0;
 
     /**
-     * @brief appendPacketDatagramWithoutHeader
+     * @brief appendPacketBody
      * @param datagram where specific datagram should be appended
      */
-    virtual void appendPacketDatagramWithoutHeader(QByteArray &datagram) = 0;
+    virtual void appendPacketBody(QByteArray &datagram) = 0;
 
     /**
      * @brief haveAnswer method

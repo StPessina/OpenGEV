@@ -16,12 +16,12 @@ DiscoveryCommand::DiscoveryCommand(GVComponent* target, QHostAddress destination
 
 }
 
-quint16 DiscoveryCommand::getLengthWithoutHeader()
+quint16 DiscoveryCommand::getPacketBodyLength()
 {
     return 0;
 }
 
-void DiscoveryCommand::appendPacketDatagramWithoutHeader(QByteArray &datagram)
+void DiscoveryCommand::appendPacketBody(QByteArray &datagram)
 {
     //Nothing to append
 }

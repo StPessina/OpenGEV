@@ -22,12 +22,12 @@ int CmdNotSupportedMH::execute()
     return -1;
 }
 
-void CmdNotSupportedMH::appendAckDatagramWithoutHeader(QByteArray &datagram)
+void CmdNotSupportedMH::appendAckBody(QByteArray &datagram)
 {
     //Nothing to append
 }
 
-quint16 CmdNotSupportedMH::getAckDatagramLengthWithoutHeader()
+quint16 CmdNotSupportedMH::getAckBodyLength()
 {
     return 0;
 }
