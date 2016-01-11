@@ -34,12 +34,12 @@ void GVApplication::addDevice(PartnerDevice aDevice)
     devices.push_back(aDevice);
 }
 
-QList<PartnerDevice> GVApplication::getDiscoveredDevice()
+QList<PartnerDevice> GVApplication::getDiscoveredDevices()
 {
     return devices;
 }
 
-int GVApplication::discoverDevice()
+int GVApplication::discoverDevices()
 {
     QHostAddress address("255.255.255.255");
     DiscoveryCommand dis (this, address, CONTROL_CHANNEL_DEF_PORT);

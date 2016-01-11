@@ -54,13 +54,13 @@ public:
      * @brief getDiscoveredDevice method
      * @return list of discovered devices
      */
-    QList<PartnerDevice> getDiscoveredDevice();
+    QList<PartnerDevice> getDiscoveredDevices();
 
     /**
      * @brief discoverDevice send a broadcast message for device discover
      * @return 0 if command success
      */
-    int discoverDevice();
+    int discoverDevices();
 
 private:
 
