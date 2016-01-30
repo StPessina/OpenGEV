@@ -45,3 +45,12 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/OpenNICamera/opennicamera.cpp
+
+INCLUDEPATH += Kinect
+DEPENDPATH += Kinect
+
+HEADERS += \
+    $$PWD/Kinect/kinectv2camera.h
+
+SOURCES += \
+    $$PWD/Kinect/kinectv2camera.cpp

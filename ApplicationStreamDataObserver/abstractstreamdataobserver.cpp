@@ -1,7 +1,7 @@
 #include "abstractstreamdataobserver.h"
 
 AbstractStreamDataObserver::AbstractStreamDataObserver(StreamDataReceiver &channel)
-    : channel(channel)
+    : channel(channel), ptrCloud(&cloud)
 {
     connect(&channel,SIGNAL(newStreamDataAvailable()),
             this,SLOT(newStreamDataReceived()));

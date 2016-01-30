@@ -33,18 +33,22 @@ unix {
                    /usr/include/boost \
                    /usr/include/pcl-1.7 \
                    /usr/include/eigen3 \
-                   /usr/include/openni2
+                   /usr/include/openni2 \
+                   /usr/local/include/libfreenect2
 
-    LIBS += "-L/usr/lib" \
-             -lboost_system
+    LIBS += "-L/usr/lib"
 
     LIBS += -L/usr/local/lib
+
+    LIBS += -lboost_system
 
     LIBS += -llog4cpp
 
     LIBS += -lpcl_common
 
     LIBS += -lOpenNI2
+
+    LIBS += -lfreenect2
 }
 
 OTHER_FILES += \

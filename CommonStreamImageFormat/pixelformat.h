@@ -31,6 +31,7 @@
 
 //Custom pixel number
 #define GVSP_PIX_OCCUPY40BIT 0x00280000
+#define GVSP_PIX_OCCUPY56BIT 0x00380000
 
 //===================================================
 // MONO FORMAT
@@ -59,9 +60,17 @@
 //===================================================
 
 //===================================================
+// CUSTOM DEPTH FORMAT
+//===================================================
+
+#define GVSP_PIX_MONO32 (GVSP_PIX_CUSTOM | GVSP_PIX_OCCUPY32BIT | 0x0010)
+
+//===================================================
 // CUSTOM DEPTH + RGB FORMAT
 //===================================================
 
 #define GVSP_PIX_MONO16_RGB8 (GVSP_PIX_CUSTOM | GVSP_PIX_OCCUPY40BIT | 0x0001)
+#define GVSP_PIX_MONO32_RGB8 (GVSP_PIX_CUSTOM | GVSP_PIX_OCCUPY56BIT | 0x0002)
+
 
 #endif // PIXELFORMAT_H

@@ -59,7 +59,14 @@ INCLUDEPATH += ApplicationStreamDataObserver
 DEPENDPATH += ApplicationStreamDataObserver
 
 HEADERS +=  \
-    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.h
+    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.h \
+    $$PWD/ApplicationStreamDataObserver/depthstreamdataobserver.h \
+    $$PWD/ApplicationStreamDataObserver/colorstreamdataobserver.h \
+    $$PWD/ApplicationStreamDataObserver/depthcolorstreamdataobserver.h
+
 
 SOURCES += \
-    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.cpp
+    $$PWD/ApplicationStreamDataObserver/abstractstreamdataobserver.cpp \
+    $$PWD/ApplicationStreamDataObserver/depthstreamdataobserver.cpp \
+    $$PWD/ApplicationStreamDataObserver/colorstreamdataobserver.cpp \
+    $$PWD/ApplicationStreamDataObserver/depthcolorstreamdataobserver.cpp
