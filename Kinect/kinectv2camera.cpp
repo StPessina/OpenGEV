@@ -26,6 +26,7 @@ KinectV2Camera::KinectV2Camera()
     gvdevice = new GVDevice("Microsoft Corp.",
                             "Kinect V2",
                             serial);
+    gvdevice->configure3DCapabilities(57,44);
 
     gvdevice->createStreamChannel();
     gvdevice->createStreamChannel();

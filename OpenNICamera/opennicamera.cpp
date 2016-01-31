@@ -46,6 +46,7 @@ OpenNICamera::OpenNICamera()
     gvdevice = new GVDevice(opennidevice.getDeviceInfo().getVendor(),
                           opennidevice.getDeviceInfo().getName(),
                           opennidevice.getDeviceInfo().getUri());
+    gvdevice->configure3DCapabilities(70,60);
 
     gvdevice->createStreamChannel();
     gvdevice->createStreamChannel();
