@@ -236,7 +236,7 @@ quint32 PartnerDevice::getHorizontalFieldOfView()
 quint32 PartnerDevice::getVerticalFieldOfView()
 {
     if(!isChannelOpen())
-        return false;
+        return 0;
 
     ReadRegisterCommand readReg (this,
                                  REG_VFOV_DEG,
