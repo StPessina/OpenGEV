@@ -158,6 +158,27 @@ public:
      */
     quint32 getStreamChannelPacketLength(int channel);
 
+    /**
+     * Check custom 3D capabilities bootstrap register
+     *
+     * @brief is3DCamera
+     * @return true if it is a 3D camera
+     */
+    bool is3DCamera();
+
+    /**
+     * @brief getHorizontalFieldOfView
+     * @return horizontal field of view, or 0 if it's not set
+     */
+    quint32 getHorizontalFieldOfView();
+
+
+    /**
+     * @brief getverticalFieldOfView
+     * @return vertical field of view, or 0 if it's not set
+     */
+    quint32 getVerticalFieldOfView();
+
 private:
 
     /**

@@ -198,3 +198,54 @@ StreamDataReceiver *PartnerDevice::getStreamChannel(int channel)
 
     return streamChannelsOpenMap[channel];
 }
+
+bool PartnerDevice::is3DCamera()
+{
+    if(!isChannelOpen())
+        return false;
+
+    ReadRegisterCommand readReg (this,
+                                 REG_3D_CAPABILITIES,
+                                 ipAddress,
+                                 CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendPacket(readReg);
+
+    if(readReg.getStatusCode() == GEV_STATUS_SUCCESS)
+        return readReg.getRegisterValue()==1;
+    else
+        return false;
+}
+
+quint32 PartnerDevice::getHorizontalFieldOfView()
+{
+    if(!isChannelOpen())
+        return false;
+
+    ReadRegisterCommand readReg (this,
+                                 REG_HFOV_DEG,
+                                 ipAddress,
+                                 CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendPacket(readReg);
+
+    if(readReg.getStatusCode() == GEV_STATUS_SUCCESS)
+        return readReg.getRegisterValue();
+    else
+        return 0;
+}
+
+quint32 PartnerDevice::getVerticalFieldOfView()
+{
+    if(!isChannelOpen())
+        return false;
+
+    ReadRegisterCommand readReg (this,
+                                 REG_VFOV_DEG,
+                                 ipAddress,
+                                 CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendPacket(readReg);
+
+    if(readReg.getStatusCode() == GEV_STATUS_SUCCESS)
+        return readReg.getRegisterValue();
+    else
+        return 0;
+}
