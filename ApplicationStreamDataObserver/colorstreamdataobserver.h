@@ -11,6 +11,8 @@ class ColorStreamDataObserver : public AbstractStreamDataObserver
 public:
     ColorStreamDataObserver(StreamDataReceiver &channel, int hFOVDegree, int vFOVDegree);
 
+    void setColorInformation(pcl::PointXYZRGBA& pt, const char* data);
+
 protected:
     virtual void convertFromPixelMapToCloud(const PixelMap::Ptr map,
                                             pcl::PointCloud<pcl::PointXYZRGBA> &cloud);

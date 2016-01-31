@@ -8,6 +8,30 @@ ColorStreamDataObserver::ColorStreamDataObserver(StreamDataReceiver &channel,
     hFOVRad = (hFOVDegree * PI) / 180.0;
 }
 
+void ColorStreamDataObserver::setColorInformation(pcl::PointXYZRGBA &pt, int pixelFormat, const char *data)
+{
+    switch (pixelFormat) {
+    case GVSP_PIX_RGB8:
+        pt.r = data[0];
+        pt.g = data[1];
+        pt.b = data[2];
+        break;
+    case GVSP_PIX_BGR8:
+        pt.b = data[0];
+        pt.g = data[1];
+        pt.r = data[2];
+        break;
+    case GVSP_PIX_BGRA8:
+        pt.b = data[0];
+        pt.g = data[1];
+        pt.r = data[2];
+        pt.a = data[3];
+        break;
+    default:
+        break;
+    }
+}
+
 void ColorStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map, pcl::PointCloud<pcl::PointXYZRGBA> &cloud)
 {
     cloud.width=map->sizex;
@@ -38,9 +62,7 @@ void ColorStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map
             pt.x = (static_cast<float> (u) - centerX) * constant_x;
             pt.y = (static_cast<float> (v) - centerY) * constant_y;
 
-            pt.r = data[char_idx];
-            pt.g = data[char_idx+1];
-            pt.b = data[char_idx+2];
+            setColorInformation(pt, map->pixelFormat, data[char_idx]);
         }
     }
 
