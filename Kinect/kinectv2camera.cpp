@@ -35,7 +35,7 @@ KinectV2Camera::KinectV2Camera()
     connect(this,SIGNAL(initialization()),this,SLOT(setupTimer()));
 
     depthMap = new PixelMap(GVSP_PIX_MONO32, 512,424,0,0,0,0);
-    RGBMap = new PixelMap(GVSP_PIX_RGB8, 1920,1080,0,0,0,0);
+    RGBMap = new PixelMap(GVSP_PIX_BGRA8, 1920,1080,0,0,0,0);
     DepthRGBMap = new PixelMap(GVSP_PIX_MONO32_RGB8, 1920, 1080,0,0,0,0);
 
     initOk=true;
@@ -101,11 +101,13 @@ void KinectV2Camera::sendRgbDataStream()
     if(!gvdevice->getStreamChannel(1)->isChannelOpen())
         return;
 
+
+    /*
     char* rgbData = (char*) rgbFrame->data;
     RGBMap->sizex = rgbFrame->width;
     RGBMap->sizey = rgbFrame->height;
 
-    //Converting data from BGR to RGB
+    //Converting data from BGRA to RBG
     int rgb_idx = 0;
     int char_idx = 0;
     for (int v = 0; v < RGBMap->sizey; ++v)
@@ -116,7 +118,13 @@ void KinectV2Camera::sendRgbDataStream()
             RGBMap->data[char_idx+1] = rgbData[rgb_idx+1];
             RGBMap->data[char_idx+2] = rgbData[rgb_idx];
         }
-    }
+    }*/
+
+    char* rgbData = (char*) rgbFrame->data;
+    RGBMap->sizex = rgbFrame->width;
+    RGBMap->sizey = rgbFrame->height;
+
+    RGBMap->data = rgbData;
 
     gvdevice->getStreamChannel(1)->writeIncomingData(*RGBMap);
 }
