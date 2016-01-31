@@ -148,6 +148,15 @@ public:
      */
     StreamChannelTransmitter* getStreamChannel(int streamChannelCode);
 
+    /**
+     *  Configure 3D capabities and camera 3D information for depth recostruction
+     *
+     * @brief configure3DCapabilities
+     * @param HFOVDegree
+     * @param VFOVDegree
+     */
+    void configure3DCapabilities(int HFOVDegree, int VFOVDegree);
+
 private:
 
     UDPChannel* controlChannel;

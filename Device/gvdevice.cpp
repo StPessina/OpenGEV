@@ -242,6 +242,13 @@ StreamChannelTransmitter *GVDevice::getStreamChannel(int streamChannelCode)
     return streamChannels[streamChannelCode];
 }
 
+void GVDevice::configure3DCapabilities(int HFOVDegree, int VFOVDegree)
+{
+    commonRegisters[REG_3D_CAPABILITIES]->setValue(1);
+    commonRegisters[REG_HFOV_DEG]->setValue(HFOVDegree);
+    commonRegisters[REG_VFOV_DEG]->setValue(VFOVDegree);
+}
+
 void GVDevice::initCommonRegisterMap()
 {
     commonRegisters[REG_VERSION]= new  BootstrapRegister(REG_VERSION, "Version",RA_READ, 4);
@@ -279,6 +286,9 @@ void GVDevice::initCommonRegisterMap()
     commonRegisters[REG_PRIMARY_APPLICATION_PORT] = new  BootstrapRegister(REG_PRIMARY_APPLICATION_PORT, "Primary application port",RA_READ, 4);
     commonRegisters[REG_PRIMARY_APPLICATION_IP_ADDRESS] = new  BootstrapRegister(REG_PRIMARY_APPLICATION_IP_ADDRESS, "Primary application address",RA_READ, 4);
 
+    commonRegisters[REG_3D_CAPABILITIES] = new  BootstrapRegister(REG_3D_CAPABILITIES, "3D Capabilities register",RA_READ, 4);
+    commonRegisters[REG_HFOV_DEG] = new  BootstrapRegister(REG_HFOV_DEG, "3D Horizontal field of view",RA_READ, 4);
+    commonRegisters[REG_VFOV_DEG] = new  BootstrapRegister(REG_VFOV_DEG, "3D Vertical field of view",RA_READ, 4);
 }
 
 void GVDevice::initNetworkRegisters()

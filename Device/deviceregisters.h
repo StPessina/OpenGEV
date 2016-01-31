@@ -60,6 +60,12 @@
 #define REG_STREAM_CHANNEL_ZONE 0x0028
 #define REG_STREAM_CHANNEL_ZONE_DIRECTION 0x002C
 
+/****************************************************************
+ *                  CUSTOM REGISTERS
+ * *************************************************************/
+#define REG_3D_CAPABILITIES 0xA100
+#define REG_HFOV_DEG 0xA104
+#define REG_VFOV_DEG 0xA108
 
 /**
  * @brief The DeviceRegisterConverter class utils conversion for device bootstrap register
