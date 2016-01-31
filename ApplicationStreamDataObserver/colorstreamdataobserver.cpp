@@ -62,7 +62,7 @@ void ColorStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map
             pt.x = (static_cast<float> (u) - centerX) * constant_x;
             pt.y = (static_cast<float> (v) - centerY) * constant_y;
 
-            setColorInformation(pt, map->pixelFormat, data[char_idx]);
+            setColorInformation(pt, map->pixelFormat, &data[char_idx]);
         }
     }
 
