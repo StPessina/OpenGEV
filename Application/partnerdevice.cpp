@@ -219,7 +219,7 @@ bool PartnerDevice::is3DCamera()
 quint32 PartnerDevice::getHorizontalFieldOfView()
 {
     if(!isChannelOpen())
-        return false;
+        return 0;
 
     ReadRegisterCommand readReg (this,
                                  REG_HFOV_DEG,
