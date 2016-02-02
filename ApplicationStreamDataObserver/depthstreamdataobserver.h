@@ -13,11 +13,16 @@ class DepthStreamDataObserver : public AbstractStreamDataObserver
 public:
     DepthStreamDataObserver(StreamDataReceiver &channel, int hFOVDegree, int vFOVDegree);
 
+    static bool setPointDepth(pcl::PointXYZRGBA &pt, int pixelFormat, const char *data,
+                              int pixelXIndex, int pixelYIndex,
+                              float centerX, float centerY,
+                              float constantX, float constantY);
+
 protected:
     virtual void convertFromPixelMapToCloud(const PixelMap::Ptr map,
                                             pcl::PointCloud<pcl::PointXYZRGBA> &cloud);
 private:
-    int hFOVRad, vFOVRad;
+    float hFOVRad, vFOVRad;
     int hFOVDegree, vFOVDegree;
 };
 

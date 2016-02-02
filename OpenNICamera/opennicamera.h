@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 
-#include <OpenNI.h>
+#include <openni2/OpenNI.h>
 
 class OpenNICamera : public QThread
 {

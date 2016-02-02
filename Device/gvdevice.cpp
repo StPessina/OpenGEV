@@ -69,7 +69,7 @@ BootstrapRegister *GVDevice::getRegister(int registerCode)
     }
 
     //Stream registers
-    if(registerCode>=0x0D00) {
+    if(registerCode>=0x0D00 && registerCode < 0xA000) {
         quint32 channelNumber = DeviceRegisterConverter::getChannelNumberFromStreamChannel(registerCode);
         if(channelNumber<streamChannels.size())
             return NULL;

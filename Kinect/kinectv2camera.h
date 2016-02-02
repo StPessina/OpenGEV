@@ -20,9 +20,7 @@
 #include <libfreenect2/libfreenect2.hpp>
 #include <libfreenect2/frame_listener.hpp>
 #include <libfreenect2/frame_listener_impl.h>
-
-using namespace libfreenect2;
-
+#include <libfreenect2/registration.h>
 class KinectV2Camera : public QThread
 {
     Q_OBJECT
@@ -53,21 +51,25 @@ private:
 
     PixelMap::Ptr depthMap;
 
-    PixelMap::Ptr RGBMap;
+    PixelMap::Ptr colorMap;
 
-    PixelMap::Ptr DepthRGBMap;
+    PixelMap::Ptr DepthColorMap;
 
     bool initOk;
 
-    Freenect2 freenect2;
-    Freenect2Device *dev = 0;
+    libfreenect2::Freenect2 freenect2;
+    libfreenect2::Freenect2Device *dev = 0;
 
-    SyncMultiFrameListener *listener;
-    FrameMap frames;
+    libfreenect2::SyncMultiFrameListener *listener;
+    libfreenect2::FrameMap frames;
 
-    Frame *rgbFrame;
-    Frame *irFrame;
-    Frame *depthFrame;
+    libfreenect2::Frame *colorFrame;
+    libfreenect2::Frame *irFrame;
+    libfreenect2::Frame *depthFrame;
+
+    libfreenect2::Registration* registration;
+    libfreenect2::Frame* undistorted;
+    libfreenect2::Frame* registered;
 };
 
 #endif // KINECTV2CAMERA_H

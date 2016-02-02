@@ -2,7 +2,7 @@
 
 OpenNICamera::OpenNICamera()
 {
-    openiniInitResult = openni::OpenNI::initialize ();
+    openiniInitResult = openni::OpenNI::initialize();
     if(openiniInitResult!=openni::STATUS_OK) {
         perror("OPENNI ERROR: " + openiniInitResult);
         return;
@@ -46,7 +46,7 @@ OpenNICamera::OpenNICamera()
     gvdevice = new GVDevice(opennidevice.getDeviceInfo().getVendor(),
                           opennidevice.getDeviceInfo().getName(),
                           opennidevice.getDeviceInfo().getUri());
-    gvdevice->configure3DCapabilities(70,60);
+    gvdevice->configure3DCapabilities(58,45);
 
     gvdevice->createStreamChannel();
     gvdevice->createStreamChannel();
@@ -92,12 +92,12 @@ void OpenNICamera::readDataFromCam()
     if(rcDepth==openni::STATUS_OK)
         sendDepthDataStream();
     else
-        perror("OPENI ERROR: During depth frame acquisition " + rcColor);
+        perror("OPENNI ERROR: During depth frame acquisition " + rcColor);
 
     if(rcColor==openni::STATUS_OK)
         sendRgbDataStream();
     else
-        perror("OPENI ERROR: During color frame acquisition " + rcColor);
+        perror("OPENNI ERROR: During color frame acquisition " + rcColor);
 
     if(rcDepth==openni::STATUS_OK &&
            rcColor ==openni::STATUS_OK)

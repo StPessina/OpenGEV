@@ -4,11 +4,11 @@ ColorStreamDataObserver::ColorStreamDataObserver(StreamDataReceiver &channel,
                                                  int hFOVDegree, int vFOVDegree)
     : AbstractStreamDataObserver(channel), hFOVDegree(hFOVDegree), vFOVDegree(vFOVDegree)
 {
-    vFOVRad = (vFOVDegree * PI) / 180.0;
-    hFOVRad = (hFOVDegree * PI) / 180.0;
+    vFOVRad = (((float) vFOVDegree) * PI) / 180.0;
+    hFOVRad = (((float) hFOVDegree) * PI) / 180.0;
 }
 
-void ColorStreamDataObserver::setColorInformation(pcl::PointXYZRGBA &pt, int pixelFormat, const char *data)
+void ColorStreamDataObserver::setPointColor(pcl::PointXYZRGBA &pt, int pixelFormat, const char *data)
 {
     switch (pixelFormat) {
     case GVSP_PIX_RGB8:
@@ -27,6 +27,16 @@ void ColorStreamDataObserver::setColorInformation(pcl::PointXYZRGBA &pt, int pix
         pt.r = data[2];
         pt.a = data[3];
         break;
+    case GVSP_PIX_MONO16_RGB8:
+        pt.r = data[2];
+        pt.g = data[3];
+        pt.b = data[4];
+        break;
+    case GVSP_PIX_MONO32_RGB8:
+        pt.r = data[4];
+        pt.g = data[5];
+        pt.b = data[6];
+        break;
     default:
         break;
     }
@@ -39,14 +49,13 @@ void ColorStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map
     cloud.is_dense=false;
     cloud.points.resize(map->sizex*map->sizey);
 
-    float focalLengthX = cloud.width / (2*tan(((float) hFOVRad)/2));
-    float focalLengthY = cloud.height / (2*tan(((float) vFOVRad)/2));
+    float focalLengthX, focalLengthY, constant_x, constant_y,
+            centerX, centerY;
 
-    float constant_x = 1.0f / focalLengthX;
-    float constant_y = 1.0f / focalLengthY;
-
-    float centerX = ((float)cloud.width - 1.f) / 2.f;
-    float centerY = ((float)cloud.height - 1.f) / 2.f;
+    computeFocalParameters(cloud.width, cloud.height, hFOVRad, vFOVRad,
+                           focalLengthX, focalLengthY,
+                           constant_x, constant_y,
+                           centerX, centerY);
 
     const char* data = (const char*) map->data;
 
@@ -62,7 +71,7 @@ void ColorStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map
             pt.x = (static_cast<float> (u) - centerX) * constant_x;
             pt.y = (static_cast<float> (v) - centerY) * constant_y;
 
-            setColorInformation(pt, map->pixelFormat, &data[char_idx]);
+            setPointColor(pt, map->pixelFormat, &data[char_idx]);
         }
     }
 

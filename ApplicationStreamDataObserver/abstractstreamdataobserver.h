@@ -32,6 +32,11 @@ protected:
     virtual void convertFromPixelMapToCloud(const PixelMap::Ptr map,
                                             pcl::PointCloud<pcl::PointXYZRGBA> &cloud) = 0;
 
+    static void computeFocalParameters(int width, int height, float hFOVRad, float vFOVRad,
+                                    float &focalLengthX, float &focalLengthY,
+                                    float &opticalCenterX, float &opticalCenterY,
+                                    float &centerX, float &centerY);
+
 private:
 
     StreamDataReceiver &channel;

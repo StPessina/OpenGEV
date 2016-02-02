@@ -6,6 +6,8 @@
 #include <math.h>
 
 #include <ApplicationStreamDataObserver/abstractstreamdataobserver.h>
+#include <ApplicationStreamDataObserver/depthstreamdataobserver.h>
+#include <ApplicationStreamDataObserver/colorstreamdataobserver.h>
 
 class DepthColorStreamDataObserver : public AbstractStreamDataObserver
 {
@@ -17,7 +19,7 @@ protected:
     virtual void convertFromPixelMapToCloud(const PixelMap::Ptr map,
                                             pcl::PointCloud<pcl::PointXYZRGBA> &cloud);
 private:
-    int hFOVRad, vFOVRad;
+    float hFOVRad, vFOVRad;
     int hFOVDegree, vFOVDegree;
 };
 

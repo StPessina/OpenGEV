@@ -4,8 +4,48 @@ DepthStreamDataObserver::DepthStreamDataObserver(StreamDataReceiver &channel,
                                                  int hFOVDegree, int vFOVDegree)
     : AbstractStreamDataObserver(channel), hFOVDegree(hFOVDegree), vFOVDegree(vFOVDegree)
 {
-    vFOVRad = (vFOVDegree * PI) / 180.0;
-    hFOVRad = (hFOVDegree * PI) / 180.0;
+    vFOVRad = (((float) vFOVDegree) * PI) / 180.0;
+    hFOVRad = (((float) hFOVDegree) * PI) / 180.0;
+}
+
+bool DepthStreamDataObserver::setPointDepth(pcl::PointXYZRGBA &pt,
+                                            int pixelFormat,
+                                            const char *data,
+                                            int pixelXIndex, int pixelYIndex,
+                                            float centerX, float centerY,
+                                            float constantX, float constantY)
+{
+    float depth;
+
+    switch (pixelFormat) {
+    case GVSP_PIX_MONO16:
+    case GVSP_PIX_MONO16_RGB8:
+        depth=(float) ((const quint16*) data)[0];
+        break;
+    case GVSP_PIX_MONO32:
+    case GVSP_PIX_MONO32_RGB8:
+        depth=((const float*) data)[0];
+        break;
+    default:
+        return false;
+        break;
+    }
+
+
+    float bad_point =  std::numeric_limits<float>::quiet_NaN();
+    // Check for invalid measurements
+    if (depth == 0)
+    {
+        // not valid
+        pt.x = pt.y = pt.z = bad_point;
+        return false;
+    }
+
+    pt.z = depth * 0.001f;
+    pt.x = (static_cast<float> (pixelXIndex) - centerX) * pt.z * constantX;
+    pt.y = (static_cast<float> (pixelYIndex) - centerY) * pt.z * constantY;
+
+    return true;
 }
 
 void DepthStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map, pcl::PointCloud<pcl::PointXYZRGBA> &cloud)
@@ -15,43 +55,28 @@ void DepthStreamDataObserver::convertFromPixelMapToCloud(const PixelMap::Ptr map
     cloud.is_dense=false;
     cloud.points.resize(map->sizex*map->sizey);
 
-    float focalLengthX = cloud.width / (2*tan(((float) hFOVRad)/2));
-    float focalLengthY = cloud.height / (2*tan(((float) vFOVRad)/2));
+    float focalLengthX, focalLengthY, constantX, constantY,
+            centerX, centerY;
 
-    float constant_x = 1.0f / focalLengthX;
-    float constant_y = 1.0f / focalLengthY;
+    computeFocalParameters(cloud.width, cloud.height, hFOVRad, vFOVRad,
+                           focalLengthX, focalLengthY,
+                           constantX, constantY,
+                           centerX, centerY);
 
-
-    float centerX = ((float)cloud.width - 1.f) / 2.f;
-    float centerY = ((float)cloud.height - 1.f) / 2.f;
-
-    float bad_point = std::numeric_limits<float>::quiet_NaN();
-
+    int char_idx = 0;
     int depth_idx = 0;
     for (int v = 0; v < cloud.height; ++v)
     {
-        for (int u = 0; u < cloud.width; ++u, ++depth_idx)
+        for (int u = 0; u < cloud.width; ++u, ++depth_idx, char_idx+=map->bytePerPixel)
         {
-            float depth;
-            if(map->bytePerPixel==2)
-                depth=(float) ((const quint16*) map->data)[depth_idx];
-            else
-                depth=((const float*) map->data)[depth_idx];
             pcl::PointXYZRGBA& pt = cloud.points[depth_idx];
-            // Check for invalid measurements
-            if (depth == 0)
-            {
-                // not valid
-                pt.x = pt.y = pt.z = bad_point;
-                continue;
-            }
 
-            pt.z = depth * 0.001f;
-            pt.x = (static_cast<float> (u) - centerX) * pt.z * constant_x;
-            pt.y = (static_cast<float> (v) - centerY) * pt.z * constant_y;
-            pt.r = 255;
-            pt.g = 255;
-            pt.b = 255;
+            if(setPointDepth(pt, map->pixelFormat, &(map->data[char_idx]),
+                             u,v,centerX, centerY, constantX, constantY)) {
+                pt.r = 255;
+                pt.g = 255;
+                pt.b = 255;
+            }
         }
     }
 

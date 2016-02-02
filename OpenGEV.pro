@@ -38,15 +38,15 @@ unix {
 
     LIBS += "-L/usr/lib"
 
-    LIBS += -L/usr/local/lib
-
     LIBS += -lboost_system
-
-    LIBS += -llog4cpp
 
     LIBS += -lpcl_common
 
     LIBS += -lOpenNI2
+
+    LIBS += "-L/usr/local/lib"
+
+    LIBS += -llog4cpp
 
     LIBS += -lfreenect2
 }
