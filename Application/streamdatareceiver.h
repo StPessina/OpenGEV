@@ -177,6 +177,7 @@ private:
      * @brief streamReceiver udp channel where stream packet is received
      */
     UDPChannel *streamReceiver;
+    QThread communicationThread;
 
     /**
      * @brief requestRetrasmissionChannel is udp channel used for resend message
@@ -206,7 +207,7 @@ private:
     /**
      * @brief streamDataCacheSize cache size
      */
-    int streamDataCacheSize = 15;
+    int streamDataCacheSize = 30;
 
 #ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("StreamReceiverLog");

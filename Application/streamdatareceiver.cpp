@@ -19,7 +19,13 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address,
     streamReceiver = new OSAPIUDPChannel(QHostAddress::Any, port,
                                          new StreamImageDataHandlerFactory(this));
 #endif
+
     streamReceiver->initSocket();
+
+    //This allow signals/slots separation between stream receiver
+    //and frame observers class, registered to signal newStreamDataAvailable
+    this->moveToThread(&communicationThread);
+    communicationThread.start();
     streamReceiver->start();
 
 
@@ -53,6 +59,9 @@ StreamDataReceiver::~StreamDataReceiver()
             }
         }
     }
+
+    communicationThread.terminate();
+
     delete streamData;
     delete blockId;
     delete packetId;
