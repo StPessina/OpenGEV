@@ -24,48 +24,39 @@ StreamDataReceiver::StreamDataReceiver(QHostAddress address,
 
     //This allow signals/slots separation between stream receiver
     //and frame observers class, registered to signal newStreamDataAvailable
+#ifdef USE_QT_SOCKET
+    this->moveToThread(streamReceiver);
+#else
     this->moveToThread(&communicationThread);
     communicationThread.start();
+#endif
     streamReceiver->start();
 
-
-    streamData = new PixelMap::Ptr[streamDataCacheSize];
-
-    for (int i = 0; i < streamDataCacheSize; ++i)
-        streamData[i]=NULL;
-
-    blockId = new quint64[streamDataCacheSize];
-    for (int i = 0; i < streamDataCacheSize; ++i)
-        blockId[i]=-1;
-
-    packetId = new quint32[streamDataCacheSize];
-    for (int i = 0; i < streamDataCacheSize; ++i)
-        packetId[i]=0;
-
-    lastDataWriteIndex = new quint32[streamDataCacheSize];
-    for (int i = 0; i < streamDataCacheSize; ++i)
-        lastDataWriteIndex[i]=0;
+    streamDataCacheMap = new CacheMapEntry[streamDataCacheSize];
 }
 
 StreamDataReceiver::~StreamDataReceiver()
 {
-    delete streamReceiver;
     for (int i = 0; i < streamDataCacheSize; ++i) {
-        if(blockId[i]!=-1) {
+        if(streamDataCacheMap[i].blockId!=-1) {
             freeStreamData(i);
-            if(streamData[i]!=NULL) {
-                streamData[i]->destroyPixelMap();
-                delete streamData[i];
+            if(streamDataCacheMap[i].exists) {
+                streamDataCacheMap[i].map->destroyPixelMap();
+                delete streamDataCacheMap[i].map;
             }
         }
     }
 
-    communicationThread.terminate();
+#ifndef USE_QT_SOCKET
+    communicationThread.quit();
+    communicationThread.wait();
+#endif
 
-    delete streamData;
-    delete blockId;
-    delete packetId;
-    delete lastDataWriteIndex;
+    streamReceiver->quit();
+    streamReceiver->wait();
+
+    delete streamReceiver;
+    delete streamDataCacheMap;
 }
 
 void StreamDataReceiver::openStreamData(quint64 blockId,
@@ -79,17 +70,18 @@ void StreamDataReceiver::openStreamData(quint64 blockId,
 
     if(getStreamDataIndexFromBlockId(blockId)==-1) {
         int i = getFreeStreamData();
-        this->blockId[i] = blockId;
+        streamDataCacheMap[i].blockId = blockId;
 
-        if(streamData[i]==NULL)
-            streamData[i] = new PixelMap(pixelFormat, sizex, sizey,
+        if(!streamDataCacheMap[i].exists) {
+            streamDataCacheMap[i].map = new PixelMap(pixelFormat, sizex, sizey,
                                            offsetx, offsety,
                                            paddingx, paddingy);
-        else
-            streamData[i]->renew(pixelFormat, sizex, sizey,
+            streamDataCacheMap[i].exists = true;
+        } else
+            streamDataCacheMap[i].map->renew(pixelFormat, sizex, sizey,
                                  offsetx, offsety,
                                  paddingx, paddingy);
-        this->packetId[i] = 1;
+        streamDataCacheMap[i].packetId = 1;
     }
 #ifdef ENABLE_LOG4CPP
     else
@@ -128,20 +120,21 @@ bool StreamDataReceiver::addData(quint64 blockId, quint32 packetId, const char *
 
     checkPacketIdSequence(cacheIndex, blockId, packetId);
 
-    memcpy(&(streamData[cacheIndex]->data[lastDataWriteIndex[cacheIndex]]),
+    memcpy(&(streamDataCacheMap[cacheIndex].map
+             ->data[streamDataCacheMap[cacheIndex].lastDataWriteIndex]),
            data, dataLenght*sizeof(char));
 
-    lastDataWriteIndex[cacheIndex]+=dataLenght;
+    streamDataCacheMap[cacheIndex].lastDataWriteIndex+=dataLenght;
 
     return true;
 }
 
 bool StreamDataReceiver::checkPacketIdSequence(int cacheIndex, quint64 blockId, quint32 packetId)
 {
-    if(this->packetId[cacheIndex]>packetId) //Accept previous as resend packets
+    if(streamDataCacheMap[cacheIndex].packetId>packetId) //Accept previous as resend packets
         return true;
 
-    bool sequentiallyCheckResult = (packetId==this->packetId[cacheIndex]+1);
+    bool sequentiallyCheckResult = (packetId==streamDataCacheMap[cacheIndex].packetId+1);
 
     if(!sequentiallyCheckResult) {
         PacketResendCommand resend (this,
@@ -149,11 +142,11 @@ bool StreamDataReceiver::checkPacketIdSequence(int cacheIndex, quint64 blockId, 
                                     requestRetrasmissionChannel.getStandardDestinationPort(),
                                     channelId,
                                     blockId,
-                                    this->packetId[cacheIndex]+1, packetId-1);
+                                    streamDataCacheMap[cacheIndex].packetId+1, packetId-1);
         requestRetrasmissionChannel.sendPacket(resend);
     }
 
-    this->packetId[cacheIndex] = packetId;
+    streamDataCacheMap[cacheIndex].packetId = packetId;
 
     return sequentiallyCheckResult;
 }
@@ -173,36 +166,36 @@ void StreamDataReceiver::closeStreamData(quint64 blockId, quint32 packetId)
 
 PixelMap::Ptr StreamDataReceiver::getStreamData()
 {
-    return streamData[lastClosedStream];
+    return streamDataCacheMap[lastClosedStream].map;
 }
 
 PixelMap::Ptr StreamDataReceiver::getStreamData(quint64 blockId)
 {
     int i = getStreamDataIndexFromBlockId(blockId);
     if(i!=-1)
-        return streamData[i];
+        return streamDataCacheMap[i].map;
     return NULL;
 }
 
 quint32 StreamDataReceiver::getPixelFormat()
 {
-    return streamData[lastClosedStream]->pixelFormat;
+    return streamDataCacheMap[lastClosedStream].map->pixelFormat;
 }
 
 quint64 StreamDataReceiver::getBlockId()
 {
-    return blockId[0];
+    return streamDataCacheMap[0].blockId;
 }
 
 quint32 StreamDataReceiver::getLastPacketId()
 {
-    return packetId[lastClosedStream];
+    return streamDataCacheMap[lastClosedStream].packetId;
 }
 
 int StreamDataReceiver::getStreamDataIndexFromBlockId(quint64 blockId)
 {
     for (int i = 0; i < streamDataCacheSize; ++i)
-       if(this->blockId[i]==blockId)
+       if(streamDataCacheMap[i].blockId==blockId)
            return i;
     return -1;
 }
@@ -210,24 +203,26 @@ int StreamDataReceiver::getStreamDataIndexFromBlockId(quint64 blockId)
 int StreamDataReceiver::getFreeStreamData()
 {
     for (int i = 0; i < streamDataCacheSize; ++i)
-        if(this->blockId[i]==-1)
+        if(streamDataCacheMap[i].blockId==-1)
             return i;
     return -1;
 }
 
 int StreamDataReceiver::freeStreamData(int index)
 {
-    blockId[index]=-1;
-    lastDataWriteIndex[index]=0;
-    packetId[index]=0;
+    streamDataCacheMap[index].blockId=-1;
+    streamDataCacheMap[index].lastDataWriteIndex=0;
+    streamDataCacheMap[index].packetId=0;
+    if(!streamDataCacheMap[index].exists)
+        streamDataCacheMap[index].map = NULL;
     return 0;
 }
 
 int StreamDataReceiver::clearOldCache(quint64 lastBlockId)
 {    
     for (int i = 0; i < streamDataCacheSize; ++i)
-        if(this->blockId[i]<=lastBlockId-(streamDataCacheSize-1)
-                && this->blockId[i]!=-1)
+        if(streamDataCacheMap[i].blockId<=lastBlockId-(streamDataCacheSize-1)
+                && streamDataCacheMap[i].blockId!=-1)
             freeStreamData(i);
     return 0;
 }

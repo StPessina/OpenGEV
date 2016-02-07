@@ -48,13 +48,13 @@ public:
      * @brief addDevice method add a new device to discovered device list
      * @param aDevice new device
      */
-    void addDevice(PartnerDevice aDevice);
+    void addDevice(PartnerDevice *aDevice);
 
     /**
      * @brief getDiscoveredDevice method
      * @return list of discovered devices
      */
-    QList<PartnerDevice> getDiscoveredDevices();
+    const QList<PartnerDevice *> getDiscoveredDevices();
 
     /**
      * @brief discoverDevice send a broadcast message for device discover
@@ -67,7 +67,7 @@ private:
     /**
      * @brief devices store discovered devices list
      */
-    QList<PartnerDevice> devices;
+    QList<PartnerDevice*> devices;
 
     /**
      * @brief masterChannel is broadcast control channel

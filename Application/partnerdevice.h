@@ -123,6 +123,13 @@ public:
     StreamDataReceiver *getStreamChannel(int channel);
 
     /**
+     * @brief closeStreamChannel
+     * @param channel
+     * @return status result
+     */
+    int closeStreamChannel(int channel);
+
+    /**
      * @brief setControlAccessKey set access key for switch over mode
      * application can set access key on the device only if application has take
      * control of the device

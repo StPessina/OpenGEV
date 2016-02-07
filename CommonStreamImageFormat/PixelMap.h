@@ -63,7 +63,8 @@ struct PixelMap {
         if(sizex!=this->sizex ||
                 this->sizey!=sizey ||
                 this->pixelFormat!=pixelFormat) {
-            destroyPixelMap();
+            if(data!=NULL)
+                destroyPixelMap();
             data = (char*) malloc(declaredPixelsSize*bytePerPixel*sizeof(char));
             dataLength = declaredPixelsSize*bytePerPixel;
         }

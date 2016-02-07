@@ -70,6 +70,9 @@ public:
      */
     virtual void run();
 
+public slots:
+    virtual void quit();
+
 protected:
 
     /**
@@ -105,6 +108,8 @@ private:
     void* getInAddr(struct sockaddr *sa);
 
     quint16 getInPort(struct sockaddr *sa);
+
+    bool finished = false;
 
 };
 

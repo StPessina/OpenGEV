@@ -80,11 +80,6 @@ public:
      */
     virtual bool isSocketOpen() final;
 
-    /**
-     * @brief run method for qt thread
-     */
-    virtual void run();
-
 public slots:
     /**
      * @brief readPendingDatagrams method will be called when

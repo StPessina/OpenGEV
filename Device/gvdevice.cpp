@@ -56,6 +56,8 @@ GVDevice::~GVDevice()
         delete streamReg.second;
     streamChannels.clear();
 
+    controlChannel->quit();
+    controlChannel->wait();
     delete controlChannel;
 }
 

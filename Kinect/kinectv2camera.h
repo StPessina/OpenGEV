@@ -46,8 +46,12 @@ public slots:
 
     void sendDepthRgbDataStream();
 
+    void quit();
+
 private:
     GVDevice* gvdevice;
+
+    QTimer* readFromCamTimer;
 
     PixelMap::Ptr depthMap;
 

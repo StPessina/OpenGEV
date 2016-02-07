@@ -70,7 +70,7 @@ KinectV2Camera::~KinectV2Camera()
 
 void KinectV2Camera::setupTimer()
 {
-    QTimer* readFromCamTimer = new QTimer(this);
+    readFromCamTimer = new QTimer(this);
     connect(readFromCamTimer,SIGNAL(timeout()),this,SLOT(readDataFromCam()));
     readFromCamTimer->start(30);
 }
@@ -110,7 +110,7 @@ void KinectV2Camera::sendRgbDataStream()
     colorMap->sizex = colorFrame->width;
     colorMap->sizey = colorFrame->height;
 
-    colorMap->data = (char*) colorFrame->data;;
+    colorMap->data = (char*) colorFrame->data;
 
     gvdevice->getStreamChannel(1)->writeIncomingData(*colorMap);
 }
@@ -120,28 +120,40 @@ void KinectV2Camera::sendDepthRgbDataStream()
     if(!gvdevice->getStreamChannel(2)->isChannelOpen())
         return;
 
-    registration->apply(colorFrame, depthFrame, undistorted, registered);
-
-    char* depthColorData =  (char*) registered->data;
+    registration->apply(colorFrame, depthFrame,
+                        undistorted,
+                        registered);
 
     int reg_idx = 0;
+    int depth_idx = 0;
     int char_idx = 0;
     for (int v = 0; v < DepthColorMap->sizey; ++v)
     {
-        for (int u = 0; u < DepthColorMap->sizex; ++u, char_idx+=5, reg_idx+=4)
+        for (int u = 0; u < DepthColorMap->sizex; ++u,
+             char_idx+=DepthColorMap->bytePerPixel,
+             depth_idx+=undistorted->bytes_per_pixel,
+             reg_idx+=registered->bytes_per_pixel)
         {
-            //Space 8 bit
-            DepthColorMap->data[char_idx] = 0;
-            DepthColorMap->data[char_idx+1] = depthColorData[reg_idx+3];
+            //Distance
+            DepthColorMap->data[char_idx] = undistorted->data[reg_idx];
+            DepthColorMap->data[char_idx+1] = undistorted->data[reg_idx+1];
 
             //BGR to RBG conversion
-            DepthColorMap->data[char_idx+2] = depthColorData[reg_idx+2];
-            DepthColorMap->data[char_idx+3] = depthColorData[reg_idx+1];
-            DepthColorMap->data[char_idx+4] = depthColorData[reg_idx];
+            DepthColorMap->data[char_idx+2] = registered->data[reg_idx+2];
+            DepthColorMap->data[char_idx+3] = registered->data[reg_idx+1];
+            DepthColorMap->data[char_idx+4] = registered->data[reg_idx];
         }
     }
 
     gvdevice->getStreamChannel(2)->writeIncomingData(*DepthColorMap);
+}
+
+void KinectV2Camera::quit()
+{
+    readFromCamTimer->stop();
+    dev->stop();
+    dev->close();
+    exit();
 }
 
 void KinectV2Camera::run()

@@ -20,7 +20,7 @@ public:
     const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr ptrCloud;
 
 signals:
-    void pointCloudUpdate(const pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &cloud);
+    void pointCloudUpdate();
 
 public slots:
     virtual void startReceiveStreamData() final;

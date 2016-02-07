@@ -18,7 +18,7 @@ void AbstractStreamDataObserver::newStreamDataReceived()
 {
     const PixelMap::Ptr map = (const PixelMap::Ptr)channel.getStreamData();
     convertFromPixelMapToCloud(map, cloud);
-    emit pointCloudUpdate(ptrCloud);
+    emit pointCloudUpdate();
 }
 
 void AbstractStreamDataObserver::computeFocalParameters(int width, int height, float hFOVRad, float vFOVRad,

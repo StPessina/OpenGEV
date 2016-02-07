@@ -37,7 +37,9 @@ BoostUDPChannel::BoostUDPChannel(QHostAddress sourceAddr, quint16 sourcePort,
 
 BoostUDPChannel::~BoostUDPChannel()
 {
-
+    if(ENABLE_BOOST_ASYNCH_SOCKET==1)
+        if(!io_service.stopped())
+            io_service.stop();
 }
 
 bool BoostUDPChannel::initSocket()
@@ -56,10 +58,20 @@ bool BoostUDPChannel::isSocketOpen()
 void BoostUDPChannel::run()
 {
     if(ENABLE_BOOST_ASYNCH_SOCKET==1)
-        io_service.run();
+        while(!finished)
+            io_service.run();
     else
-        while(true)
+        while(!finished)
             startSynchReceive();
+
+    if(ENABLE_BOOST_ASYNCH_SOCKET==1)
+        if(!io_service.stopped())
+            io_service.stop();
+}
+
+void BoostUDPChannel::quit()
+{
+    finished = true;
 }
 
 int BoostUDPChannel::writeDatagram(const QByteArray &datagram, QHostAddress destAddr, quint16 destPort)

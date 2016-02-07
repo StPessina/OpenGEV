@@ -21,6 +21,28 @@
 #include "ApplicationStreamDataHandler/streamimagedatahandlerfactory.h"
 #include "ApplicationCommand/packetresendcommand.h"
 
+struct CacheMapEntry {
+    bool exists = false;
+
+    PixelMap::Ptr map = NULL;
+
+    /**
+     * @brief blockId reference to blockId cache
+     */
+    quint64 blockId = -1;
+
+    /**
+     * @brief packetId reference to last packetId cache (used for sequence control)
+     */
+    quint32 packetId = 0;
+
+    /**
+     * @brief lastDataWriteIndex reference to last write data in pixelmap (used for sequential memcopy)
+     */
+    quint32 lastDataWriteIndex = 0;
+};
+
+
 /**
  * @brief The StreamDataReceiver class create UDP channel to receive
  * stream data from a stream channel on the application. When a new
@@ -187,27 +209,38 @@ private:
     /**
      * @brief streamData reference to PixelMap cache
      */
-    PixelMap::Ptr* streamData;
+    //PixelMap::Ptr* streamData;
+
+    /**
+     * @brief streamData reference to PixelMap cache
+     */
+    //bool* streamDataMapInit;
 
     /**
      * @brief blockId reference to blockId cache
      */
-    quint64* blockId;
+    //quint64* blockId;
 
     /**
      * @brief packetId reference to last packetId cache (used for sequence control)
      */
-    quint32* packetId;
+    //quint32* packetId;
 
     /**
      * @brief lastDataWriteIndex reference to last write data in pixelmap (used for sequential memcopy)
      */
-    quint32* lastDataWriteIndex;
+    //quint32* lastDataWriteIndex;
+
 
     /**
      * @brief streamDataCacheSize cache size
      */
     int streamDataCacheSize = 30;
+
+    /**
+     * @brief streamDataCacheMap contains map data
+     */
+    CacheMapEntry* streamDataCacheMap;
 
 #ifdef ENABLE_LOG4CPP
     log4cpp::Category &logger = log4cpp::Category::getInstance("StreamReceiverLog");

@@ -131,6 +131,8 @@ void StreamChannelTransmitter::closeStreamChannel()
 
         blockId=1;
 
+        streamChannelTransmitter->quit();
+        streamChannelTransmitter->wait();
         delete streamChannelTransmitter;
     }
 }

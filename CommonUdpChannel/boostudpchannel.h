@@ -84,6 +84,9 @@ public:
      */
     virtual void run();
 
+public slots:
+    virtual void quit();
+
 protected:
 
     /**
@@ -124,6 +127,8 @@ private:
   udp::endpoint senderEndpoint;
 
   boost::array<char, 2000000> recvBuffer;
+
+  bool finished = false;
 };
 
 #endif // BOOSTUDPCHANNEL_H

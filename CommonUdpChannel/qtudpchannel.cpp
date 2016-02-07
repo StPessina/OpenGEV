@@ -90,9 +90,4 @@ bool QtUDPChannel::isSocketOpen()
     return true;
 }
 
-void QtUDPChannel::run()
-{
-    exec(); //For Qt event support
-}
-
 

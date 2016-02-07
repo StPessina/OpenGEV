@@ -21,20 +21,24 @@ GVApplication::~GVApplication()
 {
     devices.clear();
 
+    masterChannel->quit();
+    masterChannel->wait();
     delete masterChannel;
 }
 
 void GVApplication::clearDevices()
 {
+    foreach (PartnerDevice* aDevice, devices)
+        delete aDevice;
     devices.clear();
 }
 
-void GVApplication::addDevice(PartnerDevice aDevice)
+void GVApplication::addDevice(PartnerDevice *aDevice)
 {
     devices.push_back(aDevice);
 }
 
-QList<PartnerDevice> GVApplication::getDiscoveredDevices()
+const QList<PartnerDevice *> GVApplication::getDiscoveredDevices()
 {
     return devices;
 }

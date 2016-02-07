@@ -34,12 +34,12 @@ int DiscoveryCommand::executeAnswer(const QByteArray &answer)
 
     QByteArray answerWithoutHeader = answer.mid(8);
 
-    PartnerDevice aDevice;
+    PartnerDevice* aDevice = new PartnerDevice;
 
     //device info
-    aDevice.manufactureName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 72);
-    aDevice.modelName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 104);
-    aDevice.deviceVersion = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 136);
+    aDevice->manufactureName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 72);
+    aDevice->modelName = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 104);
+    aDevice->deviceVersion = ConversionUtils::getStringFromQByteArray(answerWithoutHeader, 32, 136);
 
     //Read device mac address
     char* hexAnswer = answerWithoutHeader.toHex().data();
@@ -53,16 +53,16 @@ int DiscoveryCommand::executeAnswer(const QByteArray &answer)
         pos+=3;
     }
 
-    aDevice.macAddress = QString(mac);
+    aDevice->macAddress = QString(mac);
 
     delete mac;
 
     //Ip address
-    aDevice.ipAddress = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 36));
+    aDevice->ipAddress = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 36));
 
-    aDevice.subnetMask = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 52));
+    aDevice->subnetMask = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 52));
 
-    aDevice.defaultGateway = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 68));
+    aDevice->defaultGateway = QHostAddress(ConversionUtils::getIntFromQByteArray(answerWithoutHeader, 68));
 
     dynamic_cast<GVApplication*>(target)->addDevice(aDevice);
 

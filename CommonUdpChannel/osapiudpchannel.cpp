@@ -87,8 +87,13 @@ bool OSAPIUDPChannel::isSocketOpen()
 
 void OSAPIUDPChannel::run()
 {
-    while(true)
+    while(!finished)
         receive();
+}
+
+void OSAPIUDPChannel::quit()
+{
+    finished = true;
 }
 
 int OSAPIUDPChannel::writeDatagram(const QByteArray &datagram, QHostAddress destAddr, quint16 destPort)

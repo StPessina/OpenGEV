@@ -11,8 +11,11 @@ PartnerDevice::~PartnerDevice()
         delete channel.second;
     streamChannelsOpenMap.clear();
 
-    if(isChannelOpen())
+    if(isChannelOpen()) {
+        controlChannel->quit();
+        controlChannel->wait();
         delete controlChannel;
+    }
 }
 
 bool PartnerDevice::openControlChannel(quint16 port)
@@ -52,6 +55,8 @@ bool PartnerDevice::openControlChannel(quint16 port)
         channelOpen=true;
     else {
         channelOpen=false;
+        controlChannel->quit();
+        controlChannel->wait();
         delete controlChannel;
         return false;
     }
@@ -73,6 +78,8 @@ void PartnerDevice::closeControlChannel()
         if(writeReg.getStatusCode()==GEV_STATUS_SUCCESS) {
             controlChannelKey = 0;
             channelOpen=false;
+            controlChannel->quit();
+            controlChannel->wait();
             delete controlChannel;
         }
     }
@@ -197,6 +204,35 @@ StreamDataReceiver *PartnerDevice::getStreamChannel(int channel)
         return NULL;
 
     return streamChannelsOpenMap[channel];
+}
+
+int PartnerDevice::closeStreamChannel(int channel)
+{
+    if(!isChannelOpen())
+        return GEV_STATUS_ACCESS_DENIED;
+
+    if(getStreamingChannelNumber()<=channel)
+        return GEV_STATUS_INVALID_ADDRESS;
+
+    if(streamChannelsOpenMap.at(channel)==NULL)
+        return GEV_STATUS_ERROR;
+
+    WriteRegisterCommand writeReg (this,
+                                   DeviceRegisterConverter::getStreamChannelRegister(channel,REG_STREAM_CHANNEL_PORT),
+                                   0,
+                                   ipAddress,
+                                   CONTROL_CHANNEL_DEF_PORT);
+    controlChannel->sendPacket(writeReg);
+    short result = writeReg.getStatusCode();
+
+    if(result == GEV_STATUS_SUCCESS) {
+        StreamDataReceiver* streamChannel = streamChannelsOpenMap[channel];
+        streamChannelsOpenMap[channel]=NULL;
+        delete streamChannel;
+        return GEV_STATUS_SUCCESS;
+    }
+
+    return GEV_STATUS_ERROR;
 }
 
 bool PartnerDevice::is3DCamera()

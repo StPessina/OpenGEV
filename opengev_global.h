@@ -16,8 +16,8 @@
 
 //#define USE_LOG4CPP 1
 
-//#define USE_QT_SOCKET 0
-#define USE_BOOST_SOCKET 0
+#define USE_QT_SOCKET 1
+//#define USE_BOOST_SOCKET 0
 //#define USE_OSAPI_SOCKET 0
 
 //This take effect only with boost socket
